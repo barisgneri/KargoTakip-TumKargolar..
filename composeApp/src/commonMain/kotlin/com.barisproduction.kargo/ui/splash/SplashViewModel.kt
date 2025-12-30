@@ -7,18 +7,36 @@ import com.barisproduction.kargo.delegation.mvi
 import com.barisproduction.kargo.ui.splash.SplashContract.UiAction
 import com.barisproduction.kargo.ui.splash.SplashContract.UiEffect
 import com.barisproduction.kargo.ui.splash.SplashContract.UiState
+import com.barisproduction.kargo.domain.usecase.CheckNetworkUseCase
 import kotlinx.coroutines.launch
 
-class SplashViewModel : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
+class SplashViewModel(
+    private val checkNetworkUseCase: CheckNetworkUseCase
+) : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
+
+    init {
+        checkNetwork()
+    }
 
     override fun onAction(uiAction: UiAction) {
         viewModelScope.launch {
+            when(uiAction){
+                UiAction.CheckNetwork -> checkNetwork()
+            }
         }
     }
 
-    // Update state example: updateUiState { UiState(isLoading = false) }
-    // or // updateUiState { copy(isLoading = false) }
-
-    // Update effect example: emitUiEffect(UiEffect.ShowError(it.message.orEmpty()))
-    // Use within a coroutine scope, e.g., viewModelScope.launch { ... }
+    private fun checkNetwork() {
+        viewModelScope.launch {
+            updateUiState { copy(isLoading = true, isError = false) }
+            val isConnected = checkNetworkUseCase()
+            updateUiState { copy(isLoading = false) }
+            
+            if (isConnected) {
+                emitUiEffect(UiEffect.NavigateToMain)
+            } else {
+                updateUiState { copy(isError = true) }
+            }
+        }
+    }
 }
