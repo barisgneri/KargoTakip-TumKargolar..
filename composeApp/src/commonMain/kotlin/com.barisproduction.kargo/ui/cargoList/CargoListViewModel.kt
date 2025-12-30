@@ -14,6 +14,9 @@ class CargoListViewModel : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(
 
     override fun onAction(uiAction: UiAction) {
         viewModelScope.launch {
+            when (uiAction) {
+                is UiAction.AddNewCargo -> emitUiEffect(UiEffect.NavigateToAddNewCargo)
+            }
         }
     }
 

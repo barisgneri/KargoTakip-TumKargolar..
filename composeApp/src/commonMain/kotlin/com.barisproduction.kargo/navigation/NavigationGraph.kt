@@ -4,22 +4,16 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import org.koin.compose.viewmodel.koinViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.barisproduction.kargo.ui.splash.SplashScreen
-import com.barisproduction.kargo.ui.splash.SplashViewModel
-import com.barisproduction.kargo.navigation.Screen.Splash
-import com.barisproduction.kargo.ui.cargoList.CargoListScreen
-import com.barisproduction.kargo.ui.cargoList.CargoListViewModel
-import com.barisproduction.kargo.navigation.Screen.CargoList
-import com.barisproduction.kargo.ui.savedCargo.SavedCargoScreen
-import com.barisproduction.kargo.ui.savedCargo.SavedCargoViewModel
-import com.barisproduction.kargo.navigation.Screen.SavedCargo
+import com.barisproduction.kargo.ui.addCargo.AddCargoNavActions
+import com.barisproduction.kargo.ui.addCargo.addCargoScreen
+import com.barisproduction.kargo.ui.cargoList.CargoListNavActions
+import com.barisproduction.kargo.ui.cargoList.cargoListScreen
+import com.barisproduction.kargo.ui.splash.SplashNavActions
+import com.barisproduction.kargo.ui.splash.splashScreen
 
 private const val DURATION = 1000
 
@@ -41,36 +35,21 @@ fun NavigationGraph(
         popEnterTransition = { enterAnim },
         popExitTransition = { exitAnim },
     ) {
-        composable<Splash> {
-            val viewModel = koinViewModel<SplashViewModel>()
-            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-            val uiEffect = viewModel.uiEffect
-            SplashScreen(
-                uiState = uiState,
-                uiEffect = uiEffect,
-                onAction = viewModel::onAction,
-                navigateCargoList = { navController.navigate(CargoList) }
-            )
-        }
-        composable<CargoList> {
-            val viewModel = koinViewModel<CargoListViewModel>()
-            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-            val uiEffect = viewModel.uiEffect
-            CargoListScreen(
-                uiState = uiState,
-                uiEffect = uiEffect,
-                onAction = viewModel::onAction
-            )
-        }
-        composable<SavedCargo> {
-            val viewModel = koinViewModel<SavedCargoViewModel>()
-            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-            val uiEffect = viewModel.uiEffect
-            SavedCargoScreen(
-                uiState = uiState,
-                uiEffect = uiEffect,
-                onAction = viewModel::onAction
-            )
-        }
+        splashScreen(actions = SplashNavActions(navigateToMain = {
+            navController.navigate(Screen.CargoList) {
+                popUpTo(Screen.Splash) {
+                    inclusive = true
+                }
+            }
+        }))
+        cargoListScreen(actions = CargoListNavActions(
+            addNewCargoNavigation = {
+                navController.navigate(Screen.AddNewCargo)
+            }
+        ))
+        addCargoScreen(actions = AddCargoNavActions(onBack = {
+            navController.popBackStack()
+        }))
+        
     }
 }
