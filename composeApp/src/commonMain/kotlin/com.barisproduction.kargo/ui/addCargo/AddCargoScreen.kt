@@ -30,6 +30,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -38,11 +39,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -52,6 +55,9 @@ import com.barisproduction.kargo.domain.model.ParcelModel
 import com.barisproduction.kargo.ui.addCargo.AddCargoContract.UiAction
 import com.barisproduction.kargo.ui.addCargo.AddCargoContract.UiEffect
 import com.barisproduction.kargo.ui.addCargo.AddCargoContract.UiState
+import com.barisproduction.kargo.ui.addCargo.components.AddCargoTopBar
+import com.barisproduction.kargo.ui.addCargo.components.KargoTextField
+import com.barisproduction.kargo.ui.components.ActionOutlineButton
 import com.barisproduction.kargo.ui.theme.Dimens
 import kotlinx.coroutines.flow.Flow
 
@@ -66,7 +72,6 @@ fun AddCargoScreen(
         when (it) {
             is UiEffect.NavigateBack -> navActions.onBack()
             is UiEffect.ShowToast -> {
-                // TODO: Show toast
             }
         }
     }
@@ -112,7 +117,7 @@ fun AddCargoScreen(
 
                 Spacer(modifier = Modifier.height(Dimens.paddingMedium))
 
-                val clipboardManager = androidx.compose.ui.platform.LocalClipboardManager.current
+                val clipboardManager = LocalClipboardManager.current
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -120,6 +125,7 @@ fun AddCargoScreen(
                     ActionOutlineButton(
                         text = "Barkod Tara",
                         icon = Icons.Outlined.QrCodeScanner,
+                        isEnabled = false,
                         onClick = { onAction(UiAction.OnScanBarcode) },
                         modifier = Modifier.weight(1f)
                     )
@@ -127,7 +133,7 @@ fun AddCargoScreen(
                         text = "Panodan Yapıştır",
                         icon = Icons.Outlined.ContentPaste,
                         onClick = {
-                            clipboardManager.getText()?.text?.let { 
+                            clipboardManager.getText()?.text?.let {
                                 onAction(UiAction.OnTrackingNumberChange(it)) 
                             }
                         },
@@ -191,9 +197,9 @@ fun CarrierSelectionSheet(
     onDismissRequest: () -> Unit,
     onCarrierSelected: (ParcelModel) -> Unit
 ) {
-    val sheetState = androidx.compose.material3.rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState()
     
-    androidx.compose.material3.ModalBottomSheet(
+    ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         sheetState = sheetState,
         containerColor = MaterialTheme.colorScheme.surface
@@ -305,105 +311,12 @@ fun CarrierSelectionTrigger(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AddCargoTopBar(onBack: () -> Unit, onSave: () -> Unit) {
-    TopAppBar(
-        title = {
-            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                Text(
-                    text = "Yeni Kargo Ekle",
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        color = MaterialTheme.colorScheme.onBackground, 
-                        fontWeight = FontWeight.SemiBold
-                    )
-                )
-            }
-        },
-        navigationIcon = {
-            IconButton(onClick = onBack) {
-                Icon(
-                    Icons.Default.Close, 
-                    contentDescription = "Close", 
-                    tint = MaterialTheme.colorScheme.onBackground
-                )
-            }
-        },
-        actions = {
-            TextButton(onClick = onSave) {
-                Text(
-                    "Kaydet", 
-                    color = MaterialTheme.colorScheme.primary, 
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.background
-        )
-    )
-}
-
-@Composable
-fun KargoTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    placeholder: String,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default
-) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        placeholder = { 
-            Text(
-                placeholder, 
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
-            ) 
-        },
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-            focusedTextColor = MaterialTheme.colorScheme.onSurface,
-            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-            focusedBorderColor = MaterialTheme.colorScheme.primary,
-            unfocusedBorderColor = MaterialTheme.colorScheme.outline
-        ),
-        keyboardOptions = keyboardOptions,
-        singleLine = true
-    )
-}
-
-@Composable
-fun ActionOutlineButton(
-    text: String,
-    icon: ImageVector,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    OutlinedButton(
-        onClick = onClick,
-        modifier = modifier.height(48.dp),
-        shape = RoundedCornerShape(8.dp),
-        colors = ButtonDefaults.outlinedButtonColors(
-            contentColor = MaterialTheme.colorScheme.onBackground
-        ),
-        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
-    ) {
-        Icon(icon, contentDescription = null, modifier = Modifier.size(18.dp))
-        Spacer(modifier = Modifier.width(Dimens.paddingSmall))
-        Text(text, style = MaterialTheme.typography.bodySmall)
-    }
-}
-
 @Composable
 fun DetectedCarrierView(carrier: ParcelModel) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
     ) {
-        // Logo placeholder with dynamic coloring
         Box(
             modifier = Modifier
                 .size(40.dp)

@@ -12,4 +12,5 @@ object Dimens {
     val barHeight = 80.dp
     val fabSize = 64.dp // Seçilenin büyüklüğü
     val curveRadius = 48.dp // Çukurun derinliği ile ilgili
+    
 }

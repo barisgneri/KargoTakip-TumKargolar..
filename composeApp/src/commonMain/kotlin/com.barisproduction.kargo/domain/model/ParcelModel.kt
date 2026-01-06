@@ -3,7 +3,7 @@ package com.barisproduction.kargo.domain.model
 enum class ParcelModel(
     val parcelName: String,
     val trackingUrl: String,
-    val logo: String // You might want to change this to Int (Res ID) or keep as String (URL/Name) later
+    val logo: String
 ) {
     YURTICI("Yurtiçi Kargo", "https://gonderitakip.yurticikargo.com/t?t=", "logo_yurtici"),
     ARAS("Aras Kargo", "http://kargotakip.araskargo.com.tr/mainpage.aspx?code=", "logo_aras"),
