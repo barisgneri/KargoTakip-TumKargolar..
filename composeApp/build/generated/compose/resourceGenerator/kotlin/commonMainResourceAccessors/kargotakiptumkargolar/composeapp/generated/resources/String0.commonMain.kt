@@ -30,9 +30,27 @@ internal val Res.string.btn_save: StringResource by lazy {
       ))
     }
 
+internal val Res.string.check_connection_and_try_again: StringResource by lazy {
+      StringResource("string:check_connection_and_try_again", "check_connection_and_try_again", setOf(
+        ResourceItem(setOf(), "${MD}values/strings.commonMain.cvr", 110, 114),
+      ))
+    }
+
+internal val Res.string.connection_error: StringResource by lazy {
+      StringResource("string:connection_error", "connection_error", setOf(
+        ResourceItem(setOf(), "${MD}values/strings.commonMain.cvr", 225, 48),
+      ))
+    }
+
 internal val Res.string.error_network: StringResource by lazy {
       StringResource("string:error_network", "error_network", setOf(
-        ResourceItem(setOf(), "${MD}values/strings.commonMain.cvr", 110, 57),
+        ResourceItem(setOf(), "${MD}values/strings.commonMain.cvr", 274, 57),
+      ))
+    }
+
+internal val Res.string.new_cargo_search: StringResource by lazy {
+      StringResource("string:new_cargo_search", "new_cargo_search", setOf(
+        ResourceItem(setOf(), "${MD}values/strings.commonMain.cvr", 332, 48),
       ))
     }
 
@@ -41,5 +59,8 @@ internal fun _collectCommonMainString0Resources(map: MutableMap<String, StringRe
   map.put("add_new_cargo", Res.string.add_new_cargo)
   map.put("app_name", Res.string.app_name)
   map.put("btn_save", Res.string.btn_save)
+  map.put("check_connection_and_try_again", Res.string.check_connection_and_try_again)
+  map.put("connection_error", Res.string.connection_error)
   map.put("error_network", Res.string.error_network)
+  map.put("new_cargo_search", Res.string.new_cargo_search)
 }

@@ -50,7 +50,5 @@ fun AnimAddCargoFAB(
             Text(text = stringResource(Res.string.add_new_cargo))
         },
         shape = RoundedCornerShape(16.dp),
-        containerColor = MaterialTheme.colorScheme.primaryFixed,
-        contentColor = MaterialTheme.colorScheme.onPrimary
     )
 }

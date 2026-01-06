@@ -8,10 +8,11 @@ import androidx.compose.material3.Typography
 
 @Composable
 fun getAppTypography(): Typography {
-    val montserratFamily = FontFamily(
+    val montserratFamily = FontFamily.Default
+        /*FontFamily(
        // Font(Res.font.montserrat_regular),
       // Font(Res.font.montserrat_bold)
-    )
+    )*/
 
     return Typography(
         titleLarge = TextStyle(

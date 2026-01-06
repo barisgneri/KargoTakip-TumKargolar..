@@ -21,7 +21,6 @@ fun App() {
             containerColor = MaterialTheme.colorScheme.onPrimary
         ) {
             NavigationGraph(
-                modifier = Modifier.padding(it),
                 navController = navController,
                 startDestination = Splash
             )

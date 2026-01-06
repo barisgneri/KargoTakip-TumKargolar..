@@ -12,11 +12,6 @@ fun KargoTheme(
 ) {
     val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
     val typography = getAppTypography()
-    
-    // Shapes are currently default, but we pass them explicitly for future customization if needed.
-    // Ensure Shapes import points to material3 defaults or your own Shapes definition if you have one.
-    // If Shapes is not defined in this package, we can rely on MaterialTheme defaults by omitting it or defining it.
-    // Assuming standard Material3 Shapes for now.
 
     MaterialTheme(
         colorScheme = colorScheme,

@@ -33,6 +33,7 @@ class SplashViewModel(
             updateUiState { copy(isLoading = false) }
             
             if (isConnected) {
+                updateUiState { copy(isError = false) }
                 emitUiEffect(UiEffect.NavigateToMain)
             } else {
                 updateUiState { copy(isError = true) }

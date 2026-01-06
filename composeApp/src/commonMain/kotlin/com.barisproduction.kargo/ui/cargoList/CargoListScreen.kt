@@ -42,9 +42,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import com.barisproduction.kargo.domain.model.CargoModel
+import com.barisproduction.kargo.ui.splash.SplashContract
+import com.barisproduction.kargo.ui.splash.SplashScreenPreviewProvider
+import kotlinx.coroutines.flow.emptyFlow
 
 import kotlinx.coroutines.flow.flowOf
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 @Composable
 fun CargoListScreen(
@@ -179,12 +183,16 @@ fun CargoItem(cargo: CargoModel) {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-fun CargoListPreview() {
+fun CargoListPreview(@PreviewParameter(SplashScreenPreviewProvider::class) uiState: UiState) {
     KargoTheme {
-
+        CargoListScreen(
+            uiState = uiState,
+            uiEffect = emptyFlow(),
+            onAction = {},
+            navActions = CargoListNavActions.default
+        )
     }
 
-    //  CargoListScreen(UiState(),flowOf(), {}, CargoListNavActions.default)
 }

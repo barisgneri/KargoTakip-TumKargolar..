@@ -3,4 +3,7 @@
     <string name="btn_save">Kaydet</string>
     <string name="error_network">İnternet bağlantısı yok</string>
     <string name="add_new_cargo">Yeni Kargo Ekle</string>
+    <string name="check_connection_and_try_again">İnternet bağlantınızı kontrol edip tekrar deneyin.</string>
+    <string name="connection_error" >Bağlantı Hatası</string>
+    <string name="new_cargo_search">Yeni Kargo Sorgula</string>
 </resources>
