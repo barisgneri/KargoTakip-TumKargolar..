@@ -111,13 +111,12 @@ fun AddCargoScreen(
                 KargoTextField(
                     value = uiState.trackingNumber,
                     onValueChange = { onAction(UiAction.OnTrackingNumberChange(it)) },
-                    placeholder = "1Z9999W99999999999",
+                    placeholder = "1Z9999W 99999999999",
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
                 )
 
                 Spacer(modifier = Modifier.height(Dimens.paddingMedium))
 
-                val clipboardManager = LocalClipboardManager.current
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -133,9 +132,7 @@ fun AddCargoScreen(
                         text = "Panodan Yapıştır",
                         icon = Icons.Outlined.ContentPaste,
                         onClick = {
-                            clipboardManager.getText()?.text?.let {
-                                onAction(UiAction.OnTrackingNumberChange(it)) 
-                            }
+                                onAction(UiAction.OnPasteClipboard)
                         },
                         modifier = Modifier.weight(1f)
                     )

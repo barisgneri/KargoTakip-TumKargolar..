@@ -2,6 +2,7 @@ package com.barisproduction.kargo.ui.addCargo
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.barisproduction.kargo.common.service.ClipboardService
 import com.barisproduction.kargo.delegation.MVI
 import com.barisproduction.kargo.delegation.mvi
 
@@ -10,7 +11,7 @@ import com.barisproduction.kargo.ui.addCargo.AddCargoContract.UiEffect
 import com.barisproduction.kargo.ui.addCargo.AddCargoContract.UiState
 import kotlinx.coroutines.launch
 
-class AddCargoViewModel : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
+class AddCargoViewModel(private val clipboardService: ClipboardService) : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
 
     override fun onAction(uiAction: UiAction) {
         viewModelScope.launch {
@@ -25,8 +26,8 @@ class AddCargoViewModel : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(U
                 is UiAction.OnBackClick -> {
                     emitUiEffect(UiEffect.NavigateBack)
                 }
-                UiAction.OnPasteClipboard -> {
-                    // TODO: Implement clipboard handling
+                is UiAction.OnPasteClipboard -> {
+                    onPasteClicked()
                 }
                 UiAction.OnScanBarcode -> {
                     // TODO: Implement barcode scanning
@@ -44,6 +45,16 @@ class AddCargoViewModel : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(U
                 is UiAction.OnCarrierSelected -> {
                     updateUiState { copy(detectedCarrier = uiAction.carrier, isCarrierSelectionVisible = false) }
                 }
+            }
+        }
+    }
+
+    private fun onPasteClicked() {
+        viewModelScope.launch {
+            val text = clipboardService.getText()
+            if (!text.isNullOrBlank()) {
+                updateUiState { copy(trackingNumber = text) }
+                // Oto firma tanıma eklenecek
             }
         }
     }
