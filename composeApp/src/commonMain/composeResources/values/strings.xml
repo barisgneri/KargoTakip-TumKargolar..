@@ -6,4 +6,13 @@
     <string name="check_connection_and_try_again">İnternet bağlantınızı kontrol edip tekrar deneyin.</string>
     <string name="connection_error" >Bağlantı Hatası</string>
     <string name="new_cargo_search">Yeni Kargo Sorgula</string>
+    <string name="start_with_enter_tracking_number">Takip numaranı girerek başla</string>
+    <string name="tracking_number">Takip Numarası</string>
+    <string name="scan_barcode">Barkod Tara</string>
+    <string name="paste_clipboard">Panodan Yapıştır</string>
+    <string name="search_cargo">Kargo Sorgula</string>
+    <string name="cargo_name_optional">Kargo Adı (İsteğe Bağlı)</string>
+    <string name="placeholder_cargo_name_optional">Örn: Sipariş: Ayakkabı</string>
+    <string name="cargo_company">Kargo Firması</string>
+    <string name="select_cargo_company">Firma Seçin</string>
 </resources>
