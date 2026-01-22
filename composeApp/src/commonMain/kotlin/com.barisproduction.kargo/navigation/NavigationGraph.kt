@@ -7,13 +7,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import com.barisproduction.kargo.ui.addCargo.AddCargoNavActions
 import com.barisproduction.kargo.ui.addCargo.addCargoScreen
 import com.barisproduction.kargo.ui.cargoList.CargoListNavActions
 import com.barisproduction.kargo.ui.cargoList.cargoListScreen
 import com.barisproduction.kargo.ui.splash.SplashNavActions
 import com.barisproduction.kargo.ui.splash.splashScreen
+import com.barisproduction.kargo.ui.tracking.TrackingScreenNavActions
+import com.barisproduction.kargo.ui.tracking.trackingScreen
 
 private const val DURATION = 1000
 
@@ -50,8 +51,10 @@ fun NavigationGraph(
         addCargoScreen(actions = AddCargoNavActions(onBack = {
             navController.popBackStack()
         }, navigateToSearch = {
-            
+            navController.navigate(Screen.Tracking(it))
         }))
-
+        trackingScreen(
+            actions = TrackingScreenNavActions()
+        )
     }
 }
