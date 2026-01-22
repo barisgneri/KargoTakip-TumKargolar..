@@ -12,8 +12,7 @@ enum class ParcelModel(
     PTT("PTT Kargo", "https://gonderitakip.ptt.gov.tr/Track/Verify?q=", "logo_ptt"),
     UPS("UPS Kargo", "https://www.ups.com.tr/WaybillQueryResult.aspx?Waybill=", "logo_ups"),
     OTHER("Diğer", "", "logo_default");
-    
-    // Helper to find by name if needed
+
     companion object {
         fun fromName(name: String): ParcelModel? {
             return entries.find { it.parcelName.equals(name, ignoreCase = true) }
