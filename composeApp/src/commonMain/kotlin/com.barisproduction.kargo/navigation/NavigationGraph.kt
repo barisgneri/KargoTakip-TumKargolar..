@@ -42,14 +42,16 @@ fun NavigationGraph(
                 }
             }
         }))
-        cargoListScreen(actions = CargoListNavActions(
+        cargoListScreen(
+            actions = CargoListNavActions(
             addNewCargoNavigation = {
                 navController.navigate(Screen.AddNewCargo)
-            }
-        ))
+            }))
         addCargoScreen(actions = AddCargoNavActions(onBack = {
             navController.popBackStack()
+        }, navigateToSearch = {
+            
         }))
-        
+
     }
 }

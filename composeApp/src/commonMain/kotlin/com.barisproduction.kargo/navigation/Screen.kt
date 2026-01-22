@@ -10,5 +10,5 @@ sealed interface Screen {
     @Serializable
     data object AddNewCargo : Screen
     @Serializable
-    data object CargoDetail : Screen
+    data class CargoDetail(val trackingNumber: String) : Screen
 }

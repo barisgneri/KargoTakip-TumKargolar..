@@ -11,6 +11,7 @@ import com.barisproduction.kargo.data.repository.NetworkRepositoryImpl
 import com.barisproduction.kargo.domain.repository.NetworkRepository
 import com.barisproduction.kargo.domain.usecase.CheckNetworkUseCase
 import org.koin.core.module.dsl.factoryOf
+import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
 
 val dataModule = module {
@@ -27,11 +28,12 @@ val viewModelModule = module {
     factoryOf(::CheckNetworkUseCase)
 }
 
-fun initKoin() {
+fun initKoin(appDeclaration: KoinAppDeclaration = {}) {
     startKoin {
+        appDeclaration()
         modules(
             dataModule,
-            viewModelModule,
+            viewModelModule
         )
     }
 }

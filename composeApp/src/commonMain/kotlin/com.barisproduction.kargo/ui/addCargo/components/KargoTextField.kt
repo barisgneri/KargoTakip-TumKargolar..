@@ -16,6 +16,7 @@ fun KargoTextField(
     value: String,
     onValueChange: (String) -> Unit,
     placeholder: String,
+    isError: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default
 ) {
     OutlinedTextField(
@@ -39,5 +40,6 @@ fun KargoTextField(
         ),
         keyboardOptions = keyboardOptions,
         singleLine = true,
+        isError = isError
     )
 }

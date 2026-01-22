@@ -8,12 +8,14 @@ import com.barisproduction.kargo.navigation.Screen
 import org.koin.compose.viewmodel.koinViewModel
 
 class AddCargoNavActions(
-    val onBack: () -> Unit
+    val onBack: () -> Unit,
+    val navigateToSearch: (String) -> Unit
 ) {
     companion object {
         val default: AddCargoNavActions
             get() = AddCargoNavActions(
-                onBack = {}
+                onBack = {},
+                navigateToSearch = {}
             )
     }
 }
