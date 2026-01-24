@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinxSerialization)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.androidx.room)
 }
 
 kotlin {
@@ -55,6 +57,14 @@ kotlin {
             implementation(libs.navigation.compose)
             implementation(libs.coil)
             implementation(libs.ktor.client.core)
+
+            // Room
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.androidx.sqlite.bundled)
+
+            //datetime
+            implementation(libs.kotlinx.datetime)
+
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -64,6 +74,18 @@ kotlin {
             implementation(libs.kotlinx.coroutines.swing)
         }
     }
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
+dependencies {
+    add("kspCommonMainMetadata", libs.androidx.room.compiler)
+    add("kspAndroid", libs.androidx.room.compiler)
+    add("kspIosSimulatorArm64", libs.androidx.room.compiler)
+    add("kspIosX64", libs.androidx.room.compiler)
+    add("kspIosArm64", libs.androidx.room.compiler)
 }
 
 android {
@@ -94,6 +116,7 @@ android {
 
     dependencies {
         debugImplementation(compose.uiTooling)
+
     }
 }
 
@@ -108,4 +131,3 @@ compose.desktop {
         }
     }
 }
-

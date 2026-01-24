@@ -9,7 +9,8 @@ class NetworkRepositoryImpl(
 ) : NetworkRepository {
     override suspend fun isInternetAvailable(): Boolean {
         return try {
-            val response = client.head("https://www.google.com")
+            //head getten hafif sadece başık okur
+            val response = client.head("https://8.8.8.8")
             response.status.value in 200..299
         } catch (e: Exception) {
             false

@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.barisproduction.kargo.common.createTrackUrl
 import com.barisproduction.kargo.delegation.MVI
 import com.barisproduction.kargo.delegation.mvi
 import com.barisproduction.kargo.navigation.Screen
@@ -16,10 +17,12 @@ class TrackingViewModel (
     savedStateHandle: SavedStateHandle
 ) : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
     private val args = savedStateHandle.toRoute<Screen.Tracking>()
-    private val argsTrackingUrl = args.trackingNumber
+    private val argsTrackingNumber = args.trackingNumber
+    private val argsCargoParcel = args.cargoParcel
 
     init {
-        updateUiState { copy(trackingUrl = argsTrackingUrl) }
+        val getUrl = createTrackUrl(argsTrackingNumber, argsCargoParcel)
+        updateUiState { copy(trackingUrl = getUrl) }
     }
 
     override fun onAction(uiAction: UiAction) {

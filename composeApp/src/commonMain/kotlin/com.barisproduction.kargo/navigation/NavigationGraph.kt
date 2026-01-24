@@ -45,16 +45,25 @@ fun NavigationGraph(
         }))
         cargoListScreen(
             actions = CargoListNavActions(
-            addNewCargoNavigation = {
-                navController.navigate(Screen.AddNewCargo)
-            }))
+                addNewCargoNavigation = {
+                    navController.navigate(Screen.AddNewCargo)
+                })
+        )
         addCargoScreen(actions = AddCargoNavActions(onBack = {
             navController.popBackStack()
-        }, navigateToSearch = {
-            navController.navigate(Screen.Tracking(it))
+        }, navigateToSearch = { cargo, no ->
+            navController.navigate(Screen.Tracking(cargoParcel = cargo, trackingNumber = no)) {
+                popUpTo(Screen.AddNewCargo) {
+                    inclusive = true
+                }
+            }
         }))
         trackingScreen(
-            actions = TrackingScreenNavActions()
+            actions = TrackingScreenNavActions(
+                onBack = {
+                    navController.popBackStack()
+                }
+            )
         )
     }
 }
