@@ -15,4 +15,5 @@
     <string name="placeholder_cargo_name_optional">Örn: Sipariş: Ayakkabı</string>
     <string name="cargo_company">Kargo Firması</string>
     <string name="select_cargo_company">Firma Seçin</string>
+    <string name="cargo_tracking_detail">Takip Detayları</string>
 </resources>
