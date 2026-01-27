@@ -163,7 +163,7 @@ fun CargoItem(cargo: CargoModel) {
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = cargo.cargoName,
+                    text = cargo.parcel.parcelName,
                     style = MaterialTheme.typography.titleMedium
                 )
                 Spacer(modifier = Modifier.height(4.dp))
