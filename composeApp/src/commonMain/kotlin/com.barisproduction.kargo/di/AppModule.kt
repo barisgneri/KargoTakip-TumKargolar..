@@ -13,6 +13,7 @@ import com.barisproduction.kargo.data.repository.LocalRepositoryImpl
 import com.barisproduction.kargo.domain.repository.LocalRepository
 import com.barisproduction.kargo.domain.usecase.GetCargosUseCase
 import com.barisproduction.kargo.domain.usecase.InsertCargoUseCase
+import com.barisproduction.kargo.domain.usecase.CheckCargoInDBUseCase
 import com.barisproduction.kargo.domain.usecase.DeleteCargoUseCase
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.KoinAppDeclaration
@@ -30,6 +31,7 @@ val dataModule = module {
     factoryOf(::GetCargosUseCase)
     factoryOf(::CheckNetworkUseCase)
     factoryOf(::DeleteCargoUseCase)
+    factoryOf(::CheckCargoInDBUseCase)
 }
 
 val viewModelModule = module {
