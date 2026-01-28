@@ -9,6 +9,7 @@ object TrackingScreenContract {
     )
     sealed class UiEffect{
         data class ShowError(val message: String) : UiEffect()
+        data class ShowToast(val message: String) : UiEffect()
         data object NavigateBack : UiEffect()
     }
     sealed class UiAction{
