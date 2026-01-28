@@ -12,6 +12,7 @@ object CargoListContract {
     sealed class UiAction{
         data object AddNewCargo : UiAction()
         data class NavigateToTracking(val parcelModel: ParcelModel, val trackingNumber: String) : UiAction()
+        data class DeleteCargo(val trackNo: String) : UiAction()
     }
     sealed class UiEffect{
         data class ShowError(val message: String) : UiEffect()

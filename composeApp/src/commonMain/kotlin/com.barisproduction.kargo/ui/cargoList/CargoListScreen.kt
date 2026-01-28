@@ -40,8 +40,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxState
+import androidx.compose.material3.SwipeToDismissBoxValue
+import androidx.compose.material3.rememberSwipeToDismissBoxState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import com.barisproduction.kargo.domain.model.CargoModel
 import com.barisproduction.kargo.ui.splash.SplashContract
 import com.barisproduction.kargo.ui.splash.SplashScreenPreviewProvider
@@ -112,8 +119,42 @@ fun CargoList(
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(cargoList) { cargo ->
-                CargoItem(cargo = cargo, onAction = onAction)
+            items(cargoList, key = { it.trackNo }) { cargo ->
+                val dismissState = rememberSwipeToDismissBoxState(
+                    initialValue = SwipeToDismissBoxValue.Settled
+                )
+
+                LaunchedEffect(dismissState.currentValue) {
+                    if (dismissState.currentValue == SwipeToDismissBoxValue.EndToStart) {
+                        onAction(UiAction.DeleteCargo(cargo.trackNo))
+                    }
+                }
+                SwipeToDismissBox(
+                    state = dismissState,
+                    enableDismissFromStartToEnd = false,
+                    backgroundContent = {
+                        val color = if (dismissState.dismissDirection == SwipeToDismissBoxValue.EndToStart) {
+                            Color.Red.copy(alpha = 0.8f)
+                        } else Color.Transparent
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(color, shape = RoundedCornerShape(12.dp))
+                                .padding(horizontal = 20.dp),
+                            contentAlignment = Alignment.CenterEnd
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "Sil",
+                                tint = Color.White
+                            )
+                        }
+                    }
+                ){
+                    CargoItem(cargo = cargo, onAction = onAction)
+                }
+
             }
         }
     }
