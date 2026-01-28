@@ -37,8 +37,10 @@ class LocalRepositoryImpl(
         }
     }
 
-    override suspend fun deleteCargo(cargo: CargoEntity) {
-        cargoDao.deleteCargo(cargo)
+    override suspend fun deleteCargo(trackNo: String) {
+        getCargoByTrackingNumber(trackNo)?.let { entity ->
+            cargoDao.deleteCargo(entity)
+        }
     }
 
     override suspend fun getCargoByTrackingNumber(trackingNumber: String): CargoEntity? {
