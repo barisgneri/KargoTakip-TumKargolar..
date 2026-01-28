@@ -1,6 +1,7 @@
 package com.barisproduction.kargo.ui.cargoList
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,8 +40,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxState
+import androidx.compose.material3.SwipeToDismissBoxValue
+import androidx.compose.material3.rememberSwipeToDismissBoxState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import com.barisproduction.kargo.domain.model.CargoModel
 import com.barisproduction.kargo.ui.splash.SplashContract
 import com.barisproduction.kargo.ui.splash.SplashScreenPreviewProvider
@@ -62,6 +70,8 @@ fun CargoListScreen(
             is UiEffect.ShowError -> {}
 
             is UiEffect.NavigateToAddNewCargo -> navActions.addNewCargoNavigation()
+
+            is UiEffect.NavigateToTracking -> navActions.navigateToTracking(it.parcelModel, it.trackingNumber)
         }
     }
     when {
@@ -88,7 +98,8 @@ fun CargoListContent(
     }) { innerPadding ->
         CargoList(
             modifier = Modifier.padding(innerPadding),
-            cargoList = uiState.list
+            cargoList = uiState.list,
+            onAction = onAction
         )
 
     }
@@ -97,7 +108,8 @@ fun CargoListContent(
 @Composable
 fun CargoList(
     modifier: Modifier = Modifier,
-    cargoList: List<CargoModel>
+    cargoList: List<CargoModel>,
+    onAction: (UiAction) -> Unit
 ) {
     if (cargoList.isEmpty()) {
         EmptyCargoView(modifier = modifier)
@@ -107,8 +119,42 @@ fun CargoList(
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(cargoList) { cargo ->
-                CargoItem(cargo = cargo)
+            items(cargoList, key = { it.trackNo }) { cargo ->
+                val dismissState = rememberSwipeToDismissBoxState(
+                    initialValue = SwipeToDismissBoxValue.Settled
+                )
+
+                LaunchedEffect(dismissState.currentValue) {
+                    if (dismissState.currentValue == SwipeToDismissBoxValue.EndToStart) {
+                        onAction(UiAction.DeleteCargo(cargo.trackNo))
+                    }
+                }
+                SwipeToDismissBox(
+                    state = dismissState,
+                    enableDismissFromStartToEnd = false,
+                    backgroundContent = {
+                        val color = if (dismissState.dismissDirection == SwipeToDismissBoxValue.EndToStart) {
+                            Color.Red.copy(alpha = 0.8f)
+                        } else Color.Transparent
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(color, shape = RoundedCornerShape(12.dp))
+                                .padding(horizontal = 20.dp),
+                            contentAlignment = Alignment.CenterEnd
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "Sil",
+                                tint = Color.White
+                            )
+                        }
+                    }
+                ){
+                    CargoItem(cargo = cargo, onAction = onAction)
+                }
+
             }
         }
     }
@@ -136,9 +182,9 @@ fun EmptyCargoView(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun CargoItem(cargo: CargoModel) {
+fun CargoItem(cargo: CargoModel, onAction: (UiAction) -> Unit) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().clickable { onAction(UiAction.NavigateToTracking(cargo.parcel, cargo.trackNo)) },
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
@@ -148,7 +194,6 @@ fun CargoItem(cargo: CargoModel) {
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Logo placeholder
             Box(
                 modifier = Modifier
                     .size(48.dp)
@@ -162,8 +207,13 @@ fun CargoItem(cargo: CargoModel) {
             }
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
+                val header = if (cargo.name.isNullOrBlank()){
+                    cargo.parcel.parcelName
+                }else{
+                    "${cargo.name} - ${cargo.parcel.parcelName}"
+                }
                 Text(
-                    text = cargo.cargoName,
+                    text = header,
                     style = MaterialTheme.typography.titleMedium
                 )
                 Spacer(modifier = Modifier.height(4.dp))
