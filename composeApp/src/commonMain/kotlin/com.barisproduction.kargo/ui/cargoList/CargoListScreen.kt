@@ -194,7 +194,6 @@ fun CargoItem(cargo: CargoModel, onAction: (UiAction) -> Unit) {
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Logo placeholder
             Box(
                 modifier = Modifier
                     .size(48.dp)
@@ -208,8 +207,13 @@ fun CargoItem(cargo: CargoModel, onAction: (UiAction) -> Unit) {
             }
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
+                val header = if (cargo.name.isNullOrBlank()){
+                    cargo.parcel.parcelName
+                }else{
+                    "${cargo.name} - ${cargo.parcel.parcelName}"
+                }
                 Text(
-                    text = cargo.parcel.parcelName,
+                    text = header,
                     style = MaterialTheme.typography.titleMedium
                 )
                 Spacer(modifier = Modifier.height(4.dp))
