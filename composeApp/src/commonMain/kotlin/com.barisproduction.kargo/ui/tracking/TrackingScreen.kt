@@ -4,7 +4,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.barisproduction.kargo.common.collectWithLifecycle
 import com.barisproduction.kargo.ui.components.ErrorView
@@ -17,6 +21,7 @@ import com.barisproduction.kargo.ui.tracking.TrackingScreenContract.UiState
 import com.barisproduction.kargo.ui.tracking.components.TrackingScreenTopBar
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
@@ -27,24 +32,33 @@ fun TrackingScreen(
     onAction: (UiAction) -> Unit,
     navActions: TrackingScreenNavActions
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
     uiEffect.collectWithLifecycle { uiEffect ->
         when (uiEffect) {
             is UiEffect.NavigateBack -> navActions.onBack()
+            is UiEffect.ShowToast -> {
+                scope.launch {
+                    snackbarHostState.showSnackbar(uiEffect.message)
+                }
+            }
             is UiEffect.ShowError -> {}
         }
     }
 
     TrackingScreenContent(
         uiState = uiState,
-        onAction = onAction
+        onAction = onAction,
+        snackbarHostState = snackbarHostState
     )
 }
 
 @Composable
 fun TrackingScreenContent(
     uiState: UiState,
-    onAction: (UiAction) -> Unit
+    onAction: (UiAction) -> Unit,
+    snackbarHostState: SnackbarHostState
 ) {
     Scaffold(
         topBar = {
@@ -52,7 +66,8 @@ fun TrackingScreenContent(
                 onBack = { onAction(UiAction.OnBackClick) },
                 onSave = { onAction(UiAction.OnSaveClick) }
             )
-        }
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { innerPadding ->
         Box(
             modifier = Modifier
