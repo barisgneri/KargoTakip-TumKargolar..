@@ -6,7 +6,7 @@ object AddCargoContract {
     data class UiState(
         val isLoading: Boolean = false,
         val trackingNumber: String = "",
-        val cargoName: String = "",
+        val cargoName: String? = null,
         val trackingNumberError: Boolean = false,
         val cargoNameError: Boolean = false,
         val detectedCarrier: ParcelModel? = null,
