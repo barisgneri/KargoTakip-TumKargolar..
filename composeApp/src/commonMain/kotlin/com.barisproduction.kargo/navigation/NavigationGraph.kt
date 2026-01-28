@@ -47,7 +47,16 @@ fun NavigationGraph(
             actions = CargoListNavActions(
                 addNewCargoNavigation = {
                     navController.navigate(Screen.AddNewCargo)
-                })
+                },
+                navigateToTracking = { cargo, no ->
+                    navController.navigate(
+                        Screen.Tracking(
+                            cargoParcel = cargo,
+                            trackingNumber = no
+                        )
+                    )
+                }
+            )
         )
         addCargoScreen(actions = AddCargoNavActions(onBack = {
             navController.popBackStack()

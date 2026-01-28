@@ -1,6 +1,7 @@
 package com.barisproduction.kargo.ui.cargoList
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -62,6 +63,8 @@ fun CargoListScreen(
             is UiEffect.ShowError -> {}
 
             is UiEffect.NavigateToAddNewCargo -> navActions.addNewCargoNavigation()
+
+            is UiEffect.NavigateToTracking -> navActions.navigateToTracking(it.parcelModel, it.trackingNumber)
         }
     }
     when {
@@ -88,7 +91,8 @@ fun CargoListContent(
     }) { innerPadding ->
         CargoList(
             modifier = Modifier.padding(innerPadding),
-            cargoList = uiState.list
+            cargoList = uiState.list,
+            onAction = onAction
         )
 
     }
@@ -97,7 +101,8 @@ fun CargoListContent(
 @Composable
 fun CargoList(
     modifier: Modifier = Modifier,
-    cargoList: List<CargoModel>
+    cargoList: List<CargoModel>,
+    onAction: (UiAction) -> Unit
 ) {
     if (cargoList.isEmpty()) {
         EmptyCargoView(modifier = modifier)
@@ -108,7 +113,7 @@ fun CargoList(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(cargoList) { cargo ->
-                CargoItem(cargo = cargo)
+                CargoItem(cargo = cargo, onAction = onAction)
             }
         }
     }
@@ -136,9 +141,9 @@ fun EmptyCargoView(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun CargoItem(cargo: CargoModel) {
+fun CargoItem(cargo: CargoModel, onAction: (UiAction) -> Unit) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().clickable { onAction(UiAction.NavigateToTracking(cargo.parcel, cargo.trackNo)) },
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
