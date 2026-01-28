@@ -76,6 +76,7 @@ class AddCargoViewModel(
         if (validateInputs()) {
             viewModelScope.launch {
                 val entity = CargoModel(
+                    name = uiState.value.cargoName,
                     parcel = uiState.value.detectedCarrier ?: ParcelModel.OTHER,
                     trackNo = uiState.value.trackingNumber,
                     addDate = null

@@ -97,7 +97,7 @@ fun CargoTrackingForm(
         )
         Spacer(modifier = Modifier.height(Dimens.paddingSmall))
         KargoTextField(
-            value = uiState.cargoName,
+            value = uiState.cargoName ?: "",
             onValueChange = { onAction(UiAction.OnCargoNameChange(it)) },
             placeholder = stringResource(Res.string.placeholder_cargo_name_optional),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)

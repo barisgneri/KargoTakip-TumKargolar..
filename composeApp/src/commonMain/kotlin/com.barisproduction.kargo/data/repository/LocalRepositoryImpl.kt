@@ -18,6 +18,7 @@ class LocalRepositoryImpl(
     @OptIn(ExperimentalTime::class)
     override suspend fun insertCargo(cargo: CargoModel) {
         val entity = CargoEntity(
+            name = cargo.name,
             cargoName = cargo.parcel.parcelName,
             trackingNumber = cargo.trackNo,
             createdAt = Clock.System.now().toEpochMilliseconds()
@@ -29,6 +30,7 @@ class LocalRepositoryImpl(
         return cargoDao.getAllCargos().map { entities ->
             entities.map { entity ->
                 CargoModel(
+                    name = entity.name,
                     parcel = ParcelModel.fromName(entity.cargoName)?: ParcelModel.OTHER,
                     trackNo = entity.trackingNumber,
                     addDate = entity.createdAt.toFormattedDate()
