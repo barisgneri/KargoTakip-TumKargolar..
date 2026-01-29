@@ -22,10 +22,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.barisproduction.kargo" />
+                  <option name="mobileSdkAppId" value="1:112627072756:android:d4da2b4dacd14a6b80a8a1" />
+                  <option name="projectId" value="kargo-takip-689d7" />
+                  <option name="projectNumber" value="112627072756" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
