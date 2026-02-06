@@ -10,6 +10,8 @@ plugins {
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.androidx.room)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
 }
 
 kotlin {
@@ -41,6 +43,9 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.ktor.client.okhttp)
+            implementation(project.dependencies.platform(libs.firebase.bom))
+            implementation(libs.firebase.crashlytics)
+
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -64,6 +69,7 @@ kotlin {
 
             //datetime
             implementation(libs.kotlinx.datetime)
+
 
         }
         iosMain.dependencies {
@@ -95,9 +101,9 @@ android {
     defaultConfig {
         applicationId = "com.barisproduction.kargo"
         minSdk = 24
-        targetSdk = 35
-        versionCode = 6
-        versionName = "1.33"
+        targetSdk = 36
+        versionCode = 8
+        versionName = "1.34"
     }
     packaging {
         resources {
@@ -106,7 +112,13 @@ android {
     }
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
