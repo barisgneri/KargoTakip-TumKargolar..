@@ -1,8 +1,10 @@
 package com.barisproduction.kargo.domain.model
 
+
 data class CargoModel(
-    val name: String? = null,
-    val parcel: ParcelModel,
+    val parcelName: String,
+    val cargoName: String?,
+    val logo: String,
     val trackNo: String,
-    val addDate: String?
+    val addDate: String? = null
 )

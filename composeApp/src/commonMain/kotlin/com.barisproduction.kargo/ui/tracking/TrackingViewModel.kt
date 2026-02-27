@@ -4,12 +4,14 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.barisproduction.kargo.common.Resource
 import com.barisproduction.kargo.common.createTrackUrl
 import com.barisproduction.kargo.delegation.MVI
 import com.barisproduction.kargo.delegation.mvi
 import com.barisproduction.kargo.domain.model.CargoModel
-import com.barisproduction.kargo.domain.model.ParcelModel
+import com.barisproduction.kargo.domain.model.Parcels
 import com.barisproduction.kargo.domain.usecase.CheckCargoInDBUseCase
+import com.barisproduction.kargo.domain.usecase.FindCargoInfoUseCase
 import com.barisproduction.kargo.domain.usecase.InsertCargoUseCase
 import com.barisproduction.kargo.navigation.Screen
 import com.barisproduction.kargo.ui.tracking.TrackingScreenContract.UiEffect
@@ -21,15 +23,31 @@ class TrackingViewModel (
     savedStateHandle: SavedStateHandle,
     private val insertCargoUseCase: InsertCargoUseCase,
     private val checkCargoInDBUseCase: CheckCargoInDBUseCase,
+    private val findCargoInfoUseCase: FindCargoInfoUseCase
     ) : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
     private val args = savedStateHandle.toRoute<Screen.Tracking>()
-    private val argsTrackingNumber = args.trackingNumber
-    private val argsCargoParcel = args.cargoParcel
+    private val argsTrackingNumber = args.trackingNo
+    private val argsParcelName = args.parcelName
 
     init {
-        val getUrl = createTrackUrl(argsTrackingNumber, argsCargoParcel)
-        updateUiState { copy(trackingUrl = getUrl) }
+        findInfoInName()
     }
+
+    private fun findInfoInName() {
+        when(val parcel = findCargoInfoUseCase(argsParcelName)){
+            is Resource.Success -> {
+                val url = createTrackUrl(trackingUrl = parcel.data?.trackingUrl ?: "", trackingNumber = argsTrackingNumber)
+                updateUiState { copy(trackingUrl = url, logo = parcel.data?.logo) }
+            }
+            is Resource.Error -> {
+                updateUiState { copy(isError = true, errorMessage = parcel.message) }
+            }
+            is Resource.Loading -> {
+                updateUiState { copy(isLoading = true) }
+            }
+        }
+    }
+
 
     override fun onAction(uiAction: UiAction) {
         viewModelScope.launch {
@@ -45,10 +63,11 @@ class TrackingViewModel (
 
     private fun handleSave() {
         viewModelScope.launch {
-            val isHaveDB = checkCargoInDBUseCase(argsTrackingNumber)
-            if (!isHaveDB){
+            if (!isHaveDB()){
                 val entity = CargoModel(
-                    parcel = argsCargoParcel,
+                    parcelName = argsParcelName,
+                    cargoName = "",
+                    logo = uiState.value.logo ?: "",
                     trackNo = argsTrackingNumber,
                     addDate = null
                 )
@@ -59,4 +78,5 @@ class TrackingViewModel (
             }
         }
     }
+    private suspend fun isHaveDB() = checkCargoInDBUseCase(argsTrackingNumber)
 }

@@ -19,8 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.barisproduction.kargo.common.collectWithLifecycle
-import com.barisproduction.kargo.domain.model.ParcelModel
+import com.barisproduction.kargo.common.extensions.collectWithLifecycle
 import com.barisproduction.kargo.ui.addCargo.AddCargoContract.UiAction
 import com.barisproduction.kargo.ui.addCargo.AddCargoContract.UiEffect
 import com.barisproduction.kargo.ui.addCargo.AddCargoContract.UiState
@@ -47,7 +46,7 @@ fun AddCargoScreen(
     uiEffect.collectWithLifecycle {
         when (it) {
             is UiEffect.NavigateBack -> navActions.onBack()
-            is UiEffect.NavigateToSearch -> navActions.navigateToSearch(it.parcelModel ?: ParcelModel.OTHER, it.trackingNo)
+            is UiEffect.NavigateToSearch -> navActions.navigateToSearch(it.cargoName, it.trackingNo)
             is UiEffect.ShowToast -> {}
         }
     }
@@ -56,6 +55,7 @@ fun AddCargoScreen(
 
     if (uiState.isCarrierSelectionVisible) {
         CarrierSelectionSheet(
+            parcelList = uiState.parcelList,
             onDismissRequest = { onAction(UiAction.OnCarrierSelectDismiss) },
             onCarrierSelected = { onAction(UiAction.OnCarrierSelected(it)) }
         )

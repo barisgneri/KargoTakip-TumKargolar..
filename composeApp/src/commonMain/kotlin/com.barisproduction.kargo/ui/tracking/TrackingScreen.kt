@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import com.barisproduction.kargo.common.collectWithLifecycle
+import com.barisproduction.kargo.common.extensions.collectWithLifecycle
 import com.barisproduction.kargo.ui.components.ErrorView
 import com.barisproduction.kargo.ui.components.KargoWebView
 import com.barisproduction.kargo.ui.components.LoadingBar

@@ -7,8 +7,9 @@ import androidx.room.PrimaryKey
 data class CargoEntity (
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
-    val name: String? = null,
-    val cargoName: String,
+    val parcelName: String,
+    val cargoName: String? = null,
     val trackingNumber: String,
+    val logo: String,
     val createdAt: Long,
 )

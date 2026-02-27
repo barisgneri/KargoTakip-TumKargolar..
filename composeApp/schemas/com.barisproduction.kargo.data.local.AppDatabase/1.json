@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "247ad3b1503a779fca692b598f8cc95f",
+    "identityHash": "759e6bbee1fe110d712e0fe1ee5470cd",
     "entities": [
       {
         "tableName": "cargo_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `cargoName` TEXT NOT NULL, `trackingNumber` TEXT NOT NULL, `createdAt` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `parcelName` TEXT NOT NULL, `cargoName` TEXT, `trackingNumber` TEXT NOT NULL, `logo` TEXT NOT NULL, `createdAt` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -15,19 +15,25 @@
             "notNull": true
           },
           {
-            "fieldPath": "name",
-            "columnName": "name",
-            "affinity": "TEXT"
-          },
-          {
-            "fieldPath": "cargoName",
-            "columnName": "cargoName",
+            "fieldPath": "parcelName",
+            "columnName": "parcelName",
             "affinity": "TEXT",
             "notNull": true
           },
           {
+            "fieldPath": "cargoName",
+            "columnName": "cargoName",
+            "affinity": "TEXT"
+          },
+          {
             "fieldPath": "trackingNumber",
             "columnName": "trackingNumber",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "logo",
+            "columnName": "logo",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -48,7 +54,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '247ad3b1503a779fca692b598f8cc95f')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '759e6bbee1fe110d712e0fe1ee5470cd')"
     ]
   }
 }
