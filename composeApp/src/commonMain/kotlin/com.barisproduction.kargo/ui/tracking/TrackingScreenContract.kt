@@ -6,6 +6,7 @@ object TrackingScreenContract {
         val isError: Boolean = false,
         val errorMessage: String? = null,
         val trackingUrl: String? = null,
+        val logo: String? = null
     )
     sealed class UiEffect{
         data class ShowError(val message: String) : UiEffect()

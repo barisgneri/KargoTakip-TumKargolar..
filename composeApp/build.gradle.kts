@@ -16,9 +16,8 @@ plugins {
 
 kotlin {
     androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+            jvmTarget.set(JvmTarget.JVM_17)
         }
     }
 
@@ -61,6 +60,7 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.navigation.compose)
             implementation(libs.coil)
+            implementation(libs.coil.ktor)
             implementation(libs.ktor.client.core)
 
             // Room
@@ -70,6 +70,9 @@ kotlin {
             //datetime
             implementation(libs.kotlinx.datetime)
 
+            //firebase
+            implementation(libs.gitlive.firebase.analytics)
+            implementation(libs.gitlive.firebase.firestore)
 
         }
         iosMain.dependencies {
@@ -119,6 +122,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        getByName("debug") {
+            isMinifyEnabled = false
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-DEBUG"
         }
     }
     compileOptions {
