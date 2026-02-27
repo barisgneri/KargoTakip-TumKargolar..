@@ -1,12 +1,12 @@
 package com.barisproduction.kargo.ui.addCargo.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,16 +24,20 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.barisproduction.kargo.domain.model.ParcelModel
+import coil3.compose.AsyncImage
+import com.barisproduction.kargo.domain.model.Parcels
 import com.barisproduction.kargo.ui.theme.Dimens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CarrierSelectionSheet(
     onDismissRequest: () -> Unit,
-    onCarrierSelected: (ParcelModel) -> Unit
+    onCarrierSelected: (Parcels) -> Unit,
+    parcelList: List<Parcels>
 ) {
     val sheetState = rememberModalBottomSheetState()
 
@@ -59,7 +63,7 @@ fun CarrierSelectionSheet(
                 modifier = Modifier.fillMaxWidth().height(400.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(ParcelModel.entries) { carrier ->
+                items(parcelList) { carrier ->
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -69,17 +73,15 @@ fun CarrierSelectionSheet(
                     ) {
                         Box(
                             modifier = Modifier
-                                .size(32.dp)
-                                .background(
-                                    MaterialTheme.colorScheme.tertiaryContainer,
-                                    shape = RoundedCornerShape(8.dp)
-                                ),
+                                .size(32.dp),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(
-                                carrier.parcelName.take(1),
-                                color = MaterialTheme.colorScheme.onTertiaryContainer,
-                                fontWeight = FontWeight.Bold
+                            AsyncImage(
+                                model = carrier.logo,
+                                contentDescription = carrier.parcelName,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .fillMaxSize().clip(RoundedCornerShape(8.dp)),
                             )
                         }
                         Spacer(modifier = Modifier.width(16.dp))

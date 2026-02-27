@@ -1,4 +1,4 @@
-package com.barisproduction.kargo.common
+package com.barisproduction.kargo.common.extensions
 
 
 import kotlinx.datetime.TimeZone

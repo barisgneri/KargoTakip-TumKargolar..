@@ -2,22 +2,42 @@ package com.barisproduction.kargo.ui.addCargo
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.barisproduction.kargo.common.Resource
 import com.barisproduction.kargo.common.service.ClipboardService
 import com.barisproduction.kargo.data.local.CargoEntity
 import com.barisproduction.kargo.delegation.MVI
 import com.barisproduction.kargo.delegation.mvi
 import com.barisproduction.kargo.domain.model.CargoModel
-import com.barisproduction.kargo.domain.model.ParcelModel
+import com.barisproduction.kargo.domain.model.Parcels
+import com.barisproduction.kargo.domain.repository.CargoRepository
 import com.barisproduction.kargo.domain.usecase.InsertCargoUseCase
 import com.barisproduction.kargo.ui.addCargo.AddCargoContract.UiAction
 import com.barisproduction.kargo.ui.addCargo.AddCargoContract.UiEffect
 import com.barisproduction.kargo.ui.addCargo.AddCargoContract.UiState
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class AddCargoViewModel(
     private val clipboardService: ClipboardService,
-    private val insertCargoUseCase: InsertCargoUseCase
+    private val insertCargoUseCase: InsertCargoUseCase,
+    private val cargoRepository: CargoRepository
 ) : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
+
+    init {
+        getParcelList()
+    }
+
+    private fun getParcelList() {
+        viewModelScope.launch {
+            cargoRepository.getCargoParcelListState().collect{
+                when(it){
+                    is Resource.Success -> updateUiState { copy(parcelList = it.data ?: emptyList()) }
+
+                    else -> updateUiState { copy(isLoading = true) }
+                }
+            }
+        }
+    }
 
     override fun onAction(uiAction: UiAction) {
         viewModelScope.launch {
@@ -67,7 +87,7 @@ class AddCargoViewModel(
     private fun handleSearch() {
         if (validateInputs()) {
             viewModelScope.launch {
-                emitUiEffect(UiEffect.NavigateToSearch(uiState.value.detectedCarrier, uiState.value.trackingNumber))
+                emitUiEffect(UiEffect.NavigateToSearch(uiState.value.detectedCarrier?.parcelName ?: "", uiState.value.trackingNumber))
             }
         }
     }
@@ -75,13 +95,17 @@ class AddCargoViewModel(
     private fun handleSave() {
         if (validateInputs()) {
             viewModelScope.launch {
-                val entity = CargoModel(
-                    name = uiState.value.cargoName,
-                    parcel = uiState.value.detectedCarrier ?: ParcelModel.OTHER,
-                    trackNo = uiState.value.trackingNumber,
-                    addDate = null
-                )
-                insertCargoUseCase(entity)
+                uiState.value.detectedCarrier?.let {
+                    val entity = CargoModel(
+                        cargoName = uiState.value.cargoName,
+                        parcelName = it.parcelName,
+                        logo = it.logo,
+                        trackNo = uiState.value.trackingNumber,
+                        addDate = null
+                    )
+                    insertCargoUseCase(entity)
+                } ?: Exception()
+
                 emitUiEffect(UiEffect.ShowToast("Kargo başarıyla kaydedildi"))
                 emitUiEffect(UiEffect.NavigateBack)
             }

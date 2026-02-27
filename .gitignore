@@ -29,3 +29,4 @@ GoogleService-Info.plist
 
 # --- Log Dosyaları ---
 *.log
+/.kotlin
