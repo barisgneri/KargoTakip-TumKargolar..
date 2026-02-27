@@ -9,29 +9,41 @@ import com.barisproduction.kargo.data.repository.NetworkRepositoryImpl
 import com.barisproduction.kargo.domain.repository.NetworkRepository
 import com.barisproduction.kargo.domain.usecase.CheckNetworkUseCase
 import com.barisproduction.kargo.data.local.AppDatabase
+import com.barisproduction.kargo.data.remote.CargoRemoteDataSource
+import com.barisproduction.kargo.data.remote.FirebaseCargoDataSource
+import com.barisproduction.kargo.data.repository.CargoRepositoryImpl
 import com.barisproduction.kargo.data.repository.LocalRepositoryImpl
+import com.barisproduction.kargo.domain.repository.CargoRepository
 import com.barisproduction.kargo.domain.repository.LocalRepository
 import com.barisproduction.kargo.domain.usecase.GetCargosUseCase
 import com.barisproduction.kargo.domain.usecase.InsertCargoUseCase
 import com.barisproduction.kargo.domain.usecase.CheckCargoInDBUseCase
 import com.barisproduction.kargo.domain.usecase.DeleteCargoUseCase
+import com.barisproduction.kargo.domain.usecase.FindCargoInfoUseCase
+import dev.gitlive.firebase.Firebase
+import dev.gitlive.firebase.firestore.firestore
+import io.ktor.client.HttpClient
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
 import org.koin.core.module.dsl.viewModelOf
 
 val dataModule = module {
-    single { io.ktor.client.HttpClient() }
+    single { HttpClient() }
     single<NetworkRepository> { NetworkRepositoryImpl(get()) }
     single<LocalRepository> { LocalRepositoryImpl(get()) }
     single { get<AppDatabase>().cargoDao() }
-    
+    single { Firebase.firestore }
+    single<CargoRemoteDataSource> { FirebaseCargoDataSource(get()) }
+    single<CargoRepository> { CargoRepositoryImpl(get()) }
+
     // UseCases
     factoryOf(::InsertCargoUseCase)
     factoryOf(::GetCargosUseCase)
     factoryOf(::CheckNetworkUseCase)
     factoryOf(::DeleteCargoUseCase)
     factoryOf(::CheckCargoInDBUseCase)
+    factoryOf(::FindCargoInfoUseCase)
 }
 
 val viewModelModule = module {
