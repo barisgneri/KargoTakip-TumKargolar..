@@ -33,8 +33,8 @@ import com.barisproduction.kargo.ui.addCargo.components.AddCargoTopBar
 import com.barisproduction.kargo.ui.addCargo.components.CargoTrackingForm
 import com.barisproduction.kargo.ui.addCargo.components.CarrierSelectionSheet
 import com.barisproduction.kargo.ui.components.CargoButton
-import com.barisproduction.kargo.ui.theme.Dimens
 import com.barisproduction.kargo.ui.theme.KargoTheme
+import com.barisproduction.kargo.ui.theme.spacing
 import kargotakiptumkargolar.composeapp.generated.resources.Res
 import kargotakiptumkargolar.composeapp.generated.resources.*
 import kotlinx.coroutines.flow.Flow
@@ -95,20 +95,20 @@ private fun AddCargoScreenContent(
                 modifier = Modifier
                     .weight(1f)
                     .verticalScroll(scrollState)
-                    .padding(horizontal = Dimens.paddingMedium),
+                    .padding(horizontal = spacing.medium),
                 uiState = uiState,
                 onAction = onAction
             )
 
             Column() {
                 HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-                Spacer(modifier = Modifier.height(Dimens.paddingMedium))
+                Spacer(modifier = Modifier.height(spacing.medium))
                 CargoButton(
                     onClick = { onAction(UiAction.OnSearchCargoClick) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .imePadding()
-                        .padding(horizontal = Dimens.paddingMedium),
+                        .padding(horizontal = spacing.medium),
                     text = stringResource(Res.string.search_cargo),
                     icon = Icons.Default.Search
                 )

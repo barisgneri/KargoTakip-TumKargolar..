@@ -19,14 +19,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.barisproduction.kargo.ui.addCargo.AddCargoContract.UiAction
 import com.barisproduction.kargo.ui.addCargo.AddCargoContract.UiState
 import com.barisproduction.kargo.ui.components.ActionOutlineButton
 import com.barisproduction.kargo.ui.components.CargoTextField
-import com.barisproduction.kargo.ui.theme.Dimens
+import com.barisproduction.kargo.ui.theme.spacing
 import kargotakiptumkargolar.composeapp.generated.resources.Res
 import kargotakiptumkargolar.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
@@ -38,12 +37,12 @@ fun CargoTrackingForm(
     onAction: (UiAction) -> Unit
 ) {
     Column(
-        modifier = modifier.fillMaxWidth().padding(top = Dimens.paddingLarge),
+        modifier = modifier.fillMaxWidth().padding(top = spacing.large),
     ) {
 
         CargoTrackingNumberEnter(uiState = uiState, onAction = onAction)
 
-        Spacer(modifier = Modifier.height(Dimens.paddingLarge))
+        Spacer(modifier = Modifier.height(spacing.large))
 
         CarrierSelectionTrigger(
             carrier = uiState.detectedCarrier,
@@ -63,7 +62,7 @@ private fun CargoTrackingNumberEnter(
         style = MaterialTheme.typography.labelLarge
     )
 
-    Spacer(modifier = Modifier.height(Dimens.paddingSmall))
+    Spacer(modifier = Modifier.height(spacing.small))
 
     CargoTextField(
         value = uiState.trackingNumber,
@@ -74,7 +73,7 @@ private fun CargoTrackingNumberEnter(
         leadingIcon = Icons.Outlined.QrCodeScanner
     )
 
-    Spacer(modifier = Modifier.height(Dimens.paddingSmall))
+    Spacer(modifier = Modifier.height(spacing.small))
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -96,12 +95,12 @@ private fun CargoTrackingNumberEnter(
             modifier = Modifier.weight(1f)
         )
     }
-    Spacer(modifier = Modifier.height(Dimens.paddingSmall))
+    Spacer(modifier = Modifier.height(spacing.small))
 
     Box(
         modifier = Modifier.fillMaxWidth().clip(MaterialTheme.shapes.small)
             .background(MaterialTheme.colorScheme.outlineVariant)
-            .padding(Dimens.paddingSmall)
+            .padding(spacing.small)
     ) {
         Text(
             text = stringResource(Res.string.enter_cargo_number_or_scan_barcode_info_text),
