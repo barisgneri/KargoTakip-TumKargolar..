@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.barisproduction.kargo.ui.theme.Dimens
 
 @Composable
 fun CargoButton(
@@ -28,7 +27,8 @@ fun CargoButton(
     enabled: Boolean = true,
     isLoading: Boolean = false
 ) {
-    val baseModifier = modifier.height(Dimens.buttonHeight)
+    val buttonHeight = 56.dp
+    val baseModifier = modifier.height(buttonHeight)
     val shape = MaterialTheme.shapes.medium
 
     when (style) {

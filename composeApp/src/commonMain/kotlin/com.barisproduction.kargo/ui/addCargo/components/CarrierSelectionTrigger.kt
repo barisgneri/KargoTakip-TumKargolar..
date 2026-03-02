@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.barisproduction.kargo.domain.model.Parcels
-import com.barisproduction.kargo.ui.theme.Dimens
+import com.barisproduction.kargo.ui.theme.spacing
 import kargotakiptumkargolar.composeapp.generated.resources.Res
 import kargotakiptumkargolar.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
@@ -46,12 +46,12 @@ fun CarrierSelectionTrigger(
         text = stringResource(Res.string.cargo_company),
         style = MaterialTheme.typography.labelLarge
     )
-    Spacer(modifier = Modifier.height(Dimens.paddingSmall))
+    Spacer(modifier = Modifier.height(spacing.small))
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .height(Dimens.buttonHeight)
+            .height(56.dp)
             .clickable(onClick = onClick)
             .border(
                 width = if (isError) 1.dp else 0.dp,
