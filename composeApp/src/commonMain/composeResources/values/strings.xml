@@ -17,4 +17,5 @@
     <string name="select_cargo_company">Firma Seçin</string>
     <string name="cargo_tracking_detail">Takip Detayları</string>
     <string name="enter_cargo_number_or_scan_barcode_info_text">Kargonuzun üzerindeki barkodu tarayabilir veya numarayı elle girebilirsiniz.</string>
+    <string name="my_cargos">Kargolarım</string>
 </resources>

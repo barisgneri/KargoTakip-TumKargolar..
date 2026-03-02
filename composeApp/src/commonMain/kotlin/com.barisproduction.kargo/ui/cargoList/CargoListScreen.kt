@@ -49,6 +49,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import coil3.compose.AsyncImage
 import com.barisproduction.kargo.domain.model.CargoModel
+import com.barisproduction.kargo.ui.cargoList.components.CargoItemCard
+import com.barisproduction.kargo.ui.cargoList.components.CargoListAppBar
 import com.barisproduction.kargo.ui.splash.SplashScreenPreviewProvider
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
@@ -69,7 +71,10 @@ fun CargoListScreen(
 
             is UiEffect.NavigateToAddNewCargo -> navActions.addNewCargoNavigation()
 
-            is UiEffect.NavigateToTracking -> navActions.navigateToTracking(it.parcelName, it.trackingNumber)
+            is UiEffect.NavigateToTracking -> navActions.navigateToTracking(
+                it.parcelName,
+                it.trackingNumber
+            )
         }
     }
     when {
@@ -89,7 +94,10 @@ fun CargoListContent(
     uiState: UiState,
     onAction: (UiAction) -> Unit,
 ) {
-    Scaffold(modifier = modifier, floatingActionButton = {
+    Scaffold(
+        modifier = modifier.background(MaterialTheme.colorScheme.background),
+        topBar = { CargoListAppBar() },
+        floatingActionButton = {
         AnimAddCargoFAB(onClick = {
             onAction(UiAction.AddNewCargo)
         })
@@ -128,9 +136,10 @@ fun CargoList(
                     state = dismissState,
                     enableDismissFromStartToEnd = false,
                     backgroundContent = {
-                        val color = if (dismissState.dismissDirection == SwipeToDismissBoxValue.EndToStart) {
-                            Color.Red.copy(alpha = 0.8f)
-                        } else Color.Transparent
+                        val color =
+                            if (dismissState.dismissDirection == SwipeToDismissBoxValue.EndToStart) {
+                                Color.Red.copy(alpha = 0.8f)
+                            } else Color.Transparent
 
                         Box(
                             Modifier
@@ -139,7 +148,7 @@ fun CargoList(
                                 .background(color)
                                 .padding(horizontal = 20.dp),
                             contentAlignment = Alignment.CenterEnd
-                        ){
+                        ) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -150,9 +159,16 @@ fun CargoList(
                                         onAction(UiAction.EditCargo(cargo.trackNo))
                                         scope.launch { dismissState.reset() }
                                     },
-                                    modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer, CircleShape)
+                                    modifier = Modifier.background(
+                                        MaterialTheme.colorScheme.primaryContainer,
+                                        CircleShape
+                                    )
                                 ) {
-                                    Icon(Icons.Default.Edit, contentDescription = "Düzenle", tint = MaterialTheme.colorScheme.onPrimaryContainer)
+                                    Icon(
+                                        Icons.Default.Edit,
+                                        contentDescription = "Düzenle",
+                                        tint = MaterialTheme.colorScheme.onPrimaryContainer
+                                    )
                                 }
 
                                 // SİL
@@ -161,15 +177,31 @@ fun CargoList(
                                         onAction(UiAction.DeleteCargo(trackNo = cargo.trackNo))
                                         scope.launch { dismissState.reset() }
                                     },
-                                    modifier = Modifier.background(MaterialTheme.colorScheme.errorContainer, CircleShape)
+                                    modifier = Modifier.background(
+                                        MaterialTheme.colorScheme.errorContainer,
+                                        CircleShape
+                                    )
                                 ) {
-                                    Icon(Icons.Default.Delete, contentDescription = "Sil", tint = MaterialTheme.colorScheme.onErrorContainer)
+                                    Icon(
+                                        Icons.Default.Delete,
+                                        contentDescription = "Sil",
+                                        tint = MaterialTheme.colorScheme.onErrorContainer
+                                    )
                                 }
                             }
                         }
                     }
-                ){
-                    CargoItem(cargo = cargo, onAction = onAction)
+                ) {
+                    cargo.apply {
+                        CargoItemCard(
+                            title = cargoName,
+                            trackingNumber = trackNo,
+                            courierName = parcelName,
+                            imageUrl = logo,
+                            dateAdded = addDate ?: "Tarih bilgisi yok.",
+                            onClick = { onAction(UiAction.NavigateToTracking(parcelName, trackNo)) }
+                        )
+                    }
                 }
 
             }
@@ -194,61 +226,6 @@ fun EmptyCargoView(modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-        }
-    }
-}
-
-@Composable
-fun CargoItem(cargo: CargoModel, onAction: (UiAction) -> Unit) {
-    Card(
-        modifier = Modifier.fillMaxWidth().clickable { onAction(UiAction.NavigateToTracking(cargo.parcelName, cargo.trackNo)) },
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(48.dp)
-                    .background(Color.Gray.copy(alpha = 0.2f), shape = RoundedCornerShape(8.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                AsyncImage(
-                    model = cargo.logo,
-                    contentDescription = cargo.parcelName,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxSize()
-                )
-            }
-            Spacer(modifier = Modifier.width(16.dp))
-            Column(modifier = Modifier.weight(1f)) {
-                val header = if (cargo.cargoName.isNullOrBlank()){
-                    cargo.parcelName
-                }else{
-                    "${cargo.cargoName} - ${cargo.parcelName}"
-                }
-                Text(
-                    text = header,
-                    style = MaterialTheme.typography.titleMedium
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "Takip No: ${cargo.trackNo}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "Eklenme: ${cargo.addDate}", // TODO: Format Date
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
         }
     }
 }
