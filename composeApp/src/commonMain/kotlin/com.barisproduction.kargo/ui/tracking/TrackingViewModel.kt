@@ -21,9 +21,8 @@ import kotlinx.coroutines.launch
 
 class TrackingViewModel (
     savedStateHandle: SavedStateHandle,
-    private val insertCargoUseCase: InsertCargoUseCase,
     private val checkCargoInDBUseCase: CheckCargoInDBUseCase,
-    private val findCargoInfoUseCase: FindCargoInfoUseCase
+    private val findCargoInfoUseCase: FindCargoInfoUseCase,
     ) : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
     private val args = savedStateHandle.toRoute<Screen.Tracking>()
     private val argsTrackingNumber = args.trackingNo
@@ -31,13 +30,17 @@ class TrackingViewModel (
 
     init {
         findInfoInName()
+        viewModelScope.launch {
+            val isVisible = !isHaveDB()
+            updateUiState { copy(saveButtonVisibility = isVisible) }
+        }
     }
 
     private fun findInfoInName() {
         when(val parcel = findCargoInfoUseCase(argsParcelName)){
             is Resource.Success -> {
                 val url = createTrackUrl(trackingUrl = parcel.data?.trackingUrl ?: "", trackingNumber = argsTrackingNumber)
-                updateUiState { copy(trackingUrl = url, logo = parcel.data?.logo) }
+                updateUiState { copy(trackingUrl = url, logo = parcel.data?.logo, js = parcel.data?.js ?: "") }
             }
             is Resource.Error -> {
                 updateUiState { copy(isError = true, errorMessage = parcel.message) }
@@ -53,7 +56,7 @@ class TrackingViewModel (
         viewModelScope.launch {
             when (uiAction) {
                 is UiAction.OnBackClick -> emitUiEffect(UiEffect.NavigateBack)
-                is UiAction.OnSaveClick -> handleSave()
+                is UiAction.OnSaveClick -> emitUiEffect(UiEffect.ShowSaveDialog(argsParcelName, argsTrackingNumber))
                 is UiAction.OnLoadingStateChanged -> updateUiState { copy(isLoading = uiAction.isLoading) }
                 is UiAction.OnErrorReceived -> updateUiState { copy(isError = true, errorMessage = uiAction.message) }
                 is UiAction.OnRetryClick -> updateUiState { copy(isError = false, isLoading = true) }
@@ -61,22 +64,6 @@ class TrackingViewModel (
         }
     }
 
-    private fun handleSave() {
-        viewModelScope.launch {
-            if (!isHaveDB()){
-                val entity = CargoModel(
-                    parcelName = argsParcelName,
-                    cargoName = "",
-                    logo = uiState.value.logo ?: "",
-                    trackNo = argsTrackingNumber,
-                    addDate = null
-                )
-                insertCargoUseCase(entity)
-                emitUiEffect(UiEffect.ShowToast("Kargo başarıyla kaydedildi"))
-            }else{
-                emitUiEffect(UiEffect.ShowToast("Bu kargo zaten kayıtlı"))
-            }
-        }
-    }
-    private suspend fun isHaveDB() = checkCargoInDBUseCase(argsTrackingNumber)
+
+    private suspend fun isHaveDB() : Boolean = checkCargoInDBUseCase(argsTrackingNumber)
 }

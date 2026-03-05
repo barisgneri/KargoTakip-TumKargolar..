@@ -7,11 +7,12 @@ import androidx.navigation.compose.composable
 import com.barisproduction.kargo.navigation.Screen
 import org.koin.compose.viewmodel.koinViewModel
 
-class TrackingScreenNavActions(val onBack: () -> Unit = {}) {
+class TrackingScreenNavActions(val onBack: () -> Unit = {}, val onSave: (String, String) -> Unit) {
     companion object {
         val default: TrackingScreenNavActions
             get() = TrackingScreenNavActions(
-                onBack = {}
+                onBack = {},
+                onSave = { _, _ -> }
             )
     }
 }

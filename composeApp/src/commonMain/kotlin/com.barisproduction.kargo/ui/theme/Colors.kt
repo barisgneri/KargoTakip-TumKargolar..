@@ -20,7 +20,7 @@ val cargo_theme_light_onSurface = Color(0xFF0F172A)
 val cargo_theme_light_surfaceVariant = Color(0xFFF8FAFC)
 val cargo_theme_light_onSurfaceVariant = Color(0xFF64748B)
 val cargo_theme_light_outline = Color(0xFFE2E8F0)
-val cargo_theme_light_outlineVariant = Color(0xFFF1F5F9)
+val cargo_theme_light_outlineVariant = Color(0xFFDFE6EE)
 
 // Hata Durumu (Standart M3 Kırmızısı)
 val cargo_theme_light_error = Color(0xFFBA1A1A)

@@ -47,7 +47,9 @@ class AddCargoViewModel(
                 is UiAction.OnBackClick -> emitUiEffect(UiEffect.NavigateBack)
                 is UiAction.OnPasteClipboard -> handlePaste()
                 is UiAction.OnSearchCargoClick -> handleSearch()
-                is UiAction.OnSaveClick -> handleSave()
+                is UiAction.OnSaveClick -> {
+                    emitUiEffect(UiEffect.ShowSaveDialog(uiState.value.detectedCarrier?.parcelName ?: "", uiState.value.trackingNumber))
+                }
                 is UiAction.OnCarrierSelectClick -> updateUiState { copy(isCarrierSelectionVisible = true) }
                 is UiAction.OnCarrierSelectDismiss -> updateUiState { copy(isCarrierSelectionVisible = false) }
                 is UiAction.OnCarrierSelected -> selectCarrier(uiAction)
@@ -92,25 +94,7 @@ class AddCargoViewModel(
         }
     }
 
-    private fun handleSave() {
-        if (validateInputs()) {
-            viewModelScope.launch {
-                uiState.value.detectedCarrier?.let {
-                    val entity = CargoModel(
-                        cargoName = uiState.value.cargoName,
-                        parcelName = it.parcelName,
-                        logo = it.logo,
-                        trackNo = uiState.value.trackingNumber,
-                        addDate = null
-                    )
-                    insertCargoUseCase(entity)
-                } ?: Exception()
 
-                emitUiEffect(UiEffect.ShowToast("Kargo başarıyla kaydedildi"))
-                emitUiEffect(UiEffect.NavigateBack)
-            }
-        }
-    }
 
     private fun validateInputs(): Boolean {
         val trackingError = uiState.value.trackingNumber.isBlank()

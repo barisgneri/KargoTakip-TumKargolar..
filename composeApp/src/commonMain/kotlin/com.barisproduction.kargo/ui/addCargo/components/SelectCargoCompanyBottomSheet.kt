@@ -63,11 +63,14 @@ fun CarrierSelectionSheet(
                 modifier = Modifier.fillMaxWidth().height(400.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(parcelList) { carrier ->
+                items(parcelList, key = { it.parcelName }) { carrier ->
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { onCarrierSelected(carrier) }
+                            .clickable {
+                                onCarrierSelected(carrier)
+                                onDismissRequest()
+                            }
                             .padding(vertical = 12.dp, horizontal = 8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {

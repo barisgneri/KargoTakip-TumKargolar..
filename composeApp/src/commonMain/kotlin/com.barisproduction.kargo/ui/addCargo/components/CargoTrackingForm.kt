@@ -44,6 +44,11 @@ fun CargoTrackingForm(
 
         Spacer(modifier = Modifier.height(spacing.large))
 
+        Text(
+            text = stringResource(Res.string.cargo_company),
+            style = MaterialTheme.typography.labelLarge
+        )
+        Spacer(modifier = Modifier.height(spacing.small))
         CarrierSelectionTrigger(
             carrier = uiState.detectedCarrier,
             isError = uiState.cargoNameError,
@@ -97,15 +102,11 @@ private fun CargoTrackingNumberEnter(
     }
     Spacer(modifier = Modifier.height(spacing.small))
 
-    Box(
-        modifier = Modifier.fillMaxWidth().clip(MaterialTheme.shapes.small)
-            .background(MaterialTheme.colorScheme.outlineVariant)
-            .padding(spacing.small)
-    ) {
-        Text(
-            text = stringResource(Res.string.enter_cargo_number_or_scan_barcode_info_text),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    }
+
+    Text(
+        text = stringResource(Res.string.enter_cargo_number_or_scan_barcode_info_text),
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant
+    )
+
 }
