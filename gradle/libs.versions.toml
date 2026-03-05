@@ -18,6 +18,8 @@ google-services = "4.4.4"
 firebase-bom = "34.8.0"
 firebase-crashlytics-plugin = "3.0.6"
 gitlive-firebase = "2.4.0"
+androidx-lifecycle = "2.9.4"
+
 
 
 [libraries]
@@ -43,6 +45,7 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
 gitlive-firebase-analytics = { group = "dev.gitlive", name = "firebase-analytics", version.ref = "gitlive-firebase" }
 gitlive-firebase-firestore = { group = "dev.gitlive", name = "firebase-firestore", version.ref = "gitlive-firebase" }
+jetbrains-androidx-lifecycle = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle"}
 
 
 

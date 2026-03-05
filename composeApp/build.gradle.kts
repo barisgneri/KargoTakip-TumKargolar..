@@ -72,6 +72,8 @@ kotlin {
             implementation(libs.gitlive.firebase.analytics)
             implementation(libs.gitlive.firebase.firestore)
 
+            implementation(libs.jetbrains.androidx.lifecycle)
+
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
