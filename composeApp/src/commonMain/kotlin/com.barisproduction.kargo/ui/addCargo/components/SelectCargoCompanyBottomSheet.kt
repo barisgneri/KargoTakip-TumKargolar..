@@ -30,7 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.barisproduction.kargo.domain.model.Parcels
-import com.barisproduction.kargo.ui.theme.Dimens
+import com.barisproduction.kargo.ui.theme.spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,25 +49,28 @@ fun CarrierSelectionSheet(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(Dimens.paddingMedium)
+                .padding(spacing.medium)
         ) {
             Text(
                 "Kargo Firması Seçin",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.padding(bottom = Dimens.paddingMedium)
+                modifier = Modifier.padding(bottom = spacing.medium)
             )
 
             LazyColumn(
                 modifier = Modifier.fillMaxWidth().height(400.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(parcelList) { carrier ->
+                items(parcelList, key = { it.parcelName }) { carrier ->
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { onCarrierSelected(carrier) }
+                            .clickable {
+                                onCarrierSelected(carrier)
+                                onDismissRequest()
+                            }
                             .padding(vertical = 12.dp, horizontal = 8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {

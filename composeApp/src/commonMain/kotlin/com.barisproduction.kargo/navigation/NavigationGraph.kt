@@ -7,14 +7,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.dialog
 import com.barisproduction.kargo.ui.addCargo.AddCargoNavActions
 import com.barisproduction.kargo.ui.addCargo.addCargoScreen
 import com.barisproduction.kargo.ui.cargoList.CargoListNavActions
 import com.barisproduction.kargo.ui.cargoList.cargoListScreen
+import com.barisproduction.kargo.ui.saveDialog.CargoDialogViewModel
+import com.barisproduction.kargo.ui.saveDialog.CargoSaveDialog
 import com.barisproduction.kargo.ui.splash.SplashNavActions
 import com.barisproduction.kargo.ui.splash.splashScreen
 import com.barisproduction.kargo.ui.tracking.TrackingScreenNavActions
 import com.barisproduction.kargo.ui.tracking.trackingScreen
+import org.koin.compose.viewmodel.koinViewModel
 
 private const val DURATION = 1000
 
@@ -48,7 +52,7 @@ fun NavigationGraph(
                 addNewCargoNavigation = {
                     navController.navigate(Screen.AddNewCargo)
                 },
-                navigateToTracking = {parcelName, trackNo ->
+                navigateToTracking = { parcelName, trackNo ->
                     navController.navigate(
                         Screen.Tracking(
                             parcelName = parcelName,
@@ -58,21 +62,53 @@ fun NavigationGraph(
                 }
             )
         )
-        addCargoScreen(actions = AddCargoNavActions(onBack = {
-            navController.popBackStack()
-        }, navigateToSearch = {parcelName, trackNo ->
-            navController.navigate(Screen.Tracking(parcelName = parcelName, trackingNo = trackNo)) {
-                popUpTo(Screen.AddNewCargo) {
-                    inclusive = true
-                }
-            }
-        }))
+        addCargoScreen(
+            actions = AddCargoNavActions(
+                onBack = {
+                    navController.popBackStack()
+                }, navigateToSearch = { parcelName, trackNo ->
+                    navController.navigate(
+                        Screen.Tracking(
+                            parcelName = parcelName,
+                            trackingNo = trackNo
+                        )
+                    ) {
+                        popUpTo(Screen.AddNewCargo) {
+                            inclusive = true
+                        }
+                    }
+                },
+                onSave = { parcelName, trackNo ->
+                    navController.navigate(
+                        Screen.CargoSaveDialog(
+                            parcelName = parcelName,
+                            trackingNo = trackNo
+                        )
+                    )
+                })
+        )
         trackingScreen(
             actions = TrackingScreenNavActions(
                 onBack = {
                     navController.popBackStack()
+                },
+                onSave = { parcelName, trackNo ->
+                    navController.navigate(
+                        Screen.CargoSaveDialog(
+                            parcelName = parcelName,
+                            trackingNo = trackNo
+                        )
+                    )
                 }
             )
         )
+        dialog<Screen.CargoSaveDialog> {
+            val viewModel: CargoDialogViewModel = koinViewModel()
+
+            CargoSaveDialog(
+                viewModel = viewModel,
+                onDismissRequest = { navController.popBackStack() }
+            )
+        }
     }
 }
