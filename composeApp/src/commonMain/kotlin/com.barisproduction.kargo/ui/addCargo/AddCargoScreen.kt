@@ -2,23 +2,21 @@ package com.barisproduction.kargo.ui.addCargo
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import com.barisproduction.kargo.common.extensions.collectWithLifecycle
 import com.barisproduction.kargo.ui.addCargo.AddCargoContract.UiAction
 import com.barisproduction.kargo.ui.addCargo.AddCargoContract.UiEffect
@@ -26,8 +24,9 @@ import com.barisproduction.kargo.ui.addCargo.AddCargoContract.UiState
 import com.barisproduction.kargo.ui.addCargo.components.AddCargoTopBar
 import com.barisproduction.kargo.ui.addCargo.components.CargoTrackingForm
 import com.barisproduction.kargo.ui.addCargo.components.CarrierSelectionSheet
-import com.barisproduction.kargo.ui.theme.Dimens
+import com.barisproduction.kargo.ui.components.CargoButton
 import com.barisproduction.kargo.ui.theme.KargoTheme
+import com.barisproduction.kargo.ui.theme.spacing
 import kargotakiptumkargolar.composeapp.generated.resources.Res
 import kargotakiptumkargolar.composeapp.generated.resources.*
 import kotlinx.coroutines.flow.Flow
@@ -48,6 +47,7 @@ fun AddCargoScreen(
             is UiEffect.NavigateBack -> navActions.onBack()
             is UiEffect.NavigateToSearch -> navActions.navigateToSearch(it.cargoName, it.trackingNo)
             is UiEffect.ShowToast -> {}
+            is UiEffect.ShowSaveDialog -> navActions.onSave(it.parcelName, it.trackingNo)
         }
     }
 
@@ -81,33 +81,29 @@ private fun AddCargoScreenContent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
-                .imePadding()
-                .padding(Dimens.paddingMedium),
+                .padding(innerPadding),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             CargoTrackingForm(
                 modifier = Modifier
                     .weight(1f)
-                    .verticalScroll(scrollState),
+                    .verticalScroll(scrollState)
+                    .padding(horizontal = spacing.medium),
                 uiState = uiState,
                 onAction = onAction
             )
 
-            Button(
-                onClick = { onAction(UiAction.OnSearchCargoClick) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                )
-            ) {
-                Text(
+            Column() {
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                Spacer(modifier = Modifier.height(spacing.medium))
+                CargoButton(
+                    onClick = { onAction(UiAction.OnSearchCargoClick) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .imePadding()
+                        .padding(horizontal = spacing.medium),
                     text = stringResource(Res.string.search_cargo),
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                    icon = Icons.Default.Search
                 )
             }
         }

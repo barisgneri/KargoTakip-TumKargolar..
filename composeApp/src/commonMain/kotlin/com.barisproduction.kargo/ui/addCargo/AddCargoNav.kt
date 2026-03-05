@@ -10,13 +10,15 @@ import org.koin.compose.viewmodel.koinViewModel
 
 class AddCargoNavActions(
     val onBack: () -> Unit,
-    val navigateToSearch: (String,String) -> Unit
+    val navigateToSearch: (String,String) -> Unit,
+    val onSave: (String, String) -> Unit
 ) {
     companion object {
         val default: AddCargoNavActions
             get() = AddCargoNavActions(
                 onBack = {},
-                navigateToSearch = {_,_->}
+                navigateToSearch = {_,_->},
+                onSave = {_,_->}
             )
     }
 }

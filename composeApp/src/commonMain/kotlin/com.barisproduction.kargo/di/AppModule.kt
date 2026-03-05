@@ -4,6 +4,7 @@ import com.barisproduction.kargo.ui.splash.SplashViewModel
 import com.barisproduction.kargo.ui.cargoList.CargoListViewModel
 import com.barisproduction.kargo.ui.addCargo.AddCargoViewModel
 import com.barisproduction.kargo.ui.tracking.TrackingViewModel
+import com.barisproduction.kargo.ui.saveDialog.CargoDialogViewModel
 import org.koin.core.context.startKoin
 import com.barisproduction.kargo.data.repository.NetworkRepositoryImpl
 import com.barisproduction.kargo.domain.repository.NetworkRepository
@@ -24,9 +25,9 @@ import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.firestore.firestore
 import io.ktor.client.HttpClient
 import org.koin.core.module.dsl.factoryOf
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
-import org.koin.core.module.dsl.viewModelOf
 
 val dataModule = module {
     single { HttpClient() }
@@ -51,6 +52,7 @@ val viewModelModule = module {
     viewModelOf(::CargoListViewModel)
     viewModelOf(::AddCargoViewModel)
     viewModelOf(::TrackingViewModel)
+    viewModelOf(::CargoDialogViewModel)
 }
 
 fun initKoin(database: AppDatabase, appDeclaration: KoinAppDeclaration = {}) {

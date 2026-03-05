@@ -6,12 +6,15 @@ object TrackingScreenContract {
         val isError: Boolean = false,
         val errorMessage: String? = null,
         val trackingUrl: String? = null,
-        val logo: String? = null
+        val logo: String? = null,
+        val js: String = "",
+        val saveButtonVisibility: Boolean = true,
     )
     sealed class UiEffect{
         data class ShowError(val message: String) : UiEffect()
         data class ShowToast(val message: String) : UiEffect()
         data object NavigateBack : UiEffect()
+        data class ShowSaveDialog(val parcelName: String, val trackingNo: String) : UiEffect()
     }
     sealed class UiAction{
         data object OnBackClick : UiAction()

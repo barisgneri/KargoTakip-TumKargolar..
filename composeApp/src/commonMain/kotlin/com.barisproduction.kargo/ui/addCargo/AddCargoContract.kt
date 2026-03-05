@@ -31,6 +31,7 @@ object AddCargoContract {
     sealed interface UiEffect {
         data object NavigateBack : UiEffect
         data class NavigateToSearch(val cargoName: String, val trackingNo: String) : UiEffect
+        data class ShowSaveDialog(val parcelName: String, val trackingNo: String) : UiEffect
         data class ShowToast(val message: String) : UiEffect
     }
 }
