@@ -42,11 +42,6 @@ fun CarrierSelectionTrigger(
     isError: Boolean = false,
     onClick: () -> Unit
 ) {
-    Text(
-        text = stringResource(Res.string.cargo_company),
-        style = MaterialTheme.typography.labelLarge
-    )
-    Spacer(modifier = Modifier.height(spacing.small))
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier

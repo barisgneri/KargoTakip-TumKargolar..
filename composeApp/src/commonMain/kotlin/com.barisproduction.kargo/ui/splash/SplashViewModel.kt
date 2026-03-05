@@ -10,6 +10,7 @@ import com.barisproduction.kargo.ui.splash.SplashContract.UiAction
 import com.barisproduction.kargo.ui.splash.SplashContract.UiEffect
 import com.barisproduction.kargo.ui.splash.SplashContract.UiState
 import com.barisproduction.kargo.domain.usecase.CheckNetworkUseCase
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SplashViewModel(
@@ -33,8 +34,6 @@ class SplashViewModel(
         viewModelScope.launch {
             updateUiState { copy(isLoading = true, isError = false) }
             val isConnected = checkNetworkUseCase()
-            updateUiState { copy(isLoading = false) }
-            
             if (isConnected) {
                 getParcelList()
             } else {
@@ -46,11 +45,12 @@ class SplashViewModel(
     private fun getParcelList() {
         viewModelScope.launch {
             cargoRepository.getCargoParcelList()
+            delay(1000)
             cargoRepository.getCargoParcelListState().collect {
                 when (it) {
                     is Resource.Success -> {
                         println(it.data)
-                        updateUiState { copy(isLoading = false, isError = false) }
+                        updateUiState { copy( isError = false) }
                         emitUiEffect(UiEffect.NavigateToMain)
                     }
 
