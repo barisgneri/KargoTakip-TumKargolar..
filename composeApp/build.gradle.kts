@@ -21,7 +21,6 @@ kotlin {
         }
     }
 
-    jvm("desktop")
 
     listOf(
         iosX64(),
@@ -35,7 +34,6 @@ kotlin {
     }
 
     sourceSets {
-        val desktopMain by getting
 
         androidMain.dependencies {
             implementation(libs.androidx.compose.ui.tooling.preview)
@@ -77,10 +75,6 @@ kotlin {
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
-        }
-        desktopMain.dependencies {
-            implementation(compose.desktop.currentOs)
-            implementation(libs.kotlinx.coroutines.swing)
         }
     }
 }
@@ -137,17 +131,5 @@ android {
     dependencies {
         debugImplementation(compose.uiTooling)
 
-    }
-}
-
-compose.desktop {
-    application {
-        mainClass = "com.barisproduction.kargo.mainKt"
-
-        nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.barisproduction.kargo"
-            packageVersion = "1.0.0"
-        }
     }
 }
