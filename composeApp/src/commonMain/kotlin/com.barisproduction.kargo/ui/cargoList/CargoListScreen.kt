@@ -144,7 +144,7 @@ fun CargoList(
                     backgroundContent = {
                         val color =
                             if (dismissState.dismissDirection == SwipeToDismissBoxValue.EndToStart) {
-                                Color.Red.copy(alpha = 0.8f)
+                                MaterialTheme.colorScheme.onSurfaceVariant
                             } else Color.Transparent
 
                         Box(
@@ -152,7 +152,10 @@ fun CargoList(
                                 .fillMaxSize()
                                 .clip(RoundedCornerShape(12.dp))
                                 .background(color)
-                                .padding(horizontal = 20.dp),
+                                .padding(horizontal = 20.dp)
+                                .clickable {
+                                    scope.launch { dismissState.reset() }
+                                },
                             contentAlignment = Alignment.CenterEnd
                         ) {
                             Row(
