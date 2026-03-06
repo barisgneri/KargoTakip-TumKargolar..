@@ -16,6 +16,7 @@ import com.barisproduction.kargo.domain.usecase.CheckCargoInDBUseCase
 import com.barisproduction.kargo.domain.usecase.FindCargoInfoUseCase
 import com.barisproduction.kargo.domain.usecase.GetCargoParcelListUseCase
 import com.barisproduction.kargo.domain.usecase.InsertCargoUseCase
+import com.barisproduction.kargo.domain.usecase.UpdateCargoUseCase
 import com.barisproduction.kargo.navigation.Screen
 import kotlinx.coroutines.launch
 
@@ -24,14 +25,21 @@ class CargoDialogViewModel(
     private val findCargoInfoUseCase: FindCargoInfoUseCase,
     private val getCargoParcelListUseCase: GetCargoParcelListUseCase,
     private val insertCargoUseCase: InsertCargoUseCase,
-    private val checkCargoInDBUseCase: CheckCargoInDBUseCase
+    private val checkCargoInDBUseCase: CheckCargoInDBUseCase,
+    private val updateCargoUseCase: UpdateCargoUseCase
 ) : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
 
     init {
         val args = savedStateHandle.toRoute<Screen.CargoSaveDialog>()
 
         getParcelList()
-        updateUiState { copy(trackingNumber = args.trackingNo ?: "") }
+        updateUiState {
+            copy(
+                trackingNumber = args.trackingNo ?: "",
+                isEditMode = args.isEditMode,
+                cargoName = args.cargoName ?: ""
+            )
+        }
         findInfoInName(args.parcelName)
     }
 
@@ -82,7 +90,7 @@ class CargoDialogViewModel(
             is UiAction.OnCarrierSelectClick -> updateUiState { copy(isCarrierSelectionVisible = true) }
             is UiAction.OnCarrierSelectDismiss -> updateUiState { copy(isCarrierSelectionVisible = false) }
             is UiAction.OnCargoNameChange -> updateUiState { copy(cargoName = uiAction.name) }
-            is UiAction.OnSaveClick -> handleSave()
+            is UiAction.OnSaveClick -> handleSave(isEditMode = uiState.value.isEditMode)
         }
     }
 
@@ -120,7 +128,7 @@ class CargoDialogViewModel(
             )
 
             if (isEditMode) {
-                // updateCargoUseCase(entity)
+                updateCargoUseCase(entity)
             } else {
                 insertCargoUseCase(entity)
             }

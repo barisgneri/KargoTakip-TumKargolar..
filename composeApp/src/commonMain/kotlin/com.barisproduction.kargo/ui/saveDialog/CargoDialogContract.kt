@@ -15,7 +15,8 @@ object CargoDialogContract {
         val errorMessage: String? = null,
         val isTrackingNumberError: Boolean = false,
         val isParcelError: Boolean = false,
-        val isCargoNameError: Boolean = false
+        val isCargoNameError: Boolean = false,
+        val isEditMode: Boolean = false
     )
 
     sealed interface UiAction {
