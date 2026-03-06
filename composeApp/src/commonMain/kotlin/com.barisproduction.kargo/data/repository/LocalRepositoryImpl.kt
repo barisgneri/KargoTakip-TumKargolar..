@@ -1,10 +1,9 @@
 package com.barisproduction.kargo.data.repository
 
-import com.barisproduction.kargo.common.toFormattedDate
+import com.barisproduction.kargo.common.extensions.toFormattedDate
 import com.barisproduction.kargo.data.local.CargoDao
 import com.barisproduction.kargo.data.local.CargoEntity
 import com.barisproduction.kargo.domain.model.CargoModel
-import com.barisproduction.kargo.domain.model.ParcelModel
 import com.barisproduction.kargo.domain.repository.LocalRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -18,20 +17,34 @@ class LocalRepositoryImpl(
     @OptIn(ExperimentalTime::class)
     override suspend fun insertCargo(cargo: CargoModel) {
         val entity = CargoEntity(
-            name = cargo.name,
-            cargoName = cargo.parcel.parcelName,
+            parcelName = cargo.parcelName,
+            cargoName = cargo.cargoName,
             trackingNumber = cargo.trackNo,
+            logo = cargo.logo,
             createdAt = Clock.System.now().toEpochMilliseconds()
         )
         cargoDao.insertCargo(entity)
+    }
+
+    override suspend fun updateCargo(cargo: CargoModel) {
+        val existingEntity = cargoDao.getCargoByTrackingNumber(cargo.trackNo)
+        if (existingEntity != null) {
+            val updatedEntity = existingEntity.copy(
+                parcelName = cargo.parcelName,
+                cargoName = cargo.cargoName,
+                logo = cargo.logo,
+            )
+            cargoDao.updateCargo(updatedEntity)
+        }
     }
 
     override fun getAllCargos(): Flow<List<CargoModel>> {
         return cargoDao.getAllCargos().map { entities ->
             entities.map { entity ->
                 CargoModel(
-                    name = entity.name,
-                    parcel = ParcelModel.fromName(entity.cargoName)?: ParcelModel.OTHER,
+                    parcelName = entity.parcelName,
+                    cargoName = entity.cargoName,
+                    logo = entity.logo,
                     trackNo = entity.trackingNumber,
                     addDate = entity.createdAt.toFormattedDate()
                 )
@@ -40,7 +53,7 @@ class LocalRepositoryImpl(
     }
 
     override suspend fun deleteCargo(trackNo: String) {
-        getCargoByTrackingNumber(trackNo)?.let { entity ->
+        cargoDao.getCargoByTrackingNumber(trackNo)?.let { entity ->
             cargoDao.deleteCargo(entity)
         }
     }

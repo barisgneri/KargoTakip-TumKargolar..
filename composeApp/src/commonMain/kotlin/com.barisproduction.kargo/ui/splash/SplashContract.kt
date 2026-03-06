@@ -2,8 +2,8 @@ package com.barisproduction.kargo.ui.splash
 
 object SplashContract {
     data class UiState(
-        val isLoading: Boolean = false,
-        val isError: Boolean = false,
+        val isLoading: Boolean = true,
+        val errorMessage: String? = null,
         val list: List<String> = emptyList(),
     )
 

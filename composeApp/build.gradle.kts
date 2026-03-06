@@ -16,13 +16,11 @@ plugins {
 
 kotlin {
     androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+            jvmTarget.set(JvmTarget.JVM_17)
         }
     }
 
-    jvm("desktop")
 
     listOf(
         iosX64(),
@@ -36,7 +34,6 @@ kotlin {
     }
 
     sourceSets {
-        val desktopMain by getting
 
         androidMain.dependencies {
             implementation(libs.androidx.compose.ui.tooling.preview)
@@ -61,6 +58,7 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.navigation.compose)
             implementation(libs.coil)
+            implementation(libs.coil.ktor)
             implementation(libs.ktor.client.core)
 
             // Room
@@ -70,14 +68,15 @@ kotlin {
             //datetime
             implementation(libs.kotlinx.datetime)
 
+            //firebase
+            implementation(libs.gitlive.firebase.analytics)
+            implementation(libs.gitlive.firebase.firestore)
+
+            implementation(libs.jetbrains.androidx.lifecycle)
 
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
-        }
-        desktopMain.dependencies {
-            implementation(compose.desktop.currentOs)
-            implementation(libs.kotlinx.coroutines.swing)
         }
     }
 }
@@ -102,8 +101,8 @@ android {
         applicationId = "com.barisproduction.kargo"
         minSdk = 24
         targetSdk = 36
-        versionCode = 8
-        versionName = "1.34"
+        versionCode = 9
+        versionName = "1.4"
     }
     packaging {
         resources {
@@ -120,6 +119,11 @@ android {
                 "proguard-rules.pro"
             )
         }
+        getByName("debug") {
+            isMinifyEnabled = false
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-DEBUG"
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -129,17 +133,5 @@ android {
     dependencies {
         debugImplementation(compose.uiTooling)
 
-    }
-}
-
-compose.desktop {
-    application {
-        mainClass = "com.barisproduction.kargo.mainKt"
-
-        nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.barisproduction.kargo"
-            packageVersion = "1.0.0"
-        }
     }
 }

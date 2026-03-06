@@ -14,7 +14,8 @@ actual fun KargoWebView(
     url: String,
     modifier: Modifier,
     onLoadingStateChanged: (Boolean) -> Unit,
-    onError: (String) -> Unit
+    onError: (Int) -> Unit,
+    js: String
 ) {
     AndroidView(
         modifier = modifier,
@@ -29,6 +30,15 @@ actual fun KargoWebView(
                     override fun onPageFinished(view: WebView?, url: String?) {
                         super.onPageFinished(view, url)
                         onLoadingStateChanged(false)
+
+                        val cleanJs = js
+                            .replace("javascript:", "") // javascript takısını kaldır
+                            .replace("\n", " ")         // Alt satıra geçişleri (enter) boşluğa çevir
+                            .replace("\r", "")          // Varsa carriage return karakterlerini temizle
+
+                       // val darkModeJs = "(function(){document.documentElement.style.filter='invert(1) hue-rotate(180deg)';var media=document.querySelectorAll('img, picture, video, svg');media.forEach(function(el){el.style.filter='invert(1) hue-rotate(180deg)';});document.body.style.backgroundColor='#121212';})();"
+                        println(cleanJs)
+                        view?.evaluateJavascript(cleanJs, null)
                     }
 
                     override fun onReceivedError(
@@ -37,7 +47,7 @@ actual fun KargoWebView(
                         error: WebResourceError?
                     ) {
                         super.onReceivedError(view, request, error)
-                        onError(error?.description?.toString() ?: "Unknown Error")
+                        onError(error?.errorCode ?: 404)
                         onLoadingStateChanged(false)
                     }
                 }

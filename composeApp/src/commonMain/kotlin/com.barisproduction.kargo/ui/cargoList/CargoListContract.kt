@@ -1,7 +1,6 @@
 package com.barisproduction.kargo.ui.cargoList
 
 import com.barisproduction.kargo.domain.model.CargoModel
-import com.barisproduction.kargo.domain.model.ParcelModel
 
 object CargoListContract {
     data class UiState(
@@ -11,12 +10,15 @@ object CargoListContract {
 
     sealed class UiAction{
         data object AddNewCargo : UiAction()
-        data class NavigateToTracking(val parcelModel: ParcelModel, val trackingNumber: String) : UiAction()
+        data class NavigateToTracking(val parcelName: String, val trackingNumber: String) : UiAction()
         data class DeleteCargo(val trackNo: String) : UiAction()
+        data class EditCargo(val parcelName: String, val trackingNumber: String, val cargoName: String) : UiAction()
     }
     sealed class UiEffect{
         data class ShowError(val message: String) : UiEffect()
         data object NavigateToAddNewCargo : UiEffect()
-        data class NavigateToTracking(val parcelModel: ParcelModel, val trackingNumber: String) : UiEffect()
+        data class NavigateToTracking(val parcelName: String, val trackingNumber: String) : UiEffect()
+        data class NavigateToEdit(val parcelName: String, val trackingNumber: String, val cargoName: String) : UiEffect()
+
     }
 }

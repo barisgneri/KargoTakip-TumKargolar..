@@ -7,6 +7,6 @@ class SplashScreenPreviewProvider() : PreviewParameterProvider<SplashContract.Ui
         get() = sequenceOf(
             SplashContract.UiState(),
             SplashContract.UiState(isLoading = true),
-            SplashContract.UiState(isError = true)
+            SplashContract.UiState(errorMessage = "Hata", isLoading = false)
         )
 }

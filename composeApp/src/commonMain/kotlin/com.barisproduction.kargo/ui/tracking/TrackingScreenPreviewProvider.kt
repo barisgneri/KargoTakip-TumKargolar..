@@ -7,13 +7,18 @@ class TrackingScreenPreviewProvider : PreviewParameterProvider<TrackingScreenCon
         get() = sequenceOf(
             TrackingScreenContract.UiState(
                 isLoading = true,
-                isError = false,
+                errorMessage = null,
                 trackingUrl = null
             ),
             TrackingScreenContract.UiState(
                 isLoading = false,
-                isError = false,
+                errorMessage = null,
                 trackingUrl = "null"
+            ),
+            TrackingScreenContract.UiState(
+                isLoading = false,
+                errorMessage = "Bir hata oluştu",
+                trackingUrl = null
             )
         )
 }

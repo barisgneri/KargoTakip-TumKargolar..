@@ -9,5 +9,6 @@ expect fun KargoWebView(
     url: String,
     modifier: Modifier,
     onLoadingStateChanged: (Boolean) -> Unit,
-    onError: (String) -> Unit
+    onError: (Int) -> Unit,
+    js: String
 )
