@@ -101,8 +101,8 @@ android {
         applicationId = "com.barisproduction.kargo"
         minSdk = 24
         targetSdk = 36
-        versionCode = 8
-        versionName = "1.34"
+        versionCode = 9
+        versionName = "1.4"
     }
     packaging {
         resources {
