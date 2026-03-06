@@ -4,13 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.barisproduction.kargo.common.Resource
 import com.barisproduction.kargo.common.service.ClipboardService
-import com.barisproduction.kargo.data.local.CargoEntity
 import com.barisproduction.kargo.delegation.MVI
 import com.barisproduction.kargo.delegation.mvi
-import com.barisproduction.kargo.domain.model.CargoModel
-import com.barisproduction.kargo.domain.model.Parcels
-import com.barisproduction.kargo.domain.repository.CargoRepository
-import com.barisproduction.kargo.domain.usecase.InsertCargoUseCase
+import com.barisproduction.kargo.domain.usecase.GetCargoParcelListUseCase
 import com.barisproduction.kargo.ui.addCargo.AddCargoContract.UiAction
 import com.barisproduction.kargo.ui.addCargo.AddCargoContract.UiEffect
 import com.barisproduction.kargo.ui.addCargo.AddCargoContract.UiState
@@ -19,8 +15,7 @@ import kotlinx.coroutines.launch
 
 class AddCargoViewModel(
     private val clipboardService: ClipboardService,
-    private val insertCargoUseCase: InsertCargoUseCase,
-    private val cargoRepository: CargoRepository
+    private val getCargoParcelListUseCase: GetCargoParcelListUseCase,
 ) : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
 
     init {
@@ -29,7 +24,7 @@ class AddCargoViewModel(
 
     private fun getParcelList() {
         viewModelScope.launch {
-            cargoRepository.getCargoParcelListState().collect{
+            getCargoParcelListUseCase().collect{
                 when(it){
                     is Resource.Success -> updateUiState { copy(parcelList = it.data ?: emptyList()) }
 
