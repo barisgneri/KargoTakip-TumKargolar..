@@ -3,7 +3,7 @@ package com.barisproduction.kargo.ui.splash
 object SplashContract {
     data class UiState(
         val isLoading: Boolean = true,
-        val isError: Boolean = false,
+        val errorMessage: String? = null,
         val list: List<String> = emptyList(),
     )
 
