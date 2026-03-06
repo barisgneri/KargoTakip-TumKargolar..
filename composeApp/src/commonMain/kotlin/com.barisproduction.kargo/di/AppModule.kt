@@ -21,6 +21,9 @@ import com.barisproduction.kargo.domain.usecase.InsertCargoUseCase
 import com.barisproduction.kargo.domain.usecase.CheckCargoInDBUseCase
 import com.barisproduction.kargo.domain.usecase.DeleteCargoUseCase
 import com.barisproduction.kargo.domain.usecase.FindCargoInfoUseCase
+import com.barisproduction.kargo.domain.usecase.FetchCargoParcelListUseCase
+import com.barisproduction.kargo.domain.usecase.GetCargoParcelListUseCase
+import com.barisproduction.kargo.domain.usecase.UpdateCargoUseCase
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.firestore.firestore
 import io.ktor.client.HttpClient
@@ -45,6 +48,10 @@ val dataModule = module {
     factoryOf(::DeleteCargoUseCase)
     factoryOf(::CheckCargoInDBUseCase)
     factoryOf(::FindCargoInfoUseCase)
+    factoryOf(::FetchCargoParcelListUseCase)
+    factoryOf(::GetCargoParcelListUseCase)
+    factoryOf(::UpdateCargoUseCase)
+
 }
 
 val viewModelModule = module {

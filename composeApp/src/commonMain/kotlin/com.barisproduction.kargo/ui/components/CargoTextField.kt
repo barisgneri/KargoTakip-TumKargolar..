@@ -23,7 +23,8 @@ fun CargoTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     singleLine: Boolean = true,
-    isError: Boolean = false
+    isError: Boolean = false,
+    enabled: Boolean = true
 ) {
     OutlinedTextField(
         value = value,
@@ -41,7 +42,7 @@ fun CargoTextField(
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
         shape = MaterialTheme.shapes.medium,
-
+        enabled = enabled,
         leadingIcon = leadingIcon?.let {
             {
                 Icon(

@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.barisproduction.kargo.common.Resource
 import com.barisproduction.kargo.common.createTrackUrl
+import com.barisproduction.kargo.common.extensions.toUserMessage
+import com.barisproduction.kargo.data.util.ErrorParser
 import com.barisproduction.kargo.delegation.MVI
 import com.barisproduction.kargo.delegation.mvi
 import com.barisproduction.kargo.domain.model.CargoModel
@@ -43,7 +45,7 @@ class TrackingViewModel (
                 updateUiState { copy(trackingUrl = url, logo = parcel.data?.logo, js = parcel.data?.js ?: "") }
             }
             is Resource.Error -> {
-                updateUiState { copy(isError = true, errorMessage = parcel.message) }
+                updateUiState { copy(errorMessage = parcel.errorType.toUserMessage()) }
             }
             is Resource.Loading -> {
                 updateUiState { copy(isLoading = true) }
@@ -58,9 +60,19 @@ class TrackingViewModel (
                 is UiAction.OnBackClick -> emitUiEffect(UiEffect.NavigateBack)
                 is UiAction.OnSaveClick -> emitUiEffect(UiEffect.ShowSaveDialog(argsParcelName, argsTrackingNumber))
                 is UiAction.OnLoadingStateChanged -> updateUiState { copy(isLoading = uiAction.isLoading) }
-                is UiAction.OnErrorReceived -> updateUiState { copy(isError = true, errorMessage = uiAction.message) }
-                is UiAction.OnRetryClick -> updateUiState { copy(isError = false, isLoading = true) }
+                is UiAction.OnErrorReceived -> onWebViewError(errorCode = uiAction.errorCode)
+                is UiAction.OnRetryClick -> updateUiState { copy(errorMessage = null, isLoading = true) }
             }
+        }
+    }
+
+    private fun onWebViewError(errorCode: Int) = viewModelScope.launch {
+        val errorResource = ErrorParser.parseWebViewError<Unit>(errorCode = errorCode)
+        updateUiState {
+            copy(
+                isLoading = false,
+                errorMessage = errorResource.errorType.toUserMessage(),
+            )
         }
     }
 

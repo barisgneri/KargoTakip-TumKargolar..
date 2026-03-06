@@ -11,10 +11,12 @@ object CargoDialogContract {
         val cargoName: String = "",
         val detectedCarrier: Parcels? = null,
         val isCarrierSelectionVisible: Boolean = false,
-        val isCargoNameError: Boolean = false,
+        val isError: Boolean = false,
+        val errorMessage: String? = null,
         val isTrackingNumberError: Boolean = false,
         val isParcelError: Boolean = false,
-        val errorMessage: String? = null
+        val isCargoNameError: Boolean = false,
+        val isEditMode: Boolean = false
     )
 
     sealed interface UiAction {

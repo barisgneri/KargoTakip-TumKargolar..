@@ -75,6 +75,12 @@ fun CargoListScreen(
                 it.parcelName,
                 it.trackingNumber
             )
+
+            is UiEffect.NavigateToEdit -> navActions.navigateToEdit(
+                it.parcelName,
+                it.trackingNumber,
+                it.cargoName
+            )
         }
     }
     when {
@@ -98,10 +104,10 @@ fun CargoListContent(
         modifier = modifier.background(MaterialTheme.colorScheme.background),
         topBar = { CargoListAppBar() },
         floatingActionButton = {
-        AnimAddCargoFAB(onClick = {
-            onAction(UiAction.AddNewCargo)
-        })
-    }) { innerPadding ->
+            AnimAddCargoFAB(onClick = {
+                onAction(UiAction.AddNewCargo)
+            })
+        }) { innerPadding ->
         CargoList(
             modifier = Modifier.padding(innerPadding),
             cargoList = uiState.list,
@@ -138,7 +144,7 @@ fun CargoList(
                     backgroundContent = {
                         val color =
                             if (dismissState.dismissDirection == SwipeToDismissBoxValue.EndToStart) {
-                                Color.Red.copy(alpha = 0.8f)
+                                MaterialTheme.colorScheme.onSurfaceVariant
                             } else Color.Transparent
 
                         Box(
@@ -146,7 +152,10 @@ fun CargoList(
                                 .fillMaxSize()
                                 .clip(RoundedCornerShape(12.dp))
                                 .background(color)
-                                .padding(horizontal = 20.dp),
+                                .padding(horizontal = 20.dp)
+                                .clickable {
+                                    scope.launch { dismissState.reset() }
+                                },
                             contentAlignment = Alignment.CenterEnd
                         ) {
                             Row(
@@ -156,7 +165,13 @@ fun CargoList(
                                 // DÜZENLE
                                 IconButton(
                                     onClick = {
-                                        onAction(UiAction.EditCargo(cargo.trackNo))
+                                        onAction(
+                                            UiAction.EditCargo(
+                                                cargo.parcelName,
+                                                cargo.trackNo,
+                                                cargo.cargoName ?: ""
+                                            )
+                                        )
                                         scope.launch { dismissState.reset() }
                                     },
                                     modifier = Modifier.background(

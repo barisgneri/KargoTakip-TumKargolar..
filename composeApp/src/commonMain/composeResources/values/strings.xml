@@ -20,5 +20,6 @@
     <string name="my_cargos">Kargolarım</string>
     <string name="cargo_name">Kargo Adı</string>
     <string name="cancel">İptal</string>
-
+    <string name="update_cargo">Kargoyu Güncelle</string>
+    <string name="update">Güncelle</string>
 </resources>

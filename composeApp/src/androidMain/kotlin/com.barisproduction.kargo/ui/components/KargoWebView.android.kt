@@ -14,7 +14,7 @@ actual fun KargoWebView(
     url: String,
     modifier: Modifier,
     onLoadingStateChanged: (Boolean) -> Unit,
-    onError: (String) -> Unit,
+    onError: (Int) -> Unit,
     js: String
 ) {
     AndroidView(
@@ -47,7 +47,7 @@ actual fun KargoWebView(
                         error: WebResourceError?
                     ) {
                         super.onReceivedError(view, request, error)
-                        onError(error?.description?.toString() ?: "Unknown Error")
+                        onError(error?.errorCode ?: 404)
                         onLoadingStateChanged(false)
                     }
                 }

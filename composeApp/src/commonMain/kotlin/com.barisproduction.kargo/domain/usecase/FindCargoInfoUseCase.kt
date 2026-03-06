@@ -1,6 +1,8 @@
 package com.barisproduction.kargo.domain.usecase
 
+import com.barisproduction.kargo.common.AppError
 import com.barisproduction.kargo.common.Resource
+import com.barisproduction.kargo.common.extensions.toUserMessage
 import com.barisproduction.kargo.domain.model.CargoModel
 import com.barisproduction.kargo.domain.model.Parcels
 import com.barisproduction.kargo.domain.repository.CargoRepository
@@ -25,12 +27,12 @@ class FindCargoInfoUseCase(private val repository: CargoRepository) {
                     )
                     Resource.Success(parcelModel)
                 } else {
-                    Resource.Error("Kargo bulunamadı")
+                    Resource.Error(errorType = AppError.General("Kargo bulunamadı."))
                 }
             }
 
             is Resource.Error -> {
-                Resource.Error(response.message ?: "Liste çekilirken bir hata oluşmuş.")
+                Resource.Error(errorType = AppError.General(response.errorType.toUserMessage()))
             }
 
             is Resource.Loading -> {
