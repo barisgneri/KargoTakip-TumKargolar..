@@ -12,11 +12,13 @@ object CargoListContract {
         data object AddNewCargo : UiAction()
         data class NavigateToTracking(val parcelName: String, val trackingNumber: String) : UiAction()
         data class DeleteCargo(val trackNo: String) : UiAction()
-        data class EditCargo(val trackNo: String) : UiAction()
+        data class EditCargo(val parcelName: String, val trackingNumber: String, val cargoName: String) : UiAction()
     }
     sealed class UiEffect{
         data class ShowError(val message: String) : UiEffect()
         data object NavigateToAddNewCargo : UiEffect()
         data class NavigateToTracking(val parcelName: String, val trackingNumber: String) : UiEffect()
+        data class NavigateToEdit(val parcelName: String, val trackingNumber: String, val cargoName: String) : UiEffect()
+
     }
 }

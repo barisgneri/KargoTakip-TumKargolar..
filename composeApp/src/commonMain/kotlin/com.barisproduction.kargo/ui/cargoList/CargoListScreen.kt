@@ -75,6 +75,12 @@ fun CargoListScreen(
                 it.parcelName,
                 it.trackingNumber
             )
+
+            is UiEffect.NavigateToEdit -> navActions.navigateToEdit(
+                it.parcelName,
+                it.trackingNumber,
+                it.cargoName
+            )
         }
     }
     when {
@@ -98,10 +104,10 @@ fun CargoListContent(
         modifier = modifier.background(MaterialTheme.colorScheme.background),
         topBar = { CargoListAppBar() },
         floatingActionButton = {
-        AnimAddCargoFAB(onClick = {
-            onAction(UiAction.AddNewCargo)
-        })
-    }) { innerPadding ->
+            AnimAddCargoFAB(onClick = {
+                onAction(UiAction.AddNewCargo)
+            })
+        }) { innerPadding ->
         CargoList(
             modifier = Modifier.padding(innerPadding),
             cargoList = uiState.list,
@@ -156,7 +162,13 @@ fun CargoList(
                                 // DÜZENLE
                                 IconButton(
                                     onClick = {
-                                        onAction(UiAction.EditCargo(cargo.trackNo))
+                                        onAction(
+                                            UiAction.EditCargo(
+                                                cargo.parcelName,
+                                                cargo.trackNo,
+                                                cargo.cargoName ?: ""
+                                            )
+                                        )
                                         scope.launch { dismissState.reset() }
                                     },
                                     modifier = Modifier.background(

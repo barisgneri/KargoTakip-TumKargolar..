@@ -59,6 +59,16 @@ fun NavigationGraph(
                             trackingNo = trackNo
                         )
                     )
+                },
+                navigateToEdit = { parcelName, trackNo, cargoName ->
+                    navController.navigate(
+                        Screen.CargoSaveDialog(
+                            parcelName = parcelName,
+                            trackingNo = trackNo,
+                            isEditMode = true,
+                            cargoName = cargoName
+                        )
+                    )
                 }
             )
         )

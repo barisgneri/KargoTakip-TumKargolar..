@@ -4,7 +4,6 @@ import com.barisproduction.kargo.common.extensions.toFormattedDate
 import com.barisproduction.kargo.data.local.CargoDao
 import com.barisproduction.kargo.data.local.CargoEntity
 import com.barisproduction.kargo.domain.model.CargoModel
-import com.barisproduction.kargo.domain.model.Parcels
 import com.barisproduction.kargo.domain.repository.LocalRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -27,6 +26,18 @@ class LocalRepositoryImpl(
         cargoDao.insertCargo(entity)
     }
 
+    override suspend fun updateCargo(cargo: CargoModel) {
+        val existingEntity = cargoDao.getCargoByTrackingNumber(cargo.trackNo)
+        if (existingEntity != null) {
+            val updatedEntity = existingEntity.copy(
+                parcelName = cargo.parcelName,
+                cargoName = cargo.cargoName,
+                logo = cargo.logo,
+            )
+            cargoDao.updateCargo(updatedEntity)
+        }
+    }
+
     override fun getAllCargos(): Flow<List<CargoModel>> {
         return cargoDao.getAllCargos().map { entities ->
             entities.map { entity ->
@@ -42,7 +53,7 @@ class LocalRepositoryImpl(
     }
 
     override suspend fun deleteCargo(trackNo: String) {
-        getCargoByTrackingNumber(trackNo)?.let { entity ->
+        cargoDao.getCargoByTrackingNumber(trackNo)?.let { entity ->
             cargoDao.deleteCargo(entity)
         }
     }

@@ -36,12 +36,15 @@ import com.barisproduction.kargo.ui.components.CargoButtonStyle
 import com.barisproduction.kargo.ui.components.CargoTextField
 import com.barisproduction.kargo.ui.theme.spacing
 import kargotakiptumkargolar.composeapp.generated.resources.Res
+import kargotakiptumkargolar.composeapp.generated.resources.add_new_cargo
 import kargotakiptumkargolar.composeapp.generated.resources.btn_save
 import kargotakiptumkargolar.composeapp.generated.resources.cancel
 import kargotakiptumkargolar.composeapp.generated.resources.cargo_company
 import kargotakiptumkargolar.composeapp.generated.resources.cargo_name
 import kargotakiptumkargolar.composeapp.generated.resources.cargo_name_optional
 import kargotakiptumkargolar.composeapp.generated.resources.tracking_number
+import kargotakiptumkargolar.composeapp.generated.resources.update
+import kargotakiptumkargolar.composeapp.generated.resources.update_cargo
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
@@ -115,7 +118,9 @@ private fun CargoDialogContent(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Yeni Gönderi Ekle",
+                        text = if (!uiState.isEditMode) stringResource(Res.string.add_new_cargo) else stringResource(
+                            Res.string.update_cargo
+                        ),
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -147,7 +152,8 @@ private fun CargoDialogContent(
                     },
                     isError = uiState.isTrackingNumberError,
                     placeholder = "Örn: TR123456789",
-                    leadingIcon = Icons.Default.QrCodeScanner
+                    leadingIcon = Icons.Default.QrCodeScanner,
+                    enabled = !uiState.isEditMode
                 )
 
                 Spacer(modifier = Modifier.height(spacing.medium))
@@ -184,7 +190,9 @@ private fun CargoDialogContent(
                 Spacer(modifier = Modifier.height(spacing.extraLarge))
 
                 CargoButton(
-                    text = stringResource(Res.string.btn_save),
+                    text = if (!uiState.isEditMode) stringResource(Res.string.btn_save) else stringResource(
+                        Res.string.update
+                    ),
                     style = CargoButtonStyle.PRIMARY,
                     onClick = {
                         onAction(CargoDialogContract.UiAction.OnSaveClick)
