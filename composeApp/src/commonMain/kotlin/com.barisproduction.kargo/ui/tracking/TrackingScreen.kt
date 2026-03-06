@@ -106,7 +106,7 @@ fun TrackingScreenContent(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            if (uiState.isError) {
+            if (uiState.errorMessage != null) {
                 ErrorView(
                     message = uiState.errorMessage ?: "Bir hata oluştu",
                     onRetry = { onAction(UiAction.OnRetryClick) }

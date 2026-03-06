@@ -21,7 +21,7 @@ class CargoListViewModel(private val getCargosUseCase: GetCargosUseCase, private
                 is UiAction.AddNewCargo -> emitUiEffect(UiEffect.NavigateToAddNewCargo)
                 is UiAction.NavigateToTracking -> emitUiEffect(UiEffect.NavigateToTracking(uiAction.parcelName, uiAction.trackingNumber))
                 is UiAction.DeleteCargo -> deleteCargoUseCase(uiAction.trackNo)
-                is UiAction.EditCargo -> {}
+                is UiAction.EditCargo -> emitUiEffect(UiEffect.NavigateToEdit(uiAction.parcelName, uiAction.trackingNumber, uiAction.cargoName))
             }
         }
     }

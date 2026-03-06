@@ -72,7 +72,7 @@ fun SplashScreen(
         uiState = uiState
     )
 
-    if (uiState.isError) {
+    if (uiState.errorMessage != null) {
         Dialog(onDismissRequest = {}) {
             Surface(
                 shape = RoundedCornerShape(16.dp),
