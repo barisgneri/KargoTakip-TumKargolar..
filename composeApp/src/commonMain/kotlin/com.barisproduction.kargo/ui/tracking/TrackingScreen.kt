@@ -14,9 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.NetworkLocked
-import androidx.compose.material.icons.filled.Replay
-import androidx.compose.material.icons.filled.Security
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -33,8 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.barisproduction.kargo.common.extensions.collectWithLifecycle
-import com.barisproduction.kargo.ui.components.CargoButton
-import com.barisproduction.kargo.ui.components.CargoButtonStyle
+import com.barisproduction.kargo.ui.components.CargoBaseDialog
 import com.barisproduction.kargo.ui.components.ErrorView
 import com.barisproduction.kargo.ui.components.KargoWebView
 import com.barisproduction.kargo.ui.components.LoadingBar
@@ -44,9 +41,15 @@ import com.barisproduction.kargo.ui.tracking.TrackingScreenContract.UiAction
 import com.barisproduction.kargo.ui.tracking.TrackingScreenContract.UiEffect
 import com.barisproduction.kargo.ui.tracking.TrackingScreenContract.UiState
 import com.barisproduction.kargo.ui.tracking.components.TrackingScreenTopBar
+import kargotakiptumkargolar.composeapp.generated.resources.Res
+import kargotakiptumkargolar.composeapp.generated.resources.btn_save
+import kargotakiptumkargolar.composeapp.generated.resources.did_not_save_cargo
+import kargotakiptumkargolar.composeapp.generated.resources.dont_save_cargo_info
+import kargotakiptumkargolar.composeapp.generated.resources.exit
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
@@ -75,6 +78,22 @@ fun TrackingScreen(
                 uiEffect.trackingNo
             )
         }
+    }
+
+    if (uiState.showSaveConfirmationDialog) {
+        CargoBaseDialog(
+            onDismissRequest = { onAction(UiAction.OnDismissSaveDialog) },
+            title = stringResource(Res.string.did_not_save_cargo),
+            description = stringResource(Res.string.dont_save_cargo_info),
+            icon = Icons.Default.Save,
+            confirmButtonText = stringResource(Res.string.btn_save),
+            onConfirmClick = {
+                onAction(UiAction.OnDismissSaveDialog)
+                onAction(UiAction.OnSaveClick)
+            },
+            dismissButtonText = stringResource(Res.string.exit),
+            onDismissClick = { onAction(UiAction.OnExitWithoutSaving) }
+        )
     }
 
     TrackingScreenContent(

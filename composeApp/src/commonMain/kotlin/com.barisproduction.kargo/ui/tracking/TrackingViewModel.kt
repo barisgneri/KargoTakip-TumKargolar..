@@ -57,11 +57,22 @@ class TrackingViewModel (
     override fun onAction(uiAction: UiAction) {
         viewModelScope.launch {
             when (uiAction) {
-                is UiAction.OnBackClick -> emitUiEffect(UiEffect.NavigateBack)
+                is UiAction.OnBackClick -> {
+                    if (!isHaveDB()) {
+                        updateUiState { copy(showSaveConfirmationDialog = true) }
+                    } else {
+                        emitUiEffect(UiEffect.NavigateBack)
+                    }
+                }
                 is UiAction.OnSaveClick -> emitUiEffect(UiEffect.ShowSaveDialog(argsParcelName, argsTrackingNumber))
                 is UiAction.OnLoadingStateChanged -> updateUiState { copy(isLoading = uiAction.isLoading) }
                 is UiAction.OnErrorReceived -> onWebViewError(errorCode = uiAction.errorCode)
                 is UiAction.OnRetryClick -> updateUiState { copy(errorMessage = null, isLoading = true) }
+                is UiAction.OnDismissSaveDialog -> updateUiState { copy(showSaveConfirmationDialog = false) }
+                is UiAction.OnExitWithoutSaving -> {
+                    updateUiState { copy(showSaveConfirmationDialog = false) }
+                    emitUiEffect(UiEffect.NavigateBack)
+                }
             }
         }
     }
