@@ -4,6 +4,7 @@ import com.barisproduction.kargo.common.Resource
 import com.barisproduction.kargo.data.remote.model.toDomain
 import com.barisproduction.kargo.data.remote.CargoRemoteDataSource
 import com.barisproduction.kargo.data.util.ErrorParser
+import com.barisproduction.kargo.domain.model.AppUpdateConfig
 import com.barisproduction.kargo.domain.model.Parcels
 import com.barisproduction.kargo.domain.repository.CargoRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,6 +27,15 @@ class CargoRepositoryImpl(private val remoteDataSource: CargoRemoteDataSource) :
             _parcelListState.emit(Resource.Success(domainList))
         } catch (e: Exception) {
             _parcelListState.emit(ErrorParser.parse(e))
+        }
+    }
+
+    override suspend fun getAppUpdateConfig(): Resource<AppUpdateConfig> {
+        return try {
+            val dto = remoteDataSource.getAppUpdateConfig()
+            Resource.Success(dto.toDomain())
+        } catch (e: Exception) {
+            ErrorParser.parse(e)
         }
     }
 

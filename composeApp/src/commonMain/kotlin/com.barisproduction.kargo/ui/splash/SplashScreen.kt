@@ -31,8 +31,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.window.Dialog
-import com.barisproduction.kargo.Platform
 import com.barisproduction.kargo.common.extensions.collectWithLifecycle
 import com.barisproduction.kargo.getPlatform
 import com.barisproduction.kargo.ui.components.CargoBaseDialog
@@ -68,12 +68,11 @@ fun SplashScreen(
     onAction: (UiAction) -> Unit,
     navActions: SplashNavActions,
 ) {
+    val uriHandler = LocalUriHandler.current
     uiEffect.collectWithLifecycle {
         when (it) {
             UiEffect.NavigateToMain -> navActions.navigateToMain()
-            UiEffect.NavigateToStore -> {
-                // Mağazaya yönlendirme mantığı (Platform bazlı tetiklenebilir)
-            }
+            is UiEffect.NavigateToStore -> uriHandler.openUri(it.url)
         }
     }
 
@@ -109,7 +108,7 @@ fun SplashScreen(
                     modifier = Modifier.height(300.dp),
                     message = stringResource(Res.string.check_connection_and_try_again),
                     title = stringResource(Res.string.connection_error),
-                    onRetry = { onAction(UiAction.CheckNetwork) }
+                    onRetry = { onAction(UiAction.Retry) }
                 )
             }
         }

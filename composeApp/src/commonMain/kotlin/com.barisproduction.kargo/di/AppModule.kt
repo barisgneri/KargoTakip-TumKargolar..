@@ -6,9 +6,6 @@ import com.barisproduction.kargo.ui.addCargo.AddCargoViewModel
 import com.barisproduction.kargo.ui.tracking.TrackingViewModel
 import com.barisproduction.kargo.ui.saveDialog.CargoDialogViewModel
 import org.koin.core.context.startKoin
-import com.barisproduction.kargo.data.repository.NetworkRepositoryImpl
-import com.barisproduction.kargo.domain.repository.NetworkRepository
-import com.barisproduction.kargo.domain.usecase.CheckNetworkUseCase
 import com.barisproduction.kargo.data.local.AppDatabase
 import com.barisproduction.kargo.data.remote.CargoRemoteDataSource
 import com.barisproduction.kargo.data.remote.FirebaseCargoDataSource
@@ -22,6 +19,7 @@ import com.barisproduction.kargo.domain.repository.ReviewPromptRepository
 import com.barisproduction.kargo.domain.usecase.GetCargosUseCase
 import com.barisproduction.kargo.domain.usecase.InsertCargoUseCase
 import com.barisproduction.kargo.domain.usecase.CheckCargoInDBUseCase
+import com.barisproduction.kargo.domain.usecase.CheckForceUpdateUseCase
 import com.barisproduction.kargo.domain.usecase.DeleteCargoUseCase
 import com.barisproduction.kargo.domain.usecase.FindCargoInfoUseCase
 import com.barisproduction.kargo.domain.usecase.FetchCargoParcelListUseCase
@@ -38,8 +36,6 @@ import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
 
 val dataModule = module {
-    single { HttpClient() }
-    single<NetworkRepository> { NetworkRepositoryImpl(get()) }
     single<LocalRepository> { LocalRepositoryImpl(get()) }
     single { get<AppDatabase>().cargoDao() }
     single { Firebase.firestore }
@@ -50,9 +46,9 @@ val dataModule = module {
     // UseCases
     factoryOf(::InsertCargoUseCase)
     factoryOf(::GetCargosUseCase)
-    factoryOf(::CheckNetworkUseCase)
     factoryOf(::DeleteCargoUseCase)
     factoryOf(::CheckCargoInDBUseCase)
+    factoryOf(::CheckForceUpdateUseCase)
     factoryOf(::FindCargoInfoUseCase)
     factoryOf(::FetchCargoParcelListUseCase)
     factoryOf(::GetCargoParcelListUseCase)
