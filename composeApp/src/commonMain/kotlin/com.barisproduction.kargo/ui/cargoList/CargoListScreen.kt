@@ -33,6 +33,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import com.barisproduction.kargo.domain.model.CargoModel
 import com.barisproduction.kargo.ui.cargoList.components.CargoItemCard
 import com.barisproduction.kargo.ui.cargoList.components.CargoListAppBar
+import com.barisproduction.kargo.ui.cargoList.components.DeleteConfirmationDialog
 import com.barisproduction.kargo.ui.cargoList.components.RatingDialog
 import com.barisproduction.kargo.ui.cargoList.components.SwipeButtonBackground
 import com.barisproduction.kargo.ui.splash.SplashScreenPreviewProvider
@@ -72,6 +73,9 @@ fun CargoListScreen(
 
     if (uiState.showReviewDialog) {
         RatingDialog(onAction = onAction, selectedRating = uiState.selectedRating)
+    }
+    if (uiState.showDeleteConfirmationDialog) {
+        DeleteConfirmationDialog(onAction = onAction)
     }
     when {
         uiState.isLoading -> LoadingBar()

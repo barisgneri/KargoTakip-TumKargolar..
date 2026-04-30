@@ -78,7 +78,7 @@ fun SwipeButtonBackground(dismissState: SwipeToDismissBoxState, cargo: CargoMode
             // SİL
             IconButton(
                 onClick = {
-                    onAction(UiAction.DeleteCargo(trackNo = cargo.trackNo))
+                    onAction(UiAction.RequestDelete(trackNo = cargo.trackNo))
                     scope.launch { dismissState.reset() }
                 },
                 modifier = Modifier.background(

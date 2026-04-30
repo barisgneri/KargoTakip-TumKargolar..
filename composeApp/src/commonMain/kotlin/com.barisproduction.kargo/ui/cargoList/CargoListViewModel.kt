@@ -34,6 +34,32 @@ class CargoListViewModel(
                 is UiAction.AddNewCargo -> emitUiEffect(UiEffect.NavigateToAddNewCargo)
                 is UiAction.NavigateToTracking -> emitUiEffect(UiEffect.NavigateToTracking(uiAction.parcelName, uiAction.trackingNumber))
                 is UiAction.DeleteCargo -> deleteCargoUseCase(uiAction.trackNo)
+                is UiAction.RequestDelete -> {
+                    updateUiState {
+                        copy(
+                            showDeleteConfirmationDialog = true,
+                            pendingDeleteTrackNo = uiAction.trackNo
+                        )
+                    }
+                }
+                is UiAction.ConfirmDelete -> {
+                    val trackNo = uiState.value.pendingDeleteTrackNo ?: return@launch
+                    deleteCargoUseCase(trackNo)
+                    updateUiState {
+                        copy(
+                            showDeleteConfirmationDialog = false,
+                            pendingDeleteTrackNo = null
+                        )
+                    }
+                }
+                is UiAction.DismissDeleteDialog -> {
+                    updateUiState {
+                        copy(
+                            showDeleteConfirmationDialog = false,
+                            pendingDeleteTrackNo = null
+                        )
+                    }
+                }
                 is UiAction.EditCargo -> emitUiEffect(UiEffect.NavigateToEdit(uiAction.parcelName, uiAction.trackingNumber, uiAction.cargoName))
                 is UiAction.OnReviewRatingChanged -> {
                     updateUiState { copy(selectedRating = uiAction.rating) }

@@ -8,12 +8,17 @@ object CargoListContract {
         val list: List<CargoModel> = emptyList(),
         val showReviewDialog: Boolean = false,
         val selectedRating: Int = 0,
+        val showDeleteConfirmationDialog: Boolean = false,
+        val pendingDeleteTrackNo: String? = null,
     )
 
     sealed class UiAction{
         data object AddNewCargo : UiAction()
         data class NavigateToTracking(val parcelName: String, val trackingNumber: String) : UiAction()
         data class DeleteCargo(val trackNo: String) : UiAction()
+        data class RequestDelete(val trackNo: String) : UiAction()
+        data object ConfirmDelete : UiAction()
+        data object DismissDeleteDialog : UiAction()
         data class EditCargo(val parcelName: String, val trackingNumber: String, val cargoName: String) : UiAction()
         data class OnReviewRatingChanged(val rating: Int) : UiAction()
         data object OnReviewDismiss : UiAction()
