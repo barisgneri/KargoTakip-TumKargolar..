@@ -14,15 +14,20 @@ import com.barisproduction.kargo.data.remote.CargoRemoteDataSource
 import com.barisproduction.kargo.data.remote.FirebaseCargoDataSource
 import com.barisproduction.kargo.data.repository.CargoRepositoryImpl
 import com.barisproduction.kargo.data.repository.LocalRepositoryImpl
+import com.barisproduction.kargo.data.repository.ReviewPromptRepositoryImpl
+import com.barisproduction.kargo.data.preferences.ReviewPreferenceStore
 import com.barisproduction.kargo.domain.repository.CargoRepository
 import com.barisproduction.kargo.domain.repository.LocalRepository
+import com.barisproduction.kargo.domain.repository.ReviewPromptRepository
 import com.barisproduction.kargo.domain.usecase.GetCargosUseCase
 import com.barisproduction.kargo.domain.usecase.InsertCargoUseCase
 import com.barisproduction.kargo.domain.usecase.CheckCargoInDBUseCase
 import com.barisproduction.kargo.domain.usecase.DeleteCargoUseCase
 import com.barisproduction.kargo.domain.usecase.FindCargoInfoUseCase
 import com.barisproduction.kargo.domain.usecase.FetchCargoParcelListUseCase
+import com.barisproduction.kargo.domain.usecase.GetReviewCompletedUseCase
 import com.barisproduction.kargo.domain.usecase.GetCargoParcelListUseCase
+import com.barisproduction.kargo.domain.usecase.SetReviewCompletedUseCase
 import com.barisproduction.kargo.domain.usecase.UpdateCargoUseCase
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.firestore.firestore
@@ -40,6 +45,7 @@ val dataModule = module {
     single { Firebase.firestore }
     single<CargoRemoteDataSource> { FirebaseCargoDataSource(get()) }
     single<CargoRepository> { CargoRepositoryImpl(get()) }
+    single<ReviewPromptRepository> { ReviewPromptRepositoryImpl(get<ReviewPreferenceStore>()) }
 
     // UseCases
     factoryOf(::InsertCargoUseCase)
@@ -51,6 +57,8 @@ val dataModule = module {
     factoryOf(::FetchCargoParcelListUseCase)
     factoryOf(::GetCargoParcelListUseCase)
     factoryOf(::UpdateCargoUseCase)
+    factoryOf(::GetReviewCompletedUseCase)
+    factoryOf(::SetReviewCompletedUseCase)
 
 }
 

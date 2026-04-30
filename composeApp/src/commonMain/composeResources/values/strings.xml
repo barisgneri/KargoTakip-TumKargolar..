@@ -25,4 +25,17 @@
     <string name="did_not_save_cargo">Kargoyu Kaydetmedin</string>
     <string name="dont_save_cargo_info">Tekrar bilgileri girmekle uğraşma, kargonu kaydetmek ister misin?</string>
     <string name="exit">Çık</string>
+    <string name="review_app_title">Uygulamayı Değerlendirir misin?</string>
+    <string name="review_app_description">Yorumun bizim için çok değerli.</string>
+    <string name="review_app_confirm">Puanla</string>
+    <string name="review_app_later">Sonra</string>
+
+    <!-- Splash & Update Strings -->
+    <string name="update_available">Güncelleme Mevcut</string>
+    <string name="update_description_required">Uygulamanın devam edebilmesi için yeni bir güncelleme gereklidir.</string>
+    <string name="update_description_optional">Yeni özellikler ve iyileştirmeler içeren bir güncelleme mevcut. Şimdi güncellemek ister misiniz?</string>
+    <string name="btn_update">Güncelle</string>
+    <string name="btn_later">Daha Sonra</string>
+    <string name="fast_and_ads_free">HIZLI VE REKLAMSIZ</string>
+    <string name="app_preparing">Uygulama Hazırlanıyor...</string>
 </resources>

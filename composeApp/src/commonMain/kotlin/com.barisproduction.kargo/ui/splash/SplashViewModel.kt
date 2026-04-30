@@ -33,6 +33,8 @@ class SplashViewModel(
         viewModelScope.launch {
             when (uiAction) {
                 UiAction.CheckNetwork -> checkNetwork()
+                UiAction.OnUpdateClick -> {}
+                UiAction.OnDismissUpdateDialog -> {}
             }
         }
     }

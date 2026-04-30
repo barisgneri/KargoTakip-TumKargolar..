@@ -1,13 +1,12 @@
 package com.barisproduction.kargo
 
 import android.app.Application
-import androidx.room.Room
-import com.barisproduction.kargo.data.local.AppDatabase
 import com.barisproduction.kargo.data.local.getDatabaseBuilder
 import com.barisproduction.kargo.data.local.getRoomDatabase
 import com.barisproduction.kargo.di.androidModule
 import com.barisproduction.kargo.di.initKoin
 import org.koin.android.ext.koin.androidContext
+import org.koin.mp.KoinPlatform
 
 class MainApp: Application() {
     override fun onCreate() {
@@ -18,8 +17,12 @@ class MainApp: Application() {
         ))
 
         initKoin(database = database) {
+            // Android Context'ini Koin'e tanıtıyoruz
             androidContext(this@MainApp)
             modules(androidModule)
         }
     }
+}
+actual fun getPlatform(): Platform {
+    return KoinPlatform.getKoin().get<Platform>()
 }

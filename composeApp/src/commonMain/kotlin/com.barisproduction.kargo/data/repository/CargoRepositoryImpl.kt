@@ -1,8 +1,7 @@
 package com.barisproduction.kargo.data.repository
 
-import com.barisproduction.kargo.common.AppError
 import com.barisproduction.kargo.common.Resource
-import com.barisproduction.kargo.data.model.toDomain
+import com.barisproduction.kargo.data.remote.model.toDomain
 import com.barisproduction.kargo.data.remote.CargoRemoteDataSource
 import com.barisproduction.kargo.data.util.ErrorParser
 import com.barisproduction.kargo.domain.model.Parcels
@@ -17,7 +16,7 @@ class CargoRepositoryImpl(private val remoteDataSource: CargoRemoteDataSource) :
     override fun getCargoParcelListState(): StateFlow<Resource<List<Parcels>>> = _parcelListState.asStateFlow()
 
     override suspend fun getCargoParcelList() {
-        if (_parcelListState.value is Resource.Success) return // Opsiyonel cache
+        if (_parcelListState.value is Resource.Success) return
 
         _parcelListState.emit(Resource.Loading())
         try {
@@ -29,4 +28,5 @@ class CargoRepositoryImpl(private val remoteDataSource: CargoRemoteDataSource) :
             _parcelListState.emit(ErrorParser.parse(e))
         }
     }
+
 }

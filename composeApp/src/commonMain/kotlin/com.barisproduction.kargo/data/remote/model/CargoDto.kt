@@ -1,4 +1,4 @@
-package com.barisproduction.kargo.data.model
+package com.barisproduction.kargo.data.remote.model
 
 import com.barisproduction.kargo.domain.model.Parcels
 import kotlinx.serialization.Serializable
