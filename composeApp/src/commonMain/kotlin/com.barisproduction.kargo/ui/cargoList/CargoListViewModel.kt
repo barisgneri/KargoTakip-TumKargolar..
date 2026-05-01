@@ -27,7 +27,6 @@ class CargoListViewModel(
     private var previousCargoCount: Int? = null
     private var isReviewCompleted: Boolean = false
     private var isReviewDismissedForSession: Boolean = false
-    private var isReviewStatusLoaded: Boolean = false
 
     override fun onAction(uiAction: UiAction) {
         viewModelScope.launch {
@@ -88,13 +87,13 @@ class CargoListViewModel(
     init {
         updateUiState { copy(isLoading = true) }
         viewModelScope.launch {
+            // Dialog kararını kaçırmamak için önce review durumunu yükle.
             isReviewCompleted = getReviewCompletedUseCase()
-            isReviewStatusLoaded = true
+            getCargosUseCase().onEach {
+                updateUiState { copy(list = it, isLoading = false) }
+                maybeShowReviewDialog(currentCargoCount = it.size)
+            }.launchIn(viewModelScope)
         }
-        getCargosUseCase().onEach {
-            updateUiState { copy(list = it, isLoading = false) }
-            maybeShowReviewDialog(currentCargoCount = it.size)
-        }.launchIn(viewModelScope)
     }
 
     private fun maybeShowReviewDialog(currentCargoCount: Int) {
@@ -102,7 +101,6 @@ class CargoListViewModel(
         previousCargoCount = currentCargoCount
 
         if (previousCount == null) return
-        if (!isReviewStatusLoaded) return
 
         val hasNewCargoAdded = currentCargoCount > previousCount
         val shouldShowDialog = hasNewCargoAdded &&
