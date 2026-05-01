@@ -44,14 +44,12 @@ import com.barisproduction.kargo.ui.theme.spacing
 import kargotakiptumkargolar.composeapp.generated.resources.Res
 import kargotakiptumkargolar.composeapp.generated.resources.app_name
 import kargotakiptumkargolar.composeapp.generated.resources.app_preparing
-import kargotakiptumkargolar.composeapp.generated.resources.btn_later
 import kargotakiptumkargolar.composeapp.generated.resources.btn_update
 import kargotakiptumkargolar.composeapp.generated.resources.check_connection_and_try_again
 import kargotakiptumkargolar.composeapp.generated.resources.connection_error
 import kargotakiptumkargolar.composeapp.generated.resources.fast_and_ads_free
 import kargotakiptumkargolar.composeapp.generated.resources.logo
 import kargotakiptumkargolar.composeapp.generated.resources.update_available
-import kargotakiptumkargolar.composeapp.generated.resources.update_description_optional
 import kargotakiptumkargolar.composeapp.generated.resources.update_description_required
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
@@ -81,19 +79,12 @@ fun SplashScreen(
 
     if (uiState.showUpdateDialog) {
         CargoBaseDialog(
-            onDismissRequest = { 
-                if (!uiState.isUpdateRequired) onAction(UiAction.OnDismissUpdateDialog) 
-            },
+            onDismissRequest = {},
             title = stringResource(Res.string.update_available),
-            description = if (uiState.isUpdateRequired) 
-                stringResource(Res.string.update_description_required)
-            else 
-                stringResource(Res.string.update_description_optional),
+            description = stringResource(Res.string.update_description_required),
             icon = Icons.Default.SystemUpdate,
             confirmButtonText = stringResource(Res.string.btn_update),
-            onConfirmClick = { onAction(UiAction.OnUpdateClick) },
-            dismissButtonText = if (uiState.isUpdateRequired) null else stringResource(Res.string.btn_later),
-            onDismissClick = { onAction(UiAction.OnDismissUpdateDialog) }
+            onConfirmClick = { onAction(UiAction.OnUpdateClick) }
         )
     }
 

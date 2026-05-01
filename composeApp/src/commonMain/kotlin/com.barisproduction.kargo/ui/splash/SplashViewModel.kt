@@ -36,12 +36,6 @@ class SplashViewModel(
                 UiAction.OnUpdateClick -> {
                     uiState.value.storeUrl?.let { emitUiEffect(UiEffect.NavigateToStore(it)) }
                 }
-                UiAction.OnDismissUpdateDialog -> {
-                    if (!uiState.value.isUpdateRequired) {
-                        updateUiState { copy(showUpdateDialog = false) }
-                        emitUiEffect(UiEffect.NavigateToMain)
-                    }
-                }
             }
         }
     }
@@ -52,7 +46,6 @@ class SplashViewModel(
                 isLoading = true,
                 errorMessage = null,
                 showUpdateDialog = false,
-                isUpdateRequired = false,
                 storeUrl = null
             )
         }
@@ -77,7 +70,6 @@ class SplashViewModel(
                         copy(
                             isLoading = false,
                             showUpdateDialog = true,
-                            isUpdateRequired = true,
                             storeUrl = decision.storeUrl
                         )
                     }
