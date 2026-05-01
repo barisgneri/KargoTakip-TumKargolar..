@@ -29,6 +29,7 @@ fun RatingDialog(
         title = stringResource(Res.string.review_app_title),
         description = stringResource(Res.string.review_app_description),
         confirmButtonText = stringResource(Res.string.review_app_confirm),
+        confirmButtonEnabled = selectedRating > 0,
         onConfirmClick = { onAction(UiAction.OnReviewConfirm) },
         dismissButtonText = stringResource(Res.string.review_app_later),
         onDismissClick = { onAction(UiAction.OnReviewDismiss) },

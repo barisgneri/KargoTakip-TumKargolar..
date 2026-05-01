@@ -32,6 +32,7 @@ fun CargoBaseDialog(
     icon: ImageVector? = null,
     confirmButtonText: String? = null,
     onConfirmClick: (() -> Unit)? = null,
+    confirmButtonEnabled: Boolean = true,
     dismissButtonText: String? = null,
     onDismissClick: (() -> Unit)? = null,
     content: @Composable (ColumnScope.() -> Unit)? = null
@@ -112,6 +113,7 @@ fun CargoBaseDialog(
                             text = confirmButtonText,
                             onClick = onConfirmClick,
                             style = CargoButtonStyle.PRIMARY,
+                            enabled = confirmButtonEnabled,
                             modifier = Modifier.weight(1f)
                         )
                     }
