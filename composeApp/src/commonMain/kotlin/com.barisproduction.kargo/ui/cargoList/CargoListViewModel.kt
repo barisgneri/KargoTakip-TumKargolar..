@@ -3,6 +3,7 @@ package com.barisproduction.kargo.ui.cargoList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.barisproduction.kargo.common.feedback.buildFeedbackMailUri
+import com.barisproduction.kargo.common.feedback.getStoreReviewUri
 import com.barisproduction.kargo.delegation.MVI
 import com.barisproduction.kargo.delegation.mvi
 import com.barisproduction.kargo.domain.usecase.GetReviewCompletedUseCase
@@ -33,7 +34,6 @@ class CargoListViewModel(
             when (uiAction) {
                 is UiAction.AddNewCargo -> emitUiEffect(UiEffect.NavigateToAddNewCargo)
                 is UiAction.NavigateToTracking -> emitUiEffect(UiEffect.NavigateToTracking(uiAction.parcelName, uiAction.trackingNumber))
-                is UiAction.DeleteCargo -> deleteCargoUseCase(uiAction.trackNo)
                 is UiAction.RequestDelete -> {
                     updateUiState {
                         copy(
@@ -76,7 +76,7 @@ class CargoListViewModel(
                     isReviewCompleted = true
                     updateUiState { copy(showReviewDialog = false, selectedRating = 0) }
                     if (rating >= REVIEW_STORE_THRESHOLD) {
-                        emitUiEffect(UiEffect.OpenUrl(PLAY_STORE_REVIEW_URL))
+                        emitUiEffect(UiEffect.OpenUrl(getStoreReviewUri()))
                     } else {
                         emitUiEffect(UiEffect.OpenUrl(buildFeedbackMailUri()))
                     }
@@ -106,7 +106,7 @@ class CargoListViewModel(
 
         val hasNewCargoAdded = currentCargoCount > previousCount
         val shouldShowDialog = hasNewCargoAdded &&
-            currentCargoCount > MIN_CARGO_COUNT_FOR_REVIEW &&
+            currentCargoCount >= MIN_CARGO_COUNT_FOR_REVIEW &&
             !isReviewCompleted &&
             !isReviewDismissedForSession
 
@@ -118,6 +118,5 @@ class CargoListViewModel(
     private companion object {
         const val MIN_CARGO_COUNT_FOR_REVIEW = 2
         const val REVIEW_STORE_THRESHOLD = 4
-        const val PLAY_STORE_REVIEW_URL = "https://play.google.com/store/apps/details?id=com.barisproduction.kargo"
     }
 }

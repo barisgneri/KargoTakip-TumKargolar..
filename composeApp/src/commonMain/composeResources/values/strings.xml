@@ -32,6 +32,7 @@
     <string name="delete">Sil</string>
     <string name="delete_cargo_title">Kargoyu Sil</string>
     <string name="delete_cargo_description">Bu kargoyu silmek istediğine emin misin?</string>
+    <string name="edit">Düzenle</string>
 
     <!-- Splash & Update Strings -->
     <string name="update_available">Güncelleme Mevcut</string>

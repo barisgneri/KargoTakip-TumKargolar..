@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.window.Dialog
 import com.barisproduction.kargo.common.extensions.collectWithLifecycle
-import com.barisproduction.kargo.getPlatform
 import com.barisproduction.kargo.ui.components.CargoBaseDialog
 import com.barisproduction.kargo.ui.components.ErrorView
 import com.barisproduction.kargo.ui.splash.SplashContract.UiAction
@@ -161,7 +160,6 @@ fun SplashContent(
                     color = MaterialTheme.colorScheme.onBackground
                 )
 
-                getPlatform().versionCode
                 Spacer(modifier = Modifier.height(spacing.extraSmall))
 
                 Text(

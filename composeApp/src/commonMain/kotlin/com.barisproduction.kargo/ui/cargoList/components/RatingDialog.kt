@@ -51,7 +51,7 @@ private fun RatingSelector(
             IconButton(onClick = { onRatingSelected(rating) }) {
                 Icon(
                     imageVector = if (rating <= selectedRating) Icons.Filled.Star else Icons.Outlined.StarOutline,
-                    contentDescription = "Rating $rating",
+                    contentDescription = stringResource(Res.string.review_app_confirm),
                     tint = if (rating <= selectedRating) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant
                 )
             }

@@ -15,7 +15,6 @@ object CargoListContract {
     sealed class UiAction{
         data object AddNewCargo : UiAction()
         data class NavigateToTracking(val parcelName: String, val trackingNumber: String) : UiAction()
-        data class DeleteCargo(val trackNo: String) : UiAction()
         data class RequestDelete(val trackNo: String) : UiAction()
         data object ConfirmDelete : UiAction()
         data object DismissDeleteDialog : UiAction()

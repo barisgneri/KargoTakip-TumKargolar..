@@ -26,7 +26,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.barisproduction.kargo.domain.model.CargoModel
 import com.barisproduction.kargo.ui.cargoList.CargoListContract.UiAction
+import kargotakiptumkargolar.composeapp.generated.resources.Res
+import kargotakiptumkargolar.composeapp.generated.resources.delete
+import kargotakiptumkargolar.composeapp.generated.resources.edit
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SwipeButtonBackground(dismissState: SwipeToDismissBoxState, cargo: CargoModel, onAction: (UiAction) -> Unit) {
@@ -70,7 +74,7 @@ fun SwipeButtonBackground(dismissState: SwipeToDismissBoxState, cargo: CargoMode
             ) {
                 Icon(
                     Icons.Default.Edit,
-                    contentDescription = "Düzenle",
+                    contentDescription = stringResource(Res.string.edit),
                     tint = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
@@ -88,7 +92,7 @@ fun SwipeButtonBackground(dismissState: SwipeToDismissBoxState, cargo: CargoMode
             ) {
                 Icon(
                     Icons.Default.Delete,
-                    contentDescription = "Sil",
+                    contentDescription = stringResource(Res.string.delete),
                     tint = MaterialTheme.colorScheme.onErrorContainer
                 )
             }
