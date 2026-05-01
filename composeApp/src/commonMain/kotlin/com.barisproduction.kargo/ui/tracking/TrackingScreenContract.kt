@@ -8,6 +8,7 @@ object TrackingScreenContract {
         val logo: String? = null,
         val js: String = "",
         val saveButtonVisibility: Boolean = true,
+        val showSaveConfirmationDialog: Boolean = false,
     )
     sealed class UiEffect{
         data class ShowError(val message: String) : UiEffect()
@@ -21,5 +22,7 @@ object TrackingScreenContract {
         data class OnLoadingStateChanged(val isLoading: Boolean) : UiAction()
         data class OnErrorReceived(val errorCode: Int) : UiAction()
         data object OnRetryClick : UiAction()
+        data object OnDismissSaveDialog : UiAction()
+        data object OnExitWithoutSaving : UiAction()
     }
 }
