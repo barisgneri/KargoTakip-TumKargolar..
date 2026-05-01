@@ -97,6 +97,8 @@ class SplashViewModel(
                 val errorMessage = result.errorType.toUserMessage()
                 updateUiState { copy(isLoading = false, errorMessage = errorMessage) }
             }
+
+            else -> {}
         }
     }
 }
