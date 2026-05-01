@@ -1,21 +1,15 @@
 package com.barisproduction.kargo.ui.cargoList
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.barisproduction.kargo.common.extensions.collectWithLifecycle
 import com.barisproduction.kargo.ui.cargoList.CargoListContract.UiAction
@@ -28,33 +22,22 @@ import kotlinx.coroutines.flow.Flow
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.rememberSwipeToDismissBoxState
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import coil3.compose.AsyncImage
+import androidx.compose.ui.platform.LocalUriHandler
 import com.barisproduction.kargo.domain.model.CargoModel
 import com.barisproduction.kargo.ui.cargoList.components.CargoItemCard
 import com.barisproduction.kargo.ui.cargoList.components.CargoListAppBar
+import com.barisproduction.kargo.ui.cargoList.components.DeleteConfirmationDialog
+import com.barisproduction.kargo.ui.cargoList.components.RatingDialog
+import com.barisproduction.kargo.ui.cargoList.components.SwipeButtonBackground
 import com.barisproduction.kargo.ui.splash.SplashScreenPreviewProvider
 import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.launch
-
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
@@ -65,6 +48,8 @@ fun CargoListScreen(
     onAction: (UiAction) -> Unit,
     navActions: CargoListNavActions
 ) {
+    val uriHandler = LocalUriHandler.current
+
     uiEffect.collectWithLifecycle {
         when (it) {
             is UiEffect.ShowError -> {}
@@ -81,7 +66,16 @@ fun CargoListScreen(
                 it.trackingNumber,
                 it.cargoName
             )
+
+            is UiEffect.OpenUrl -> uriHandler.openUri(it.url)
         }
+    }
+
+    if (uiState.showReviewDialog) {
+        RatingDialog(onAction = onAction, selectedRating = uiState.selectedRating)
+    }
+    if (uiState.showDeleteConfirmationDialog) {
+        DeleteConfirmationDialog(onAction = onAction)
     }
     when {
         uiState.isLoading -> LoadingBar()
@@ -132,79 +126,19 @@ fun CargoList(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(cargoList, key = { it.trackNo }) { cargo ->
-                val scope = rememberCoroutineScope()
                 val dismissState = rememberSwipeToDismissBoxState(
                     initialValue = SwipeToDismissBoxValue.Settled,
                     positionalThreshold = { it * 0.25f }
                 )
-
                 SwipeToDismissBox(
                     state = dismissState,
                     enableDismissFromStartToEnd = false,
                     backgroundContent = {
-                        val color =
-                            if (dismissState.dismissDirection == SwipeToDismissBoxValue.EndToStart) {
-                                MaterialTheme.colorScheme.onSurfaceVariant
-                            } else Color.Transparent
-
-                        Box(
-                            Modifier
-                                .fillMaxSize()
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(color)
-                                .padding(horizontal = 20.dp)
-                                .clickable {
-                                    scope.launch { dismissState.reset() }
-                                },
-                            contentAlignment = Alignment.CenterEnd
-                        ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(16.dp)
-                            ) {
-                                // DÜZENLE
-                                IconButton(
-                                    onClick = {
-                                        onAction(
-                                            UiAction.EditCargo(
-                                                cargo.parcelName,
-                                                cargo.trackNo,
-                                                cargo.cargoName ?: ""
-                                            )
-                                        )
-                                        scope.launch { dismissState.reset() }
-                                    },
-                                    modifier = Modifier.background(
-                                        MaterialTheme.colorScheme.primaryContainer,
-                                        CircleShape
-                                    )
-                                ) {
-                                    Icon(
-                                        Icons.Default.Edit,
-                                        contentDescription = "Düzenle",
-                                        tint = MaterialTheme.colorScheme.onPrimaryContainer
-                                    )
-                                }
-
-                                // SİL
-                                IconButton(
-                                    onClick = {
-                                        onAction(UiAction.DeleteCargo(trackNo = cargo.trackNo))
-                                        scope.launch { dismissState.reset() }
-                                    },
-                                    modifier = Modifier.background(
-                                        MaterialTheme.colorScheme.errorContainer,
-                                        CircleShape
-                                    )
-                                ) {
-                                    Icon(
-                                        Icons.Default.Delete,
-                                        contentDescription = "Sil",
-                                        tint = MaterialTheme.colorScheme.onErrorContainer
-                                    )
-                                }
-                            }
-                        }
+                        SwipeButtonBackground(
+                            dismissState = dismissState,
+                            cargo = cargo,
+                            onAction = onAction
+                        )
                     }
                 ) {
                     cargo.apply {

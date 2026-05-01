@@ -1,4 +1,4 @@
-package com.barisproduction.kargo.service
+package com.barisproduction.kargo.common.service
 
 import android.content.ClipData
 import android.content.ClipboardManager

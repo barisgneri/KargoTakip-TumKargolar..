@@ -5,12 +5,16 @@ object SplashContract {
         val isLoading: Boolean = true,
         val errorMessage: String? = null,
         val list: List<String> = emptyList(),
+        val showUpdateDialog: Boolean = false,
+        val storeUrl: String? = null
     )
 
     sealed class UiAction {
-        data object CheckNetwork : UiAction()
+        data object Retry : UiAction()
+        data object OnUpdateClick : UiAction()
     }
     sealed class UiEffect {
         data object NavigateToMain : UiEffect()
+        data class NavigateToStore(val url: String) : UiEffect()
     }
 }

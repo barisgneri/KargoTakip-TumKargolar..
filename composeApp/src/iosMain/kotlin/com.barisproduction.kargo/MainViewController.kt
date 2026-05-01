@@ -6,6 +6,7 @@ import com.barisproduction.kargo.data.local.AppDatabase
 import com.barisproduction.kargo.data.local.AppDatabaseConstructor
 import com.barisproduction.kargo.data.local.getRoomDatabase
 import com.barisproduction.kargo.di.initKoin
+import com.barisproduction.kargo.di.iosModule
 import platform.Foundation.NSHomeDirectory
 
 fun MainViewController() = ComposeUIViewController {
@@ -19,6 +20,8 @@ fun MainViewController() = ComposeUIViewController {
 
     val database = getRoomDatabase(builder)
 
-    initKoin(database = database)
+    initKoin(database = database) {
+        modules(iosModule)
+    }
     App()
 }
