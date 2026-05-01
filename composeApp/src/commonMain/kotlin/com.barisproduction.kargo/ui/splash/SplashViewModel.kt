@@ -57,10 +57,11 @@ class SplashViewModel(
     }
 
     private suspend fun checkForceUpdate(): ForceUpdateDecision? {
+        val platform = getPlatform()
         when (
             val updateResult = checkForceUpdateUseCase(
-                platformName = getPlatform().name,
-                currentVersionCode = getPlatform().versionCode
+                platformName = platform.name,
+                currentVersionCode = platform.versionCode
             )
         ) {
             is Resource.Success -> {
