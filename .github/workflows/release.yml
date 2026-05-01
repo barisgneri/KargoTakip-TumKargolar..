@@ -1,4 +1,4 @@
-name: Build Android Release AAB
+name: Build and Distribute to Firebase
 
 on:
   workflow_dispatch: 
@@ -33,11 +33,24 @@ jobs:
         KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
         KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-
       run: ./gradlew :composeApp:bundleRelease -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/keystore.jks -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD -Pandroid.injected.signing.key.alias=$KEY_ALIAS -Pandroid.injected.signing.key.password=$KEY_PASSWORD
 
     - name: Oluşan AAB'yi İndirilebilir Yap
       uses: actions/upload-artifact@v4
       with:
         name: release-aab-dosyasi
-        path: composeApp/build/outputs/bundle/release/*.aab
+        path: composeApp/build/outputs/bundle/release/*.aab 
+
+    - name: AAB Dosyasının Tam Yolunu Bul
+      id: find_aab
+      run: |
+        AAB_PATH=$(find composeApp/build/outputs/bundle/release -name "*.aab" | head -n 1)
+        echo "aab_path=$AAB_PATH" >> $GITHUB_ENV
+
+    - name: Firebase App Distribution'a Gönder
+      uses: wzieba/Firebase-Distribution-Github-Action@v1
+      with:
+        appId: ${{ secrets.FIREBASE_APP_ID }}
+        serviceCredentialsFileContent: ${{ secrets.FIREBASE_CREDENTIALS_JSON }}
+        groups: testers
+        file: ${{ env.aab_path }}
