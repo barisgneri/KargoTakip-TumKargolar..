@@ -1,6 +1,7 @@
 package domain
 
 import com.barisproduction.kargo.common.Resource
+import com.barisproduction.kargo.data.remote.model.AppUpdateConfigDto
 import com.barisproduction.kargo.data.remote.model.CargoDto
 import com.barisproduction.kargo.data.repository.CargoRepositoryImpl
 import data.remote.FakeCargoRemoteDataSource
@@ -101,5 +102,31 @@ class CargoRepositoryImplTest {
 
             // Sadece ilk çağrıdaki verinin kalmış olması, cache mantığının çalıştığını kanıtlar
             assertEquals(1, data?.size)
+            assertEquals(1, fakeRemoteDataSource.callCount)
         }
+
+    @Test
+    fun `getAppUpdateConfig basarili oldugunda Success ve dogru veriyi donmeli`() = runTest {
+        fakeRemoteDataSource.dummyAppConfig = AppUpdateConfigDto(
+            requireUpdate = true,
+            androidStoreUrl = "http",
+            iosStoreUrl = "http",
+            androidMinBuildCode = 11,
+            iosMinBuildCode = 11,
+            )
+
+        val result = repository.getAppUpdateConfig()
+
+        assertTrue(result is Resource.Success)
+        assertEquals(11, result.data?.androidMinBuildCode)
+        assertEquals("http", result.data?.androidStoreUrl)
+    }
+
+    @Test
+    fun `getAppUpdateConfig API hata verirse Resource Error donmeli`() = runTest {
+        fakeRemoteDataSource.shouldThrowError = true
+        val result = repository.getAppUpdateConfig()
+
+        assertTrue(result is Resource.Error)
+    }
 }

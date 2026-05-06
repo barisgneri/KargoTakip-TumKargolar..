@@ -9,8 +9,10 @@ class FakeCargoRemoteDataSource : CargoRemoteDataSource {
     var shouldThrowError = false
     var dummyDtoList: List<CargoDto> = emptyList()
     var dummyAppConfig: AppUpdateConfigDto? = null
+    var callCount = 0
 
     override suspend fun getAllParcels(): List<CargoDto> {
+        callCount++
         if (shouldThrowError) {
             throw Exception("Sunucuya ulaşılamadı veya API hatası")
         }
