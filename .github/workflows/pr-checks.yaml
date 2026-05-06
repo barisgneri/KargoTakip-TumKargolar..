@@ -23,7 +23,19 @@ jobs:
 
       - name: google-services.json Dosyasını Oluştur (Dummy)
         run: |
-          echo '{"project_info":{"project_number":"123456789","project_id":"dummy-id"},"client":[{"client_info":{"mobilesdk_app_id":"1:123456789:android:12345","android_client_info":{"package_name":"com.barisproduction.kargo"}},"api_key":[{"current_key":"dummy-key"}]}]}' > composeApp/google-services.json
+          echo '{
+            "project_info": {"project_number": "123456789", "project_id": "dummy-id"},
+            "client": [
+              {
+                "client_info": {"mobilesdk_app_id": "1:123456789:android:12345", "android_client_info": {"package_name": "com.barisproduction.kargo"}},
+                "api_key": [{"current_key": "dummy-key"}]
+              },
+              {
+                "client_info": {"mobilesdk_app_id": "1:123456789:android:67890", "android_client_info": {"package_name": "com.barisproduction.kargo.dev"}},
+                "api_key": [{"current_key": "dummy-key"}]
+              }
+            ]
+          }' > composeApp/google-services.json
 
       - name: Unit Testleri Çalıştır
         run: |
