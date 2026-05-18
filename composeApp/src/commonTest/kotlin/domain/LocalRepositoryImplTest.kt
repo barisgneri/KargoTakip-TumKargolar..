@@ -79,7 +79,7 @@ class LocalRepositoryImplTest {
         val cargo2 = CargoModel("Paket 2", "Yurtiçi", "logo", "2")
 
         repository.insertCargo(cargo1)
-        delay(10)
+        delay(100)
         repository.insertCargo(cargo2)
 
         val cargosFlow = repository.getAllCargos()
