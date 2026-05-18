@@ -1,9 +1,9 @@
 package domain
 
+import com.barisproduction.kargo.data.local.CargoEntity
 import com.barisproduction.kargo.data.repository.LocalRepositoryImpl
 import com.barisproduction.kargo.domain.model.CargoModel
 import data.local.FakeCargoDao
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
@@ -75,12 +75,23 @@ class LocalRepositoryImplTest {
 
     @Test
     fun `getAllCargos tum kargolari tarih sirasina gore Flow olarak donmeli`() = runTest {
-        val cargo1 = CargoModel("Paket 1", "Aras", "logo", "1")
-        val cargo2 = CargoModel("Paket 2", "Yurtiçi", "logo", "2")
+        val entity1 = CargoEntity(
+            parcelName = "Paket 1",
+            trackingNumber = "1",
+            cargoName = "Aras",
+            logo = "logo",
+            createdAt = 1000L
+        )
+        val entity2 = CargoEntity(
+            parcelName = "Paket 2",
+            trackingNumber = "2",
+            cargoName = "Yurtiçi",
+            logo = "logo",
+            createdAt = 2000L
+        )
 
-        repository.insertCargo(cargo1)
-        delay(100)
-        repository.insertCargo(cargo2)
+        fakeCargoDao.insertCargo(entity1)
+        fakeCargoDao.insertCargo(entity2)
 
         val cargosFlow = repository.getAllCargos()
         val list = cargosFlow.first()
