@@ -10,7 +10,6 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 
 class LocalRepositoryImplTest {
 
@@ -70,7 +69,7 @@ class LocalRepositoryImplTest {
         repository.deleteCargo("000000")
 
         val result = fakeCargoDao.getCargoByTrackingNumber("000000")
-        assertTrue(result == null)
+        assertEquals(result, null)
     }
 
     @Test
