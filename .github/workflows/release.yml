@@ -3,6 +3,11 @@ name: Kargo Takip CI/CD
 on:
   push:
     branches: [ "main" ]
+
+    paths-ignore:
+      - 'README.md'
+      - '.github/workflows/**'
+    
   workflow_dispatch:
     inputs:
       deploy_target:
