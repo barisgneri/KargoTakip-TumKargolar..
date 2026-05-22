@@ -12,6 +12,8 @@ import com.barisproduction.kargo.ui.addCargo.AddCargoNavActions
 import com.barisproduction.kargo.ui.addCargo.addCargoScreen
 import com.barisproduction.kargo.ui.cargoList.CargoListNavActions
 import com.barisproduction.kargo.ui.cargoList.cargoListScreen
+import com.barisproduction.kargo.ui.settings.SettingsNavActions
+import com.barisproduction.kargo.ui.settings.settingsScreen
 import com.barisproduction.kargo.ui.saveDialog.CargoDialogViewModel
 import com.barisproduction.kargo.ui.saveDialog.CargoSaveDialog
 import com.barisproduction.kargo.ui.splash.SplashNavActions
@@ -69,6 +71,16 @@ fun NavigationGraph(
                             cargoName = cargoName
                         )
                     )
+                },
+                navigateToSettings = {
+                    navController.navigate(Screen.Settings)
+                }
+            )
+        )
+        settingsScreen(
+            actions = SettingsNavActions(
+                onBack = {
+                    navController.popBackStack()
                 }
             )
         )

@@ -32,6 +32,7 @@ class CargoListViewModel(
         viewModelScope.launch {
             when (uiAction) {
                 is UiAction.AddNewCargo -> emitUiEffect(UiEffect.NavigateToAddNewCargo)
+                is UiAction.OnSettingsClick -> emitUiEffect(UiEffect.NavigateToSettings)
                 is UiAction.NavigateToTracking -> emitUiEffect(UiEffect.NavigateToTracking(uiAction.parcelName, uiAction.trackingNumber))
                 is UiAction.RequestDelete -> {
                     updateUiState {

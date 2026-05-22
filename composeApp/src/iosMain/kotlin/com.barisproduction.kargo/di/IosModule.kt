@@ -4,9 +4,12 @@ import com.barisproduction.kargo.data.local.getDatabaseBuilder
 import com.barisproduction.kargo.data.local.getRoomDatabase
 import com.barisproduction.kargo.data.preferences.IosReviewPreferenceStore
 import com.barisproduction.kargo.data.preferences.ReviewPreferenceStore
+import com.barisproduction.kargo.data.preferences.AppPreferenceStore
+import com.barisproduction.kargo.data.preferences.IosAppPreferenceStore
 import org.koin.dsl.module
 
 val iosModule = module {
     single { getRoomDatabase(getDatabaseBuilder()) }
     single<ReviewPreferenceStore> { IosReviewPreferenceStore() }
+    single<AppPreferenceStore> { IosAppPreferenceStore() }
 }
