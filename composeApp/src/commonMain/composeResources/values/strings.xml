@@ -53,4 +53,10 @@
     <string name="change_language">Change Language</string>
     <string name="change_language_info">You can update the app language according to your preference.</string>
     <string name="select_language">Select Language</string>
+    <string name="about_app">About App</string>
+    <string name="app_info">App Information</string>
+    <string name="publisher">Publisher</string>
+    <string name="publisher_name">Baris Production</string>
+    <string name="version">Version</string>
+    <string name="close">Close</string>
 </resources>

@@ -15,7 +15,9 @@ object SettingsContract {
         val selectedLanguage: String = "Türkçe",
         val activePicker: PickerType? = null,
         val countries: List<CountryModel> = emptyList(),
-        val languages: List<LanguageModel> = emptyList()
+        val languages: List<LanguageModel> = emptyList(),
+        val showAboutDialog: Boolean = false,
+        val appVersion: String = ""
     )
 
     enum class PickerType(val titleRes: StringResource) {
@@ -31,6 +33,8 @@ object SettingsContract {
         data object OnLanguageClick : UiAction
         data class OnLanguageSelect(val language: LanguageModel) : UiAction
         data object OnDismissPicker : UiAction
+        data object OnAboutClick : UiAction
+        data object OnDismissAbout : UiAction
     }
 
     sealed interface UiEffect {

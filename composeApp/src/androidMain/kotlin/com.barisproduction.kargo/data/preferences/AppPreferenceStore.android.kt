@@ -1,6 +1,7 @@
 package com.barisproduction.kargo.data.preferences
 
 import android.content.Context
+import androidx.core.content.edit
 
 class AndroidAppPreferenceStore(
     context: Context
@@ -43,9 +44,22 @@ class AndroidAppPreferenceStore(
         sharedPreferences.edit().putString(key, value).apply()
     }
 
+    override fun getSelectedCountry(): String? {
+        return sharedPreferences.getString(KEY_SELECTED_COUNTRY, null)
+    }
+
+    override fun setSelectedCountry(countryCode: String?) {
+        if (countryCode == null) {
+            sharedPreferences.edit { remove(KEY_SELECTED_COUNTRY) }
+        } else {
+            sharedPreferences.edit { putString(KEY_SELECTED_COUNTRY, countryCode) }
+        }
+    }
+
     private companion object {
         const val PREF_NAME = "kargo_app_preferences"
         const val KEY_THEME = "app_theme_dark"
         const val KEY_LANGUAGE = "app_language"
+        const val KEY_SELECTED_COUNTRY = "selected_country"
     }
 }

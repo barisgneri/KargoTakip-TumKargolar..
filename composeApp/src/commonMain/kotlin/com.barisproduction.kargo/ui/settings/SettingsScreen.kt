@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Translate
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -17,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,16 +35,23 @@ import com.barisproduction.kargo.ui.settings.components.SettingsSection
 import com.barisproduction.kargo.ui.theme.KargoTheme
 import com.barisproduction.kargo.ui.theme.spacing
 import kargotakiptumkargolar.composeapp.generated.resources.Res
+import kargotakiptumkargolar.composeapp.generated.resources.about_app
+import kargotakiptumkargolar.composeapp.generated.resources.app_info
+import kargotakiptumkargolar.composeapp.generated.resources.app_name
 import kargotakiptumkargolar.composeapp.generated.resources.back
 import kargotakiptumkargolar.composeapp.generated.resources.change_country
 import kargotakiptumkargolar.composeapp.generated.resources.change_country_info
 import kargotakiptumkargolar.composeapp.generated.resources.change_language
 import kargotakiptumkargolar.composeapp.generated.resources.change_language_info
+import kargotakiptumkargolar.composeapp.generated.resources.close
 import kargotakiptumkargolar.composeapp.generated.resources.dark_mode
+import kargotakiptumkargolar.composeapp.generated.resources.publisher
+import kargotakiptumkargolar.composeapp.generated.resources.publisher_name
 import kargotakiptumkargolar.composeapp.generated.resources.select_country
 import kargotakiptumkargolar.composeapp.generated.resources.select_language
 import kargotakiptumkargolar.composeapp.generated.resources.settings
 import kargotakiptumkargolar.composeapp.generated.resources.theme_setting
+import kargotakiptumkargolar.composeapp.generated.resources.version
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import org.jetbrains.compose.resources.stringResource
@@ -83,6 +93,35 @@ fun SettingsScreen(
                 )
             }
         }
+    }
+
+    if (uiState.showAboutDialog) {
+        AlertDialog(
+            onDismissRequest = { onAction(UiAction.OnDismissAbout) },
+            confirmButton = {
+                TextButton(onClick = { onAction(UiAction.OnDismissAbout) }) {
+                    Text(stringResource(Res.string.close))
+                }
+            },
+            title = { Text(stringResource(Res.string.app_info)) },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(spacing.small)) {
+                    Text(
+                        text = stringResource(Res.string.app_name),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Text(
+                        text = "${stringResource(Res.string.publisher)}: ${stringResource(Res.string.publisher_name)}",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Text(
+                        text = "${stringResource(Res.string.version)}: ${uiState.appVersion}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        )
     }
 
     Scaffold(
@@ -143,6 +182,14 @@ fun SettingsScreen(
                 description = stringResource(Res.string.change_language_info),
                 selectedValue = uiState.selectedLanguage,
                 onClick = { onAction(UiAction.OnLanguageClick) }
+            )
+
+            // About Card
+            SettingsClickableCard(
+                icon = Icons.Default.Info,
+                title = stringResource(Res.string.about_app),
+                description = "${stringResource(Res.string.version)} ${uiState.appVersion}",
+                onClick = { onAction(UiAction.OnAboutClick) }
             )
         }
     }

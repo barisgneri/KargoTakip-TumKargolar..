@@ -12,6 +12,8 @@ class IOSPlatform: Platform {
         get() = (NSBundle.mainBundle.infoDictionary?.get("CFBundleVersion") as? String)?.toIntOrNull() ?: 0
     override val systemLanguageCode: String
         get() = NSLocale.currentLocale.languageCode
+    override val systemCountryCode: String
+        get() = NSLocale.currentLocale.countryCode?.lowercase() ?: ""
 }
 
 actual fun changeLanguage(langCode: String) {

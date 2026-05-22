@@ -16,4 +16,12 @@ interface AppConfigRepository {
     // Tema Yönetimi
     val isDarkMode: StateFlow<Boolean?>
     fun setTheme(isDark: Boolean?)
+
+    // Ülke Yönetimi
+    val currentCountry: StateFlow<String?>
+    fun setCountry(countryCode: String?)
+
+    // Sistem Bilgileri
+    val systemCountryCode: String
+    val systemLanguageCode: String
 }

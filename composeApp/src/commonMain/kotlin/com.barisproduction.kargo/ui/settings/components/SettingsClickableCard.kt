@@ -24,7 +24,7 @@ fun SettingsClickableCard(
     icon: ImageVector,
     title: String,
     description: String,
-    selectedValue: String,
+    selectedValue: String? = null,
     onClick: () -> Unit
 ) {
     Card(
@@ -55,13 +55,15 @@ fun SettingsClickableCard(
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                Spacer(modifier = Modifier.height(spacing.small))
-                Text(
-                    selectedValue,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.SemiBold
-                )
+                selectedValue?.let {
+                    Spacer(modifier = Modifier.height(spacing.small))
+                    Text(
+                        it,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
             }
         }
     }

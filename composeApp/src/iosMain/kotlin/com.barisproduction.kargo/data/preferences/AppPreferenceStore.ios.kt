@@ -41,8 +41,21 @@ class IosAppPreferenceStore : AppPreferenceStore {
         userDefaults.setObject(value, key)
     }
 
+    override fun getSelectedCountry(): String? {
+        return userDefaults.stringForKey(KEY_SELECTED_COUNTRY)
+    }
+
+    override fun setSelectedCountry(countryCode: String?) {
+        if (countryCode == null) {
+            userDefaults.removeObjectForKey(KEY_SELECTED_COUNTRY)
+        } else {
+            userDefaults.setObject(countryCode, KEY_SELECTED_COUNTRY)
+        }
+    }
+
     private companion object {
         const val KEY_THEME = "app_theme_dark"
         const val KEY_LANGUAGE = "app_language"
+        const val KEY_SELECTED_COUNTRY = "selected_country"
     }
 }

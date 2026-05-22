@@ -4,6 +4,7 @@ interface Platform {
     val name: String
     val versionCode: Int
     val systemLanguageCode: String
+    val systemCountryCode: String
 }
 
 expect fun changeLanguage(langCode: String)

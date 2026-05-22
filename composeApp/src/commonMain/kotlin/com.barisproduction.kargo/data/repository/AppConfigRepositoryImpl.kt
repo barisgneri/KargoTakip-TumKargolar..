@@ -1,5 +1,6 @@
 package com.barisproduction.kargo.data.repository
 
+import com.barisproduction.kargo.Platform
 import com.barisproduction.kargo.data.preferences.AppPreferenceStore
 import com.barisproduction.kargo.data.remote.AppConfigApiService
 import com.barisproduction.kargo.domain.model.CountryModel
@@ -11,7 +12,8 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class AppConfigRepositoryImpl(
     private val apiService: AppConfigApiService,
-    private val preferenceStore: AppPreferenceStore
+    private val preferenceStore: AppPreferenceStore,
+    private val platform: Platform
 ) : AppConfigRepository {
 
     // --- Veri Listeleri ---
@@ -54,4 +56,19 @@ class AppConfigRepositoryImpl(
         preferenceStore.setTheme(isDark)
         _isDarkMode.value = isDark
     }
+
+    // --- Ülke Yönetimi ---
+    private val _currentCountry = MutableStateFlow(preferenceStore.getSelectedCountry())
+    override val currentCountry: StateFlow<String?> = _currentCountry.asStateFlow()
+
+    override fun setCountry(countryCode: String?) {
+        preferenceStore.setSelectedCountry(countryCode)
+        _currentCountry.value = countryCode
+    }
+
+    override val systemCountryCode: String
+        get() = platform.systemCountryCode
+
+    override val systemLanguageCode: String
+        get() = platform.systemLanguageCode
 }

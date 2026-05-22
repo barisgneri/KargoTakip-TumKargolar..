@@ -9,4 +9,7 @@ interface AppPreferenceStore {
 
     fun getString(key: String, defaultValue: String): String
     fun putString(key: String, value: String)
+
+    fun getSelectedCountry(): String?
+    fun setSelectedCountry(countryCode: String?)
 }

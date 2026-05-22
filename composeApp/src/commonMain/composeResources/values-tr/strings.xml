@@ -53,4 +53,10 @@
     <string name="change_language">Dil Değiştir</string>
     <string name="change_language_info">Uygulama dilini tercihinize göre güncelleyebilirsiniz.</string>
     <string name="select_language">Dil Seçin</string>
+    <string name="about_app">Uygulama Hakkında</string>
+    <string name="app_info">Uygulama Bilgileri</string>
+    <string name="publisher">Yayıncı</string>
+    <string name="publisher_name">Baris Production</string>
+    <string name="version">Versiyon</string>
+    <string name="close">Kapat</string>
 </resources>
