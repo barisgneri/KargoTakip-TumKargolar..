@@ -14,13 +14,14 @@ import kotlin.test.assertTrue
 class CargoRepositoryImplTest {
 
     private lateinit var fakeRemoteDataSource: FakeCargoRemoteDataSource
+    private lateinit var fakeAppConfigRepository: FakeAppConfigRepository
     private lateinit var repository: CargoRepositoryImpl
 
     @BeforeTest
     fun setup() {
-
         fakeRemoteDataSource = FakeCargoRemoteDataSource()
-        repository = CargoRepositoryImpl(fakeRemoteDataSource)
+        fakeAppConfigRepository = FakeAppConfigRepository()
+        repository = CargoRepositoryImpl(fakeRemoteDataSource, fakeAppConfigRepository)
     }
 
     @Test

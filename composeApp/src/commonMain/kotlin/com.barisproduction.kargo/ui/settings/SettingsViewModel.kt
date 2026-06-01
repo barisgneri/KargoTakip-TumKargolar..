@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.barisproduction.kargo.delegation.MVI
 import com.barisproduction.kargo.delegation.mvi
 import com.barisproduction.kargo.Platform
+import com.barisproduction.kargo.domain.usecase.FetchCargoParcelListUseCase
 import com.barisproduction.kargo.domain.usecase.GetCountriesUseCase
 import com.barisproduction.kargo.domain.usecase.GetLanguagesUseCase
 import com.barisproduction.kargo.domain.usecase.GetSelectedCountryUseCase
@@ -32,6 +33,7 @@ class SettingsViewModel(
     private val setThemeUseCase: SetThemeUseCase,
     private val setCountryUseCase: SetCountryUseCase,
     private val setLanguageUseCase: SetLanguageUseCase,
+    private val fetchCargoParcelListUseCase: FetchCargoParcelListUseCase,
     private val platform: Platform
 ) : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
 
@@ -88,6 +90,7 @@ class SettingsViewModel(
                 is UiAction.OnCountryClick -> updateUiState { copy(activePicker = PickerType.COUNTRY) }
                 is UiAction.OnCountrySelect -> {
                     setCountryUseCase(uiAction.country.code)
+                    fetchCargoParcelListUseCase()
                     updateUiState { copy(activePicker = null) }
                 }
                 is UiAction.OnLanguageClick -> updateUiState { copy(activePicker = PickerType.LANGUAGE) }

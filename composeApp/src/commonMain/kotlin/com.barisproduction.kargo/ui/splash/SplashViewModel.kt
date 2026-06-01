@@ -14,9 +14,6 @@ import com.barisproduction.kargo.ui.splash.SplashContract.UiState
 import com.barisproduction.kargo.domain.usecase.CheckForceUpdateUseCase
 import com.barisproduction.kargo.domain.usecase.FetchCargoParcelListUseCase
 import com.barisproduction.kargo.domain.usecase.GetCargoParcelListUseCase
-import com.barisproduction.kargo.domain.usecase.GetCurrentCountryUseCase
-import com.barisproduction.kargo.domain.usecase.SetCountryUseCase
-import com.barisproduction.kargo.domain.usecase.GetSystemCountryCodeUseCase
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -24,9 +21,6 @@ class SplashViewModel(
     private val fetchCargoParcelListUseCase: FetchCargoParcelListUseCase,
     private val getCargoParcelListUseCase: GetCargoParcelListUseCase,
     private val checkForceUpdateUseCase: CheckForceUpdateUseCase,
-    private val getCurrentCountryUseCase: GetCurrentCountryUseCase,
-    private val setCountryUseCase: SetCountryUseCase,
-    private val getSystemCountryCodeUseCase: GetSystemCountryCodeUseCase,
     private val platform: Platform
 ) : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
 
@@ -55,13 +49,6 @@ class SplashViewModel(
                 showUpdateDialog = false,
                 storeUrl = null
             )
-        }
-
-        // Varsayılan ülke ayarı
-        val currentCountry = getCurrentCountryUseCase().value
-        if (currentCountry == null) {
-            val deviceCountry = getSystemCountryCodeUseCase()
-            setCountryUseCase(deviceCountry)
         }
 
         val forceUpdateDecision = checkForceUpdate()

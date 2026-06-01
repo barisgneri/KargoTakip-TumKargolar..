@@ -58,8 +58,17 @@ class AppConfigRepositoryImpl(
     }
 
     // --- Ülke Yönetimi ---
-    private val _currentCountry = MutableStateFlow(preferenceStore.getSelectedCountry())
+    private val _currentCountry = MutableStateFlow<String?>(
+        preferenceStore.getSelectedCountry() ?: platform.systemCountryCode
+    )
     override val currentCountry: StateFlow<String?> = _currentCountry.asStateFlow()
+
+    init {
+        // Eğer ilk değer null ise (DataStore boşsa), platformunkini hemen yazalım ki tutarlı olsun
+        if (preferenceStore.getSelectedCountry() == null) {
+            preferenceStore.setSelectedCountry(platform.systemCountryCode)
+        }
+    }
 
     override fun setCountry(countryCode: String?) {
         preferenceStore.setSelectedCountry(countryCode)
