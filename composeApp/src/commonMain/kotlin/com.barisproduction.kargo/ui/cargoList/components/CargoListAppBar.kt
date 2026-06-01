@@ -1,6 +1,5 @@
 package com.barisproduction.kargo.ui.cargoList.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import kargotakiptumkargolar.composeapp.generated.resources.Res
 import kargotakiptumkargolar.composeapp.generated.resources.my_cargos
+import kargotakiptumkargolar.composeapp.generated.resources.settings
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,7 +40,7 @@ fun CargoListAppBar(onSettingsClick: () -> Unit) {
                 IconButton(onClick = onSettingsClick) {
                     Icon(
                         imageVector = Icons.Default.Settings,
-                        contentDescription = "Settings"
+                        contentDescription = stringResource(Res.string.settings)
                     )
                 }
             },

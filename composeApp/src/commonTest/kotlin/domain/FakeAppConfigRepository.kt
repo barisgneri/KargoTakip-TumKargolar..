@@ -11,7 +11,7 @@ class FakeAppConfigRepository : AppConfigRepository {
     override suspend fun getCountries(): List<CountryModel> = emptyList()
     override fun getLanguages(): List<LanguageModel> = emptyList()
 
-    private val _currentLanguage = MutableStateFlow<String?>("tr")
+    private val _currentLanguage = MutableStateFlow<String?>("en")
     override val currentLanguage: StateFlow<String?> = _currentLanguage.asStateFlow()
     override fun setLanguage(langCode: String?) { _currentLanguage.value = langCode }
 
@@ -19,10 +19,10 @@ class FakeAppConfigRepository : AppConfigRepository {
     override val isDarkMode: StateFlow<Boolean?> = _isDarkMode.asStateFlow()
     override fun setTheme(isDark: Boolean?) { _isDarkMode.value = isDark }
 
-    private val _currentCountry = MutableStateFlow<String?>("tr")
+    private val _currentCountry = MutableStateFlow<String?>("us")
     override val currentCountry: StateFlow<String?> = _currentCountry.asStateFlow()
     override fun setCountry(countryCode: String?) { _currentCountry.value = countryCode }
 
-    override val systemCountryCode: String = "tr"
-    override val systemLanguageCode: String = "tr"
+    override val systemCountryCode: String = "us"
+    override val systemLanguageCode: String = "en"
 }
