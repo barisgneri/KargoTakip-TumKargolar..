@@ -1,0 +1,62 @@
+<resources>
+    <string name="app_name">Kargo Takip</string>
+    <string name="btn_save">Kaydet</string>
+    <string name="error_network">İnternet bağlantısı yok</string>
+    <string name="add_new_cargo">Yeni Kargo Ekle</string>
+    <string name="check_connection_and_try_again">İnternet bağlantınızı kontrol edip tekrar deneyin.</string>
+    <string name="connection_error" >Bağlantı Hatası</string>
+    <string name="new_cargo_search">Yeni Kargo Sorgula</string>
+    <string name="start_with_enter_tracking_number">Takip numaranı girerek başla</string>
+    <string name="tracking_number">Takip Numarası</string>
+    <string name="scan_barcode">Barkod Tara</string>
+    <string name="paste_clipboard">Panodan Yapıştır</string>
+    <string name="search_cargo">Kargo Sorgula</string>
+    <string name="cargo_name_optional">Kargo Adı (İsteğe Bağlı)</string>
+    <string name="placeholder_cargo_name_optional">Örn: Sipariş: Ayakkabı</string>
+    <string name="cargo_company">Kargo Firması</string>
+    <string name="select_cargo_company">Firma Seçin</string>
+    <string name="cargo_tracking_detail">Takip Detayları</string>
+    <string name="enter_cargo_number_or_scan_barcode_info_text">Kargonuzun üzerindeki barkodu tarayabilir veya numarayı elle girebilirsiniz.</string>
+    <string name="my_cargos">Kargolarım</string>
+    <string name="cargo_name">Kargo Adı</string>
+    <string name="cancel">İptal</string>
+    <string name="update_cargo">Kargoyu Güncelle</string>
+    <string name="update">Güncelle</string>
+    <string name="did_not_save_cargo">Kargoyu Kaydetmedin</string>
+    <string name="dont_save_cargo_info">Tekrar bilgileri girmekle uğraşma, kargonu kaydetmek ister misin?</string>
+    <string name="exit">Çık</string>
+    <string name="review_app_title">Uygulamayı Değerlendirir misin?</string>
+    <string name="review_app_description">Yorumun bizim için çok değerli.</string>
+    <string name="review_app_confirm">Puanla</string>
+    <string name="review_app_later">Sonra</string>
+    <string name="delete">Sil</string>
+    <string name="delete_cargo_title">Kargoyu Sil</string>
+    <string name="delete_cargo_description">Bu kargoyu silmek istediğine emin misin?</string>
+    <string name="edit">Düzenle</string>
+
+    <!-- Splash & Update Strings -->
+    <string name="update_available">Güncelleme Mevcut</string>
+    <string name="update_description_required">Uygulamanın devam edebilmesi için yeni bir güncelleme gereklidir.</string>
+    <string name="btn_update">Güncelle</string>
+    <string name="fast_and_ads_free">HIZLI VE REKLAMSIZ</string>
+    <string name="app_preparing">Uygulama Hazırlanıyor...</string>
+
+    <!-- Settings -->
+    <string name="settings">Ayarlar</string>
+    <string name="settings_coming_soon">Ayarlar Sayfası Yakında!</string>
+    <string name="back">Geri</string>
+    <string name="theme_setting">Tema Ayarları</string>
+    <string name="dark_mode">Karanlık Mod</string>
+    <string name="change_country">Ülke Değiştir</string>
+    <string name="change_country_info">Kargo sorgulama servislerinin optimize edilmesi için ülkenizi seçin.</string>
+    <string name="select_country">Ülke Seçin</string>
+    <string name="change_language">Dil Değiştir</string>
+    <string name="change_language_info">Uygulama dilini tercihinize göre güncelleyebilirsiniz.</string>
+    <string name="select_language">Dil Seçin</string>
+    <string name="about_app">Uygulama Hakkında</string>
+    <string name="app_info">Uygulama Bilgileri</string>
+    <string name="publisher">Yayıncı</string>
+    <string name="publisher_name">Baris Production</string>
+    <string name="version">Versiyon</string>
+    <string name="close">Kapat</string>
+</resources>

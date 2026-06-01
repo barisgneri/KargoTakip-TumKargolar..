@@ -19,6 +19,14 @@ class FakeCargoRemoteDataSource : CargoRemoteDataSource {
         return dummyDtoList
     }
 
+    override suspend fun getCompaniesByCountry(countryCode: String): List<CargoDto> {
+        callCount++
+        if (shouldThrowError) {
+            throw Exception("Sunucuya ulaşılamadı veya API hatası")
+        }
+        return dummyDtoList
+    }
+
     override suspend fun getAppUpdateConfig(): AppUpdateConfigDto {
         if (shouldThrowError || dummyAppConfig == null) {
             throw Exception("Config alınamadı")

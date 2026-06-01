@@ -19,7 +19,7 @@ class FakeCargoRepository : CargoRepository {
 
     override fun getCargoParcelListState(): StateFlow<Resource<List<Parcels>>> = _parcelListState.asStateFlow()
 
-    override suspend fun getCargoParcelList() {
+    override suspend fun getCargoParcelList(countryCode: String?) {
         if (shouldReturnError) {
             _parcelListState.emit(Resource.Error(AppError.NotFound))
         } else {

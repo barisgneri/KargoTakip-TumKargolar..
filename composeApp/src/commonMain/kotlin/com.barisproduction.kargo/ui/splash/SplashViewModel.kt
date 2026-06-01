@@ -6,7 +6,7 @@ import com.barisproduction.kargo.common.Resource
 import com.barisproduction.kargo.common.extensions.toUserMessage
 import com.barisproduction.kargo.delegation.MVI
 import com.barisproduction.kargo.delegation.mvi
-import com.barisproduction.kargo.getPlatform
+import com.barisproduction.kargo.Platform
 import com.barisproduction.kargo.domain.model.ForceUpdateDecision
 import com.barisproduction.kargo.ui.splash.SplashContract.UiAction
 import com.barisproduction.kargo.ui.splash.SplashContract.UiEffect
@@ -20,7 +20,8 @@ import kotlinx.coroutines.launch
 class SplashViewModel(
     private val fetchCargoParcelListUseCase: FetchCargoParcelListUseCase,
     private val getCargoParcelListUseCase: GetCargoParcelListUseCase,
-    private val checkForceUpdateUseCase: CheckForceUpdateUseCase
+    private val checkForceUpdateUseCase: CheckForceUpdateUseCase,
+    private val platform: Platform
 ) : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
 
     init {
@@ -57,7 +58,6 @@ class SplashViewModel(
     }
 
     private suspend fun checkForceUpdate(): ForceUpdateDecision? {
-        val platform = getPlatform()
         when (
             val updateResult = checkForceUpdateUseCase(
                 platformName = platform.name,

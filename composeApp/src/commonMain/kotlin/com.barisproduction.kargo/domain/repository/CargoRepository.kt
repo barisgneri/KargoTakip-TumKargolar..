@@ -7,8 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 
 interface CargoRepository {
-    suspend fun getCargoParcelList()
+    suspend fun getCargoParcelList(countryCode: String? = null)
     suspend fun getAppUpdateConfig(): Resource<AppUpdateConfig>
     fun getCargoParcelListState(): StateFlow<Resource<List<Parcels>>>
-
 }

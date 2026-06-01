@@ -5,5 +5,6 @@ import com.barisproduction.kargo.data.remote.model.AppUpdateConfigDto
 
 interface CargoRemoteDataSource{
     suspend fun getAllParcels(): List<CargoDto>
+    suspend fun getCompaniesByCountry(countryCode: String): List<CargoDto>
     suspend fun getAppUpdateConfig(): AppUpdateConfigDto
 }

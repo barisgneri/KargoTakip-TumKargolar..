@@ -10,7 +10,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.barisproduction.kargo.common.extensions.collectWithLifecycle
 import com.barisproduction.kargo.ui.cargoList.CargoListContract.UiAction
 import com.barisproduction.kargo.ui.cargoList.CargoListContract.UiEffect
@@ -18,6 +17,7 @@ import com.barisproduction.kargo.ui.cargoList.CargoListContract.UiState
 import com.barisproduction.kargo.ui.components.AnimAddCargoFAB
 import com.barisproduction.kargo.ui.components.LoadingBar
 import com.barisproduction.kargo.ui.theme.KargoTheme
+import com.barisproduction.kargo.ui.theme.spacing
 import kotlinx.coroutines.flow.Flow
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -55,6 +55,8 @@ fun CargoListScreen(
             is UiEffect.ShowError -> {}
 
             is UiEffect.NavigateToAddNewCargo -> navActions.addNewCargoNavigation()
+
+            is UiEffect.NavigateToSettings -> navActions.navigateToSettings()
 
             is UiEffect.NavigateToTracking -> navActions.navigateToTracking(
                 it.parcelName,
@@ -96,7 +98,7 @@ fun CargoListContent(
 ) {
     Scaffold(
         modifier = modifier.background(MaterialTheme.colorScheme.background),
-        topBar = { CargoListAppBar() },
+        topBar = { CargoListAppBar(onSettingsClick = { onAction(UiAction.OnSettingsClick) }) },
         floatingActionButton = {
             AnimAddCargoFAB(onClick = {
                 onAction(UiAction.AddNewCargo)
@@ -122,8 +124,8 @@ fun CargoList(
     } else {
         LazyColumn(
             modifier = modifier.fillMaxSize(),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            contentPadding = PaddingValues(spacing.medium),
+            verticalArrangement = Arrangement.spacedBy(spacing.small)
         ) {
             items(cargoList, key = { it.trackNo }) { cargo ->
                 val dismissState = rememberSwipeToDismissBoxState(
@@ -169,7 +171,7 @@ fun EmptyCargoView(modifier: Modifier = Modifier) {
                 text = "Hemen kargonu sorgula!",
                 style = MaterialTheme.typography.headlineSmall
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(spacing.small))
             Text(
                 text = "Listede hiç kargo yok.",
                 style = MaterialTheme.typography.bodyMedium,

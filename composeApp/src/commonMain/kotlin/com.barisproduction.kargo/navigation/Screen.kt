@@ -10,6 +10,9 @@ sealed interface Screen {
     data object CargoList : Screen
 
     @Serializable
+    data object Settings : Screen
+
+    @Serializable
     data object AddNewCargo : Screen
 
     @Serializable

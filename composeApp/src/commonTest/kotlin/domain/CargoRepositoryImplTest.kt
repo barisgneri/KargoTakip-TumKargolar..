@@ -4,6 +4,7 @@ import com.barisproduction.kargo.common.Resource
 import com.barisproduction.kargo.data.remote.model.AppUpdateConfigDto
 import com.barisproduction.kargo.data.remote.model.CargoDto
 import com.barisproduction.kargo.data.repository.CargoRepositoryImpl
+import com.barisproduction.kargo.domain.repository.CargoRepository
 import data.remote.FakeCargoRemoteDataSource
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
@@ -14,13 +15,14 @@ import kotlin.test.assertTrue
 class CargoRepositoryImplTest {
 
     private lateinit var fakeRemoteDataSource: FakeCargoRemoteDataSource
-    private lateinit var repository: CargoRepositoryImpl
+    private lateinit var fakeAppConfigRepository: FakeAppConfigRepository
+    private lateinit var repository: CargoRepository
 
     @BeforeTest
     fun setup() {
-
         fakeRemoteDataSource = FakeCargoRemoteDataSource()
-        repository = CargoRepositoryImpl(fakeRemoteDataSource)
+        fakeAppConfigRepository = FakeAppConfigRepository()
+        repository = CargoRepositoryImpl(fakeRemoteDataSource, fakeAppConfigRepository)
     }
 
     @Test
