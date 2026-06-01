@@ -8,6 +8,6 @@ import io.ktor.client.request.get
 
 class AppConfigApiService(private val client: HttpClient) {
     suspend fun getCountries(): List<CountryResponse> {
-        return client.get(Constants.CountryListUrl).body()
+        return client.get(Constants.COUNTRY_LIST_URL).body()
     }
 }
