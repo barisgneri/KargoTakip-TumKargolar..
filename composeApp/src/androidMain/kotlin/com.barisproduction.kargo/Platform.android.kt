@@ -25,7 +25,7 @@ class AndroidPlatform(private val context: Context) : Platform {
         get() = Locale.getDefault().language
 
     override val systemCountryCode: String
-        get() = Locale.getDefault().country.lowercase()
+        get() = Locale.getDefault().country.lowercase().ifBlank { "tr" }
 }
 
 actual fun changeLanguage(langCode: String) {

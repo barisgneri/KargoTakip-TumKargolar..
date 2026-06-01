@@ -3,6 +3,8 @@ package com.barisproduction.kargo
 import platform.Foundation.NSBundle
 import platform.Foundation.NSLocale
 import platform.Foundation.NSUserDefaults
+import platform.Foundation.countryCode
+import platform.Foundation.currentLocale
 import platform.Foundation.languageCode
 import platform.UIKit.UIDevice
 
@@ -13,7 +15,7 @@ class IOSPlatform: Platform {
     override val systemLanguageCode: String
         get() = NSLocale.currentLocale.languageCode
     override val systemCountryCode: String
-        get() = NSLocale.currentLocale.countryCode?.lowercase() ?: ""
+        get() = (NSLocale.currentLocale.countryCode?.lowercase() ?: "tr").ifBlank { "tr" }
 }
 
 actual fun changeLanguage(langCode: String) {
