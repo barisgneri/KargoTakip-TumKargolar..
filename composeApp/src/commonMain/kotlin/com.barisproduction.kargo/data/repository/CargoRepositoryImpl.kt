@@ -23,7 +23,9 @@ class CargoRepositoryImpl(
     private var lastCountryCode: String? = null
 
     override suspend fun getCargoParcelList(countryCode: String?) {
-        val effectiveCountryCode = countryCode ?: configRepository.currentCountry.value ?: "tr"
+        val effectiveCountryCode = countryCode 
+            ?: configRepository.currentCountry.value 
+            ?: configRepository.systemCountryCode
         
         if (_parcelListState.value is Resource.Success && lastCountryCode == effectiveCountryCode) return
 
