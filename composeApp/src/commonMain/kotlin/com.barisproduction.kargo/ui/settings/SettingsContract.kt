@@ -11,8 +11,8 @@ object SettingsContract {
     data class UiState(
         val isLoading: Boolean = false,
         val isDarkMode: Boolean = false,
-        val selectedCountry: String = "Türkiye",
-        val selectedLanguage: String = "Türkçe",
+        val selectedCountry: String = "",
+        val selectedLanguage: String = "",
         val activePicker: PickerType? = null,
         val countries: List<CountryModel> = emptyList(),
         val languages: List<LanguageModel> = emptyList(),

@@ -55,7 +55,7 @@ fun SettingsClickableCard(
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                selectedValue?.let {
+                selectedValue?.takeIf { it.isNotBlank() }?.let {
                     Spacer(modifier = Modifier.height(spacing.small))
                     Text(
                         it,
