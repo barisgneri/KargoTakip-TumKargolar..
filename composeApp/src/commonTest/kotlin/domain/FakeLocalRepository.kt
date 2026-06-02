@@ -5,10 +5,11 @@ import com.barisproduction.kargo.domain.model.CargoModel
 import com.barisproduction.kargo.domain.repository.LocalRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
 
 class FakeLocalRepository : LocalRepository {
     private val cargos = MutableStateFlow<List<CargoModel>>(emptyList())
-    private val entities = mutableMapOf<String, CargoEntity>()
+    private val entitiesFlow = MutableStateFlow<Map<String, CargoEntity>>(emptyMap())
 
     override suspend fun insertCargo(cargo: CargoModel) {
         val current = cargos.value.toMutableList()
@@ -36,10 +37,16 @@ class FakeLocalRepository : LocalRepository {
     }
 
     override suspend fun getCargoByTrackingNumber(trackingNumber: String): CargoEntity? {
-        return entities[trackingNumber]
+        return entitiesFlow.value[trackingNumber]
+    }
+
+    override fun observeCargoByTrackingNumber(trackingNumber: String): Flow<CargoEntity?> {
+        return entitiesFlow.map { it[trackingNumber] }
     }
 
     fun addCargoEntity(entity: CargoEntity) {
-        entities[entity.trackingNumber] = entity
+        val current = entitiesFlow.value.toMutableMap()
+        current[entity.trackingNumber] = entity
+        entitiesFlow.value = current
     }
 }

@@ -187,6 +187,16 @@ private fun CargoDialogContent(
                     leadingIcon = Icons.Default.Label
                 )
 
+                if (uiState.errorMessage != null) {
+                    Spacer(modifier = Modifier.height(spacing.small))
+                    Text(
+                        text = uiState.errorMessage,
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(start = 4.dp)
+                    )
+                }
+
                 Spacer(modifier = Modifier.height(spacing.extraLarge))
 
                 CargoButton(

@@ -10,4 +10,5 @@ interface LocalRepository {
     fun getAllCargos(): Flow<List<CargoModel>>
     suspend fun deleteCargo(trackNo: String)
     suspend fun getCargoByTrackingNumber(trackingNumber: String): CargoEntity?
+    fun observeCargoByTrackingNumber(trackingNumber: String): Flow<CargoEntity?>
 }

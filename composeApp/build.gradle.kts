@@ -46,6 +46,7 @@ kotlin {
 
         }
         commonMain.dependencies {
+            implementation(libs.ui.backhandler)
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)

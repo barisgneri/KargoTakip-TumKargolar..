@@ -61,4 +61,8 @@ class LocalRepositoryImpl(
     override suspend fun getCargoByTrackingNumber(trackingNumber: String): CargoEntity? {
         return cargoDao.getCargoByTrackingNumber(trackingNumber)
     }
+
+    override fun observeCargoByTrackingNumber(trackingNumber: String): Flow<CargoEntity?> {
+        return cargoDao.getCargoByTrackingNumberFlow(trackingNumber)
+    }
 }

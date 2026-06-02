@@ -20,6 +20,8 @@ import com.barisproduction.kargo.domain.usecase.UpdateCargoUseCase
 import com.barisproduction.kargo.navigation.Screen
 import kotlinx.coroutines.launch
 
+import kotlinx.coroutines.flow.first
+
 class CargoDialogViewModel(
     savedStateHandle: SavedStateHandle,
     private val findCargoInfoUseCase: FindCargoInfoUseCase,
@@ -113,8 +115,8 @@ class CargoDialogViewModel(
             if (trackingNo.isBlank() || cargoName.isBlank() || carrier == null) return@launch
 
             if (!isEditMode) {
-                if (checkCargoInDBUseCase(trackingNo)) {
-                    emitUiEffect(UiEffect.ShowMessage("Bu numaraya ait bir gönderi zaten kayıtlı."))
+                if (checkCargoInDBUseCase(trackingNo).first()) {
+                    updateUiState { copy(errorMessage = "Bu numaraya ait bir gönderi zaten kayıtlı.") }
                     return@launch
                 }
             }
