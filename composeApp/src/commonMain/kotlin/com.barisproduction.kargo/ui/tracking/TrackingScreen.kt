@@ -66,7 +66,11 @@ fun TrackingScreen(
     val scope = rememberCoroutineScope()
 
     BackHandler(enabled = true) {
-        onAction(UiAction.OnBackClick)
+        if (uiState.showSaveConfirmationDialog) {
+            onAction(UiAction.OnDismissSaveDialog)
+        } else {
+            onAction(UiAction.OnBackClick)
+        }
     }
 
     uiEffect.collectWithLifecycle { uiEffect ->

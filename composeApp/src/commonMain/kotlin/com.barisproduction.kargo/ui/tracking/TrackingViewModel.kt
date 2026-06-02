@@ -19,6 +19,8 @@ import com.barisproduction.kargo.ui.tracking.TrackingScreenContract.UiAction
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+import kotlinx.coroutines.flow.first
+
 class TrackingViewModel (
     savedStateHandle: SavedStateHandle,
     private val checkCargoInDBUseCase: CheckCargoInDBUseCase,
@@ -61,12 +63,15 @@ class TrackingViewModel (
         viewModelScope.launch {
             when (uiAction) {
                 is UiAction.OnBackClick -> {
-                    viewModelScope.launch {
-                        if (uiState.value.saveButtonVisibility) {
-                            updateUiState { copy(showSaveConfirmationDialog = true) }
-                        } else {
-                            emitUiEffect(UiEffect.NavigateBack)
-                        }
+                    if (uiState.value.showSaveConfirmationDialog) {
+                        updateUiState { copy(showSaveConfirmationDialog = false) }
+                        return@launch
+                    }
+                    val isExist = checkCargoInDBUseCase(argsTrackingNumber).first()
+                    if (isExist) {
+                        emitUiEffect(UiEffect.NavigateBack)
+                    } else {
+                        updateUiState { copy(showSaveConfirmationDialog = true) }
                     }
                 }
                 is UiAction.OnSaveClick -> {
