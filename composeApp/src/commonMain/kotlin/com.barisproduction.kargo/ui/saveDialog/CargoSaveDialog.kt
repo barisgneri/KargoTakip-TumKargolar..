@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Label
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Label
 import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -184,8 +184,18 @@ private fun CargoDialogContent(
                     onValueChange = { onAction(CargoDialogContract.UiAction.OnCargoNameChange(it)) },
                     placeholder = "Örn: Hediye",
                     isError = uiState.isCargoNameError,
-                    leadingIcon = Icons.Default.Label
+                    leadingIcon = Icons.AutoMirrored.Filled.Label
                 )
+
+                if (uiState.errorMessage != null) {
+                    Spacer(modifier = Modifier.height(spacing.small))
+                    Text(
+                        text = stringResource(uiState.errorMessage),
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(start = 4.dp)
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(spacing.extraLarge))
 

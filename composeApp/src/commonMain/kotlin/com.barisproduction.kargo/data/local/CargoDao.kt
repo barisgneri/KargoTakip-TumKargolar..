@@ -23,5 +23,8 @@ interface CargoDao {
     suspend fun deleteCargo(cargo: CargoEntity)
 
     @Query("SELECT * FROM cargo_table WHERE trackingNumber = :trackingNumber LIMIT 1")
+    fun getCargoByTrackingNumberFlow(trackingNumber: String): Flow<CargoEntity?>
+
+    @Query("SELECT * FROM cargo_table WHERE trackingNumber = :trackingNumber LIMIT 1")
     suspend fun getCargoByTrackingNumber(trackingNumber: String): CargoEntity?
 }

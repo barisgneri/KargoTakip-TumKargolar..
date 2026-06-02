@@ -51,6 +51,7 @@ firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashly
 gitlive-firebase-analytics = { group = "dev.gitlive", name = "firebase-analytics", version.ref = "gitlive-firebase" }
 gitlive-firebase-firestore = { group = "dev.gitlive", name = "firebase-firestore", version.ref = "gitlive-firebase" }
 jetbrains-androidx-lifecycle = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle"}
+ui-backhandler = { module = "org.jetbrains.compose.ui:ui-backhandler", version.ref = "compose-multiplatform" }
 
 
 

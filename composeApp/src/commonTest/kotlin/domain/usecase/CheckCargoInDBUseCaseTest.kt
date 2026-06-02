@@ -3,6 +3,7 @@ package domain.usecase
 import com.barisproduction.kargo.data.local.CargoEntity
 import com.barisproduction.kargo.domain.usecase.CheckCargoInDBUseCase
 import domain.FakeLocalRepository
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -34,7 +35,7 @@ class CheckCargoInDBUseCaseTest {
         fakeLocalRepository.addCargoEntity(entity)
 
         // Act
-        val result = checkCargoInDBUseCase(trackingNumber)
+        val result = checkCargoInDBUseCase(trackingNumber).first()
 
         // Assert
         assertTrue(result)
@@ -46,7 +47,7 @@ class CheckCargoInDBUseCaseTest {
         val trackingNumber = "999999"
 
         // Act
-        val result = checkCargoInDBUseCase(trackingNumber)
+        val result = checkCargoInDBUseCase(trackingNumber).first()
 
         // Assert
         assertFalse(result)

@@ -37,4 +37,8 @@ class FakeCargoDao : CargoDao {
     override suspend fun getCargoByTrackingNumber(trackingNumber: String): CargoEntity? {
         return cargos.value.find { it.trackingNumber == trackingNumber }
     }
+
+    override fun getCargoByTrackingNumberFlow(trackingNumber: String): Flow<CargoEntity?> {
+        return cargos.map { list -> list.find { it.trackingNumber == trackingNumber } }
+    }
 }

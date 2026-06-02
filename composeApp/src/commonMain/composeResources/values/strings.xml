@@ -59,4 +59,5 @@
     <string name="publisher_name">Baris Production</string>
     <string name="version">Version</string>
     <string name="close">Close</string>
+    <string name="error_duplicate_tracking_number">A shipment with this number is already registered.</string>
 </resources>
