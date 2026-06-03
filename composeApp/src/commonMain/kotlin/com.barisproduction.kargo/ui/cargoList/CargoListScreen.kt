@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.barisproduction.kargo.common.extensions.collectWithLifecycle
+import com.barisproduction.kargo.common.extensions.toRelativeTime
 import com.barisproduction.kargo.ui.cargoList.CargoListContract.UiAction
 import com.barisproduction.kargo.ui.cargoList.CargoListContract.UiEffect
 import com.barisproduction.kargo.ui.cargoList.CargoListContract.UiState
@@ -18,7 +19,10 @@ import com.barisproduction.kargo.ui.components.AnimAddCargoFAB
 import com.barisproduction.kargo.ui.components.LoadingBar
 import com.barisproduction.kargo.ui.theme.KargoTheme
 import com.barisproduction.kargo.ui.theme.spacing
+import kargotakiptumkargolar.composeapp.generated.resources.Res
+import kargotakiptumkargolar.composeapp.generated.resources.no_date_info
 import kotlinx.coroutines.flow.Flow
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -149,7 +153,7 @@ fun CargoList(
                             trackingNumber = trackNo,
                             courierName = parcelName,
                             imageUrl = logo,
-                            dateAdded = addDate ?: "Tarih bilgisi yok.",
+                            dateAdded = createdAt?.toRelativeTime() ?: stringResource(Res.string.no_date_info),
                             onClick = { onAction(UiAction.NavigateToTracking(parcelName, trackNo)) }
                         )
                     }

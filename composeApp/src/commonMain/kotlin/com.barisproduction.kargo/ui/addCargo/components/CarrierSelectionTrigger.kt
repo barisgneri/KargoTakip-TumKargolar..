@@ -117,7 +117,7 @@ private fun DetectedCarrierView(carrier: Parcels) {
                 fontSize = 12.sp
             )
             Text(
-                "${carrier.parcelName} Seçildi",
+                stringResource(Res.string.cargo_company_selected, carrier.parcelName),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold

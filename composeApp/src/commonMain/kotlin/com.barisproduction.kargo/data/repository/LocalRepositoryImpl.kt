@@ -1,6 +1,5 @@
 package com.barisproduction.kargo.data.repository
 
-import com.barisproduction.kargo.common.extensions.toFormattedDate
 import com.barisproduction.kargo.data.local.CargoDao
 import com.barisproduction.kargo.data.local.CargoEntity
 import com.barisproduction.kargo.domain.model.CargoModel
@@ -46,7 +45,7 @@ class LocalRepositoryImpl(
                     cargoName = entity.cargoName,
                     logo = entity.logo,
                     trackNo = entity.trackingNumber,
-                    addDate = entity.createdAt.toFormattedDate()
+                    createdAt = entity.createdAt
                 )
             }
         }

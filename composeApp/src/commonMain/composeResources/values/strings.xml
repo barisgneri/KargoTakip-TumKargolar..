@@ -13,6 +13,8 @@
     <string name="search_cargo">Track Cargo</string>
     <string name="cargo_name_optional">Cargo Name (Optional)</string>
     <string name="placeholder_cargo_name_optional">Ex: Order: Shoes</string>
+    <string name="placeholder_tracking_number">Ex: TR123456789</string>
+    <string name="placeholder_cargo_name">Ex: Gift</string>
     <string name="cargo_company">Cargo Company</string>
     <string name="select_cargo_company">Select Company</string>
     <string name="cargo_tracking_detail">Tracking Details</string>
@@ -22,8 +24,8 @@
     <string name="cancel">Cancel</string>
     <string name="update_cargo">Update Cargo</string>
     <string name="update">Update</string>
-    <string name="did_not_save_cargo">You Didn\'t Save Cargo</string>
-    <string name="dont_save_cargo_info">Don\'t bother re-entering info, would you like to save your cargo?</string>
+    <string name="did_not_save_cargo">You Didn't Save Cargo</string>
+    <string name="dont_save_cargo_info">Don't bother re-entering info, would you like to save your cargo?</string>
     <string name="exit">Exit</string>
     <string name="review_app_title">Would you rate the app?</string>
     <string name="review_app_description">Your feedback is very valuable to us.</string>
@@ -60,4 +62,26 @@
     <string name="version">Version</string>
     <string name="close">Close</string>
     <string name="error_duplicate_tracking_number">A shipment with this number is already registered.</string>
+    <string name="tracking_no_prefix">Tracking No: %1$s • %2$s</string>
+    <string name="added_date">Added Date: </string>
+    <string name="details">Details</string>
+    <string name="cargo_logo">Cargo Logo</string>
+    <string name="just_now">Just now</string>
+    <string name="minutes_ago">%1$d min ago</string>
+    <string name="hours_ago">%1$d hours ago</string>
+    <string name="days_ago">%1$d days ago</string>
+    <string name="no_date_info">No date info.</string>
+    <string name="month_jan">January</string>
+    <string name="month_feb">February</string>
+    <string name="month_mar">March</string>
+    <string name="month_apr">April</string>
+    <string name="month_may">May</string>
+    <string name="month_jun">June</string>
+    <string name="month_jul">July</string>
+    <string name="month_aug">August</string>
+    <string name="month_sep">September</string>
+    <string name="month_oct">October</string>
+    <string name="month_nov">November</string>
+    <string name="month_dec">December</string>
+    <string name="cargo_company_selected">%1$s Selected</string>
 </resources>

@@ -42,6 +42,8 @@ import kargotakiptumkargolar.composeapp.generated.resources.cancel
 import kargotakiptumkargolar.composeapp.generated.resources.cargo_company
 import kargotakiptumkargolar.composeapp.generated.resources.cargo_name
 import kargotakiptumkargolar.composeapp.generated.resources.cargo_name_optional
+import kargotakiptumkargolar.composeapp.generated.resources.placeholder_cargo_name
+import kargotakiptumkargolar.composeapp.generated.resources.placeholder_tracking_number
 import kargotakiptumkargolar.composeapp.generated.resources.tracking_number
 import kargotakiptumkargolar.composeapp.generated.resources.update
 import kargotakiptumkargolar.composeapp.generated.resources.update_cargo
@@ -151,7 +153,7 @@ private fun CargoDialogContent(
                         )
                     },
                     isError = uiState.isTrackingNumberError,
-                    placeholder = "Örn: TR123456789",
+                    placeholder = stringResource(Res.string.placeholder_tracking_number),
                     leadingIcon = Icons.Default.QrCodeScanner,
                     enabled = !uiState.isEditMode
                 )
@@ -182,7 +184,7 @@ private fun CargoDialogContent(
                 CargoTextField(
                     value = uiState.cargoName ?: "",
                     onValueChange = { onAction(CargoDialogContract.UiAction.OnCargoNameChange(it)) },
-                    placeholder = "Örn: Hediye",
+                    placeholder = stringResource(Res.string.placeholder_cargo_name),
                     isError = uiState.isCargoNameError,
                     leadingIcon = Icons.AutoMirrored.Filled.Label
                 )

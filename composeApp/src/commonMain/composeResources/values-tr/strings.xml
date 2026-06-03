@@ -13,6 +13,8 @@
     <string name="search_cargo">Kargo Sorgula</string>
     <string name="cargo_name_optional">Kargo Adı (İsteğe Bağlı)</string>
     <string name="placeholder_cargo_name_optional">Örn: Sipariş: Ayakkabı</string>
+    <string name="placeholder_tracking_number">Örn: TR123456789</string>
+    <string name="placeholder_cargo_name">Örn: Hediye</string>
     <string name="cargo_company">Kargo Firması</string>
     <string name="select_cargo_company">Firma Seçin</string>
     <string name="cargo_tracking_detail">Takip Detayları</string>
@@ -60,4 +62,26 @@
     <string name="version">Versiyon</string>
     <string name="close">Kapat</string>
     <string name="error_duplicate_tracking_number">Bu numaraya ait bir gönderi zaten kayıtlı.</string>
+    <string name="tracking_no_prefix">Takip No: %1$s • %2$s</string>
+    <string name="added_date">Eklenme Tarihi: </string>
+    <string name="details">Detaylar</string>
+    <string name="cargo_logo">Kargo Logosu</string>
+    <string name="just_now">Az önce</string>
+    <string name="minutes_ago">%1$d dk önce</string>
+    <string name="hours_ago">%1$d saat önce</string>
+    <string name="days_ago">%1$d gün önce</string>
+    <string name="no_date_info">Tarih bilgisi yok.</string>
+    <string name="month_jan">Ocak</string>
+    <string name="month_feb">Şubat</string>
+    <string name="month_mar">Mart</string>
+    <string name="month_apr">Nisan</string>
+    <string name="month_may">Mayıs</string>
+    <string name="month_jun">Haziran</string>
+    <string name="month_jul">Temmuz</string>
+    <string name="month_aug">Ağustos</string>
+    <string name="month_sep">Eylül</string>
+    <string name="month_oct">Ekim</string>
+    <string name="month_nov">Kasım</string>
+    <string name="month_dec">Aralık</string>
+    <string name="cargo_company_selected">%1$s Seçildi</string>
 </resources>

@@ -137,8 +137,7 @@ class CargoDialogViewModel(
                 cargoName = cargoName,
                 parcelName = carrier.parcelName,
                 logo = carrier.logo,
-                trackNo = trackingNo,
-                addDate = null
+                trackNo = trackingNo
             )
 
             if (isEditMode) {
