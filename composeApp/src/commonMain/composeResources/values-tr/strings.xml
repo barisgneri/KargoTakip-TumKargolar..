@@ -87,4 +87,5 @@
     <string name="empty_cargo_title">Hemen kargonu sorgula!</string>
     <string name="empty_cargo_subtitle">Listede hiç kargo yok.</string>
     <string name="select">Seç</string>
+    <string name="done">Bitti</string>
 </resources>

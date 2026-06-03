@@ -10,5 +10,7 @@ expect fun KargoWebView(
     modifier: Modifier,
     onLoadingStateChanged: (Boolean) -> Unit,
     onError: (Int) -> Unit,
-    js: String
+    js: String,
+    injectJs: String? = null,
+    onJsInjected: () -> Unit = {}
 )
