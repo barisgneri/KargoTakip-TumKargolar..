@@ -35,18 +35,7 @@ import com.barisproduction.kargo.ui.components.CargoButton
 import com.barisproduction.kargo.ui.components.CargoButtonStyle
 import com.barisproduction.kargo.ui.components.CargoTextField
 import com.barisproduction.kargo.ui.theme.spacing
-import kargotakiptumkargolar.composeapp.generated.resources.Res
-import kargotakiptumkargolar.composeapp.generated.resources.add_new_cargo
-import kargotakiptumkargolar.composeapp.generated.resources.btn_save
-import kargotakiptumkargolar.composeapp.generated.resources.cancel
-import kargotakiptumkargolar.composeapp.generated.resources.cargo_company
-import kargotakiptumkargolar.composeapp.generated.resources.cargo_name
-import kargotakiptumkargolar.composeapp.generated.resources.cargo_name_optional
-import kargotakiptumkargolar.composeapp.generated.resources.placeholder_cargo_name
-import kargotakiptumkargolar.composeapp.generated.resources.placeholder_tracking_number
-import kargotakiptumkargolar.composeapp.generated.resources.tracking_number
-import kargotakiptumkargolar.composeapp.generated.resources.update
-import kargotakiptumkargolar.composeapp.generated.resources.update_cargo
+import kargotakiptumkargolar.composeapp.generated.resources.*
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
@@ -129,7 +118,7 @@ private fun CargoDialogContent(
                     IconButton(onClick = onDismissRequest) {
                         Icon(
                             imageVector = Icons.Default.Close,
-                            contentDescription = "Kapat",
+                            contentDescription = stringResource(Res.string.close),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }

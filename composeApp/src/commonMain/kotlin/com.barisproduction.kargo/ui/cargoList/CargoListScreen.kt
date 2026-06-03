@@ -20,6 +20,8 @@ import com.barisproduction.kargo.ui.components.LoadingBar
 import com.barisproduction.kargo.ui.theme.KargoTheme
 import com.barisproduction.kargo.ui.theme.spacing
 import kargotakiptumkargolar.composeapp.generated.resources.Res
+import kargotakiptumkargolar.composeapp.generated.resources.empty_cargo_subtitle
+import kargotakiptumkargolar.composeapp.generated.resources.empty_cargo_title
 import kargotakiptumkargolar.composeapp.generated.resources.no_date_info
 import kotlinx.coroutines.flow.Flow
 import org.jetbrains.compose.resources.stringResource
@@ -172,12 +174,12 @@ fun EmptyCargoView(modifier: Modifier = Modifier) {
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
-                text = "Hemen kargonu sorgula!",
+                text = stringResource(Res.string.empty_cargo_title),
                 style = MaterialTheme.typography.headlineSmall
             )
             Spacer(modifier = Modifier.height(spacing.small))
             Text(
-                text = "Listede hiç kargo yok.",
+                text = stringResource(Res.string.empty_cargo_subtitle),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

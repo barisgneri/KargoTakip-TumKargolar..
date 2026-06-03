@@ -34,6 +34,7 @@ import com.barisproduction.kargo.domain.model.Parcels
 import com.barisproduction.kargo.ui.theme.spacing
 import kargotakiptumkargolar.composeapp.generated.resources.Res
 import kargotakiptumkargolar.composeapp.generated.resources.*
+import kargotakiptumkargolar.composeapp.generated.resources.select
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -83,7 +84,7 @@ fun CarrierSelectionTrigger(
         Spacer(modifier = Modifier.weight(1f))
         Icon(
             imageVector = Icons.Default.KeyboardArrowDown,
-            contentDescription = "Select",
+            contentDescription = stringResource(Res.string.select),
             tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }

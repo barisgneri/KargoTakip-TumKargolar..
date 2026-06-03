@@ -84,4 +84,7 @@
     <string name="month_nov">Kasım</string>
     <string name="month_dec">Aralık</string>
     <string name="cargo_company_selected">%1$s Seçildi</string>
+    <string name="empty_cargo_title">Hemen kargonu sorgula!</string>
+    <string name="empty_cargo_subtitle">Listede hiç kargo yok.</string>
+    <string name="select">Seç</string>
 </resources>
