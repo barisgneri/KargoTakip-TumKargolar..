@@ -31,8 +31,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.barisproduction.kargo.domain.model.Parcels
 import com.barisproduction.kargo.ui.theme.spacing
-import kargotakiptumkargolar.composeapp.generated.resources.Res
-import kargotakiptumkargolar.composeapp.generated.resources.select_cargo_company
+import kargotakiptumkargolar.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
