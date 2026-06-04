@@ -22,7 +22,7 @@ import com.barisproduction.kargo.ui.tracking.TrackingScreenNavActions
 import com.barisproduction.kargo.ui.tracking.trackingScreen
 import org.koin.compose.viewmodel.koinViewModel
 
-private const val DURATION = 1000
+private const val DURATION = 500
 
 @Composable
 fun NavigationGraph(

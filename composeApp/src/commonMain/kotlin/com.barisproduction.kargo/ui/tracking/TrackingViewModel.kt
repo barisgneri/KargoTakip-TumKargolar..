@@ -16,10 +16,12 @@ import com.barisproduction.kargo.navigation.Screen
 import com.barisproduction.kargo.ui.tracking.TrackingScreenContract.UiEffect
 import com.barisproduction.kargo.ui.tracking.TrackingScreenContract.UiState
 import com.barisproduction.kargo.ui.tracking.TrackingScreenContract.UiAction
+import com.barisproduction.kargo.ui.tracking.util.TrackingScripts
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.delay
 
 class TrackingViewModel (
     savedStateHandle: SavedStateHandle,
@@ -31,6 +33,7 @@ class TrackingViewModel (
     private val argsParcelName = args.parcelName
 
     init {
+        updateUiState { copy(trackingNo = argsTrackingNumber) }
         findInfoInName()
         observeDatabase()
     }
@@ -83,6 +86,13 @@ class TrackingViewModel (
                 is UiAction.OnExitWithoutSaving -> {
                     updateUiState { copy(showSaveConfirmationDialog = false) }
                     emitUiEffect(UiEffect.NavigateBack)
+                }
+                is UiAction.OnPasteClick -> {
+                    val script = TrackingScripts.getPasteTrackingNumberScript(argsTrackingNumber)
+                    updateUiState { copy(injectJs = script) }
+                }
+                is UiAction.OnJsInjected -> {
+                    updateUiState { copy(injectJs = null) }
                 }
             }
         }

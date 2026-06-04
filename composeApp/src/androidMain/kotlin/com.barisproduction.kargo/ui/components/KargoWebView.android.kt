@@ -6,6 +6,10 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 
@@ -15,8 +19,12 @@ actual fun KargoWebView(
     modifier: Modifier,
     onLoadingStateChanged: (Boolean) -> Unit,
     onError: (Int) -> Unit,
-    js: String
+    js: String,
+    injectJs: String?,
+    onJsInjected: () -> Unit
 ) {
+    var lastLoadedUrl by remember { mutableStateOf("") }
+
     AndroidView(
         modifier = modifier,
         factory = { context ->
@@ -36,8 +44,6 @@ actual fun KargoWebView(
                             .replace("\n", " ")         // Alt satıra geçişleri (enter) boşluğa çevir
                             .replace("\r", "")          // Varsa carriage return karakterlerini temizle
 
-                       // val darkModeJs = "(function(){document.documentElement.style.filter='invert(1) hue-rotate(180deg)';var media=document.querySelectorAll('img, picture, video, svg');media.forEach(function(el){el.style.filter='invert(1) hue-rotate(180deg)';});document.body.style.backgroundColor='#121212';})();"
-                        println(cleanJs)
                         view?.evaluateJavascript(cleanJs, null)
                     }
 
@@ -52,12 +58,16 @@ actual fun KargoWebView(
                     }
                 }
                 settings.javaScriptEnabled = true
-                loadUrl(url)
             }
         },
         update = { webView ->
-            if (webView.url != url) {
+            if (lastLoadedUrl != url) {
+                lastLoadedUrl = url
                 webView.loadUrl(url)
+            }
+            injectJs?.let {
+                webView.evaluateJavascript(it, null)
+                onJsInjected()
             }
         }
     )
