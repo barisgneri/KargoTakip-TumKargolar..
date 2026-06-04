@@ -14,8 +14,11 @@ import com.barisproduction.kargo.ui.splash.SplashContract.UiState
 import com.barisproduction.kargo.domain.usecase.CheckForceUpdateUseCase
 import com.barisproduction.kargo.domain.usecase.FetchCargoParcelListUseCase
 import com.barisproduction.kargo.domain.usecase.GetCargoParcelListUseCase
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 class SplashViewModel(
     private val fetchCargoParcelListUseCase: FetchCargoParcelListUseCase,
@@ -41,7 +44,10 @@ class SplashViewModel(
         }
     }
 
+    @OptIn(ExperimentalTime::class)
     private suspend fun runSplashFlow() {
+        val startTime = Clock.System.now().toEpochMilliseconds()
+
         updateUiState {
             copy(
                 isLoading = true,
@@ -54,7 +60,14 @@ class SplashViewModel(
         val forceUpdateDecision = checkForceUpdate()
         if (forceUpdateDecision?.isRequired == true) return
 
-        getParcelList()
+        if (getParcelList()) {
+            val elapsedTime = Clock.System.now().toEpochMilliseconds() - startTime
+            val remainingTime = 3000L - elapsedTime
+            if (remainingTime > 0) {
+                delay(remainingTime)
+            }
+            emitUiEffect(UiEffect.NavigateToMain)
+        }
     }
 
     private suspend fun checkForceUpdate(): ForceUpdateDecision? {
@@ -86,19 +99,21 @@ class SplashViewModel(
         }
     }
 
-    private suspend fun getParcelList() {
+    private suspend fun getParcelList(): Boolean {
         fetchCargoParcelListUseCase()
-        when (val result = getCargoParcelListUseCase().first { it !is Resource.Loading }) {
+        return when (val result = getCargoParcelListUseCase().first { it !is Resource.Loading }) {
             is Resource.Success -> {
                 updateUiState { copy(isLoading = false) }
-                emitUiEffect(UiEffect.NavigateToMain)
+                true
             }
+
             is Resource.Error -> {
                 val errorMessage = result.errorType.toUserMessage()
                 updateUiState { copy(isLoading = false, errorMessage = errorMessage) }
+                false
             }
 
-            else -> {}
+            else -> false
         }
     }
 }
