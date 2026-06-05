@@ -20,7 +20,8 @@ class LocalRepositoryImpl(
             cargoName = cargo.cargoName,
             trackingNumber = cargo.trackNo,
             logo = cargo.logo,
-            createdAt = Clock.System.now().toEpochMilliseconds()
+            createdAt = Clock.System.now().toEpochMilliseconds(),
+            companyCountryCode = cargo.companyCountryCode ?: "tr"
         )
         cargoDao.insertCargo(entity)
     }
@@ -32,6 +33,7 @@ class LocalRepositoryImpl(
                 parcelName = cargo.parcelName,
                 cargoName = cargo.cargoName,
                 logo = cargo.logo,
+                companyCountryCode = cargo.companyCountryCode ?: existingEntity.companyCountryCode
             )
             cargoDao.updateCargo(updatedEntity)
         }
@@ -45,7 +47,23 @@ class LocalRepositoryImpl(
                     cargoName = entity.cargoName,
                     logo = entity.logo,
                     trackNo = entity.trackingNumber,
-                    createdAt = entity.createdAt
+                    createdAt = entity.createdAt,
+                    companyCountryCode = entity.companyCountryCode
+                )
+            }
+        }
+    }
+
+    override fun getCargosByCountry(countryCode: String): Flow<List<CargoModel>> {
+        return cargoDao.getCargosByCountry(countryCode).map { entities ->
+            entities.map { entity ->
+                CargoModel(
+                    parcelName = entity.parcelName,
+                    cargoName = entity.cargoName,
+                    logo = entity.logo,
+                    trackNo = entity.trackingNumber,
+                    createdAt = entity.createdAt,
+                    companyCountryCode = entity.companyCountryCode
                 )
             }
         }
