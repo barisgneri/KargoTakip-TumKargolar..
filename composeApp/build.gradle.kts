@@ -78,6 +78,8 @@ kotlin {
 
             implementation(libs.jetbrains.androidx.lifecycle)
 
+            implementation(libs.compottie.lite)
+
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)

@@ -20,6 +20,7 @@ firebase-bom = "34.8.0"
 firebase-crashlytics-plugin = "3.0.6"
 gitlive-firebase = "2.4.0"
 androidx-lifecycle = "2.9.4"
+compottie="2.2.1"
 
 
 
@@ -52,7 +53,7 @@ gitlive-firebase-analytics = { group = "dev.gitlive", name = "firebase-analytics
 gitlive-firebase-firestore = { group = "dev.gitlive", name = "firebase-firestore", version.ref = "gitlive-firebase" }
 jetbrains-androidx-lifecycle = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle"}
 ui-backhandler = { module = "org.jetbrains.compose.ui:ui-backhandler", version.ref = "compose-multiplatform" }
-
+compottie-lite = { module = "io.github.alexzhirkevich:compottie-lite", version.ref = "compottie" }
 
 
 [plugins]

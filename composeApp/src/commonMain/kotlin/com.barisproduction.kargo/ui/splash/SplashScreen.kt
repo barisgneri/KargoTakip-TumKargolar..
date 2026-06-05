@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.SystemUpdate
@@ -21,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,6 +41,14 @@ import com.barisproduction.kargo.ui.splash.SplashContract.UiEffect
 import com.barisproduction.kargo.ui.splash.SplashContract.UiState
 import com.barisproduction.kargo.ui.theme.KargoTheme
 import com.barisproduction.kargo.ui.theme.spacing
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.runtime.getValue
+import io.github.alexzhirkevich.compottie.Compottie
+import io.github.alexzhirkevich.compottie.Lottie
+import io.github.alexzhirkevich.compottie.LottieCompositionSpec
+import io.github.alexzhirkevich.compottie.animateLottieCompositionAsState
+import io.github.alexzhirkevich.compottie.rememberLottieComposition
+import io.github.alexzhirkevich.compottie.rememberLottiePainter
 import kargotakiptumkargolar.composeapp.generated.resources.Res
 import kargotakiptumkargolar.composeapp.generated.resources.app_name
 import kargotakiptumkargolar.composeapp.generated.resources.app_preparing
@@ -73,9 +81,7 @@ fun SplashScreen(
         }
     }
 
-    SplashContent(
-        uiState = uiState
-    )
+    SplashContent()
 
     if (uiState.showUpdateDialog) {
         CargoBaseDialog(
@@ -106,112 +112,49 @@ fun SplashScreen(
 }
 
 @Composable
-fun SplashContent(
-    uiState: UiState
-) {
+fun SplashContent() {
+
+    val composition by rememberLottieComposition {
+        LottieCompositionSpec.JsonString(
+            Res.readBytes("files/splash-anim.json").decodeToString()
+        )
+    }
+
+    val progress by animateLottieCompositionAsState(
+        composition = composition
+    )
+
+    val painter = rememberLottiePainter(
+        composition = composition,
+        progress = { progress }
+    )
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(
+                Brush.linearGradient(
+                    colors = listOf(
+                        Color(0xFF0F172A),
+                        Color(0xFF101622)
+                    )
+                )
+            )
     ) {
-        BackgroundGlows()
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(spacing.large),
+                .padding(vertical = spacing.large),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
+            verticalArrangement = Arrangement.Center
         ) {
-            Spacer(modifier = Modifier.weight(1f))
-
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Image(
-                    bitmap = imageResource(Res.drawable.logo), modifier = Modifier
-                        .size(140.dp)
-                        .shadow(
-                            elevation = 24.dp,
-                            shape = RoundedCornerShape(32.dp),
-                            spotColor = MaterialTheme.colorScheme.primary,
-                            ambientColor = MaterialTheme.colorScheme.primary
-                        )
-                        .clip(RoundedCornerShape(32.dp)), contentDescription = "Logo"
-                )
-
-                Spacer(modifier = Modifier.height(spacing.large))
-
-                Text(
-                    text = stringResource(Res.string.app_name),
-                    style = MaterialTheme.typography.headlineLarge.copy(
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = (-1).sp
-                    ),
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-
-                Spacer(modifier = Modifier.height(spacing.extraSmall))
-
-                Text(
-                    text = stringResource(Res.string.fast_and_ads_free),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    letterSpacing = 2.sp
-                )
-            }
-            Spacer(modifier = Modifier.weight(1f))
-            if (uiState.isLoading) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.padding(bottom = spacing.large)
-                ) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(44.dp),
-                        color = MaterialTheme.colorScheme.primary,
-                        strokeWidth = 4.dp,
-                        trackColor = MaterialTheme.colorScheme.primaryContainer
-                    )
-
-                    Spacer(modifier = Modifier.height(spacing.medium))
-
-                    Text(
-                        text = stringResource(Res.string.app_preparing),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-
-                    Spacer(modifier = Modifier.height(spacing.medium))
-                }
-            }
+            Lottie(
+                painter = painter,
+                contentDescription = "Lottie Animation",
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
         }
-    }
-}
-
-@Composable
-private fun BackgroundGlows() {
-    val primaryColor = MaterialTheme.colorScheme.primary
-
-    Canvas(modifier = Modifier.fillMaxSize()) {
-        drawCircle(
-            brush = Brush.radialGradient(
-                colors = listOf(primaryColor.copy(alpha = 0.08f), Color.Transparent),
-                center = Offset(0f, 0f),
-                radius = size.width / 1.5f
-            ),
-            center = Offset(0f, 0f),
-            radius = size.width / 1.5f
-        )
-
-        drawCircle(
-            brush = Brush.radialGradient(
-                colors = listOf(primaryColor.copy(alpha = 0.12f), Color.Transparent),
-                center = Offset(size.width, size.height),
-                radius = size.width / 1.2f
-            ),
-            center = Offset(size.width, size.height),
-            radius = size.width / 1.2f
-        )
     }
 }
 
