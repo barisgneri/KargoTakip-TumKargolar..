@@ -29,8 +29,14 @@ fun getRoomDatabase(
     return builder
         .setDriver(BundledSQLiteDriver())
         .setQueryCoroutineContext(Dispatchers.IO)
-        .addMigrations(MIGRATION_2_3)
+        .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
         .build()
+}
+
+val MIGRATION_1_2 = object : Migration(1, 2) {
+    override fun migrate(connection: SQLiteConnection) {
+        // patlama dikkat
+    }
 }
 
 val MIGRATION_2_3 = object : Migration(2, 3) {
