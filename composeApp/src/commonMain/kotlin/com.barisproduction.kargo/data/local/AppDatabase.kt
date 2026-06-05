@@ -6,13 +6,14 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
 import androidx.room.migration.AutoMigrationSpec
+import androidx.room.migration.Migration
+import androidx.sqlite.SQLiteConnection
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
+import androidx.sqlite.execSQL
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 
-@Database(entities = [CargoEntity::class], version = 2, autoMigrations = [
-    AutoMigration(from = 1, to = 2)
-])
+@Database(entities = [CargoEntity::class], version = 3)
 @ConstructedBy(AppDatabaseConstructor::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun cargoDao(): CargoDao
@@ -28,5 +29,14 @@ fun getRoomDatabase(
     return builder
         .setDriver(BundledSQLiteDriver())
         .setQueryCoroutineContext(Dispatchers.IO)
+        .addMigrations(MIGRATION_2_3)
         .build()
+}
+
+val MIGRATION_2_3 = object : Migration(2, 3) {
+    override fun migrate(connection: SQLiteConnection) {
+        connection.execSQL(
+            "ALTER TABLE cargo_table ADD COLUMN companyCountryCode TEXT NOT NULL DEFAULT 'tr'"
+        )
+    }
 }

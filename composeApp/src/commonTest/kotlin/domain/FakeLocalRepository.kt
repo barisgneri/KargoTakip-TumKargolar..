@@ -30,6 +30,12 @@ class FakeLocalRepository : LocalRepository {
         return cargos
     }
 
+    override fun getCargosByCountry(countryCode: String): Flow<List<CargoModel>> {
+        return cargos.map { list ->
+            list.filter { it.companyCountryCode == countryCode }
+        }
+    }
+
     override suspend fun deleteCargo(trackNo: String) {
         val current = cargos.value.toMutableList()
         current.removeAll { it.trackNo == trackNo }

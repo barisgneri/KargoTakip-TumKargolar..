@@ -28,6 +28,13 @@ class FakeCargoDao : CargoDao {
         return cargos.map { it.sortedByDescending { entity -> entity.createdAt } }
     }
 
+    override fun getCargosByCountry(countryCode: String): Flow<List<CargoEntity>> {
+        return cargos.map { list ->
+            list.filter { it.companyCountryCode == countryCode }
+                .sortedByDescending { it.createdAt }
+        }
+    }
+
     override suspend fun deleteCargo(cargo: CargoEntity) {
         val currentList = cargos.value.toMutableList()
         currentList.removeAll { it.trackingNumber == cargo.trackingNumber }

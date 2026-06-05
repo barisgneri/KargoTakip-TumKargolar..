@@ -19,6 +19,9 @@ interface CargoDao {
     @Query("SELECT * FROM cargo_table ORDER BY createdAt DESC")
     fun getAllCargos(): Flow<List<CargoEntity>>
 
+    @Query("SELECT * FROM cargo_table WHERE companyCountryCode = :countryCode ORDER BY createdAt DESC")
+    fun getCargosByCountry(countryCode: String): Flow<List<CargoEntity>>
+
     @Delete
     suspend fun deleteCargo(cargo: CargoEntity)
 
