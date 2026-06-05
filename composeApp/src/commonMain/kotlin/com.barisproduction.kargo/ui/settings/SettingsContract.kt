@@ -10,7 +10,7 @@ import org.jetbrains.compose.resources.StringResource
 object SettingsContract {
     data class UiState(
         val isLoading: Boolean = false,
-        val isDarkMode: Boolean = false,
+        val isDarkMode: Boolean? = null,
         val selectedCountry: String = "",
         val selectedLanguage: String = "",
         val activePicker: PickerType? = null,

@@ -50,7 +50,7 @@ class SettingsViewModel(
 
     private fun observeTheme() {
         getThemeUseCase().onEach { isDark ->
-            updateUiState { copy(isDarkMode = isDark ?: false) }
+            updateUiState { copy(isDarkMode = isDark) }
         }.launchIn(viewModelScope)
     }
 

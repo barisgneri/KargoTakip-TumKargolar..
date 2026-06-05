@@ -1,5 +1,6 @@
 package com.barisproduction.kargo.ui.settings
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -67,6 +68,8 @@ fun SettingsScreen(
     onAction: (UiAction) -> Unit,
     actions: SettingsNavActions
 ) {
+    val isDark = uiState.isDarkMode ?: isSystemInDarkTheme()
+
     uiEffect.collectWithLifecycle { effect ->
         when (effect) {
             UiEffect.NavigateBack -> actions.onBack()
@@ -169,7 +172,7 @@ fun SettingsScreen(
                         style = MaterialTheme.typography.bodyLarge
                     )
                     Switch(
-                        checked = uiState.isDarkMode,
+                        checked = isDark,
                         onCheckedChange = { onAction(UiAction.OnDarkModeChange(it)) }
                     )
                 }
@@ -210,7 +213,7 @@ fun SettingsScreenPreview() {
     KargoTheme {
         SettingsScreen(
             uiState = UiState(
-                isDarkMode = false,
+                isDarkMode = null,
                 selectedCountry = "Türkiye",
                 selectedLanguage = "Türkçe"
             ),
