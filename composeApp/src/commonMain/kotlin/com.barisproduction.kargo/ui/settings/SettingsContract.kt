@@ -17,6 +17,7 @@ object SettingsContract {
         val countries: List<CountryModel> = emptyList(),
         val languages: List<LanguageModel> = emptyList(),
         val showAboutDialog: Boolean = false,
+        val showCountryInfoDialog: Boolean = false,
         val appVersion: String = ""
     )
 
@@ -35,6 +36,8 @@ object SettingsContract {
         data object OnDismissPicker : UiAction
         data object OnAboutClick : UiAction
         data object OnDismissAbout : UiAction
+        data object OnCountryInfoConfirm : UiAction
+        data object OnDismissCountryInfo : UiAction
     }
 
     sealed interface UiEffect {

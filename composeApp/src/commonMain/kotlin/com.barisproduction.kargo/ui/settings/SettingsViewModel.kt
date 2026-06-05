@@ -6,6 +6,7 @@ import com.barisproduction.kargo.delegation.MVI
 import com.barisproduction.kargo.delegation.mvi
 import com.barisproduction.kargo.Platform
 import com.barisproduction.kargo.domain.usecase.FetchCargoParcelListUseCase
+import com.barisproduction.kargo.domain.usecase.GetCargosUseCase
 import com.barisproduction.kargo.domain.usecase.GetCountriesUseCase
 import com.barisproduction.kargo.domain.usecase.GetLanguagesUseCase
 import com.barisproduction.kargo.domain.usecase.GetSelectedCountryUseCase
@@ -19,6 +20,7 @@ import com.barisproduction.kargo.ui.settings.SettingsContract.UiAction
 import com.barisproduction.kargo.ui.settings.SettingsContract.UiEffect
 import com.barisproduction.kargo.ui.settings.SettingsContract.UiState
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -34,6 +36,7 @@ class SettingsViewModel(
     private val setCountryUseCase: SetCountryUseCase,
     private val setLanguageUseCase: SetLanguageUseCase,
     private val fetchCargoParcelListUseCase: FetchCargoParcelListUseCase,
+    private val getCargosUseCase: GetCargosUseCase,
     private val platform: Platform
 ) : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
 
@@ -87,7 +90,15 @@ class SettingsViewModel(
             when (uiAction) {
                 is UiAction.OnBackClick -> emitUiEffect(UiEffect.NavigateBack)
                 is UiAction.OnDarkModeChange -> setThemeUseCase(uiAction.isDark)
-                is UiAction.OnCountryClick -> updateUiState { copy(activePicker = PickerType.COUNTRY) }
+                is UiAction.OnCountryClick -> {
+                    val hasCargos = getCargosUseCase().first().isNotEmpty()
+                    if (hasCargos) {
+                        updateUiState { copy(showCountryInfoDialog = true) }
+                    } else {
+                        updateUiState { copy(activePicker = PickerType.COUNTRY) }
+                    }
+                }
+
                 is UiAction.OnCountrySelect -> {
                     setCountryUseCase(uiAction.country.code)
                     fetchCargoParcelListUseCase()
@@ -101,6 +112,14 @@ class SettingsViewModel(
                 is UiAction.OnDismissPicker -> updateUiState { copy(activePicker = null) }
                 is UiAction.OnAboutClick -> updateUiState { copy(showAboutDialog = true) }
                 is UiAction.OnDismissAbout -> updateUiState { copy(showAboutDialog = false) }
+                is UiAction.OnCountryInfoConfirm -> updateUiState {
+                    copy(
+                        showCountryInfoDialog = false,
+                        activePicker = PickerType.COUNTRY
+                    )
+                }
+
+                is UiAction.OnDismissCountryInfo -> updateUiState { copy(showCountryInfoDialog = false) }
             }
         }
     }

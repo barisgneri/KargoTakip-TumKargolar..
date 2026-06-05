@@ -11,7 +11,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Translate
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,12 +18,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.barisproduction.kargo.common.extensions.collectWithLifecycle
+import com.barisproduction.kargo.ui.components.CargoBaseDialog
 import com.barisproduction.kargo.ui.components.SelectionBottomSheet
 import com.barisproduction.kargo.ui.settings.SettingsContract.PickerType
 import com.barisproduction.kargo.ui.settings.SettingsContract.UiAction
@@ -44,7 +43,10 @@ import kargotakiptumkargolar.composeapp.generated.resources.change_country_info
 import kargotakiptumkargolar.composeapp.generated.resources.change_language
 import kargotakiptumkargolar.composeapp.generated.resources.change_language_info
 import kargotakiptumkargolar.composeapp.generated.resources.close
+import kargotakiptumkargolar.composeapp.generated.resources.country_change_warning_message
 import kargotakiptumkargolar.composeapp.generated.resources.dark_mode
+import kargotakiptumkargolar.composeapp.generated.resources.info
+import kargotakiptumkargolar.composeapp.generated.resources.ok
 import kargotakiptumkargolar.composeapp.generated.resources.publisher
 import kargotakiptumkargolar.composeapp.generated.resources.publisher_name
 import kargotakiptumkargolar.composeapp.generated.resources.select_country
@@ -96,15 +98,12 @@ fun SettingsScreen(
     }
 
     if (uiState.showAboutDialog) {
-        AlertDialog(
+        CargoBaseDialog(
             onDismissRequest = { onAction(UiAction.OnDismissAbout) },
-            confirmButton = {
-                TextButton(onClick = { onAction(UiAction.OnDismissAbout) }) {
-                    Text(stringResource(Res.string.close))
-                }
-            },
-            title = { Text(stringResource(Res.string.app_info)) },
-            text = {
+            title = stringResource(Res.string.app_info),
+            confirmButtonText = stringResource(Res.string.close),
+            onConfirmClick = { onAction(UiAction.OnDismissAbout) },
+            content = {
                 Column(verticalArrangement = Arrangement.spacedBy(spacing.small)) {
                     Text(
                         text = stringResource(Res.string.app_name),
@@ -121,6 +120,16 @@ fun SettingsScreen(
                     )
                 }
             }
+        )
+    }
+
+    if (uiState.showCountryInfoDialog) {
+        CargoBaseDialog(
+            onDismissRequest = { onAction(UiAction.OnDismissCountryInfo) },
+            title = stringResource(Res.string.info),
+            description = stringResource(Res.string.country_change_warning_message),
+            confirmButtonText = stringResource(Res.string.ok),
+            onConfirmClick = { onAction(UiAction.OnCountryInfoConfirm) }
         )
     }
 

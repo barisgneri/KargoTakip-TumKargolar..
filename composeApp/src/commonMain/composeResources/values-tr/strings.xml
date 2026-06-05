@@ -88,4 +88,7 @@
     <string name="empty_cargo_subtitle">Listede hiç kargo yok.</string>
     <string name="select">Seç</string>
     <string name="done">Bitti</string>
+    <string name="info">Bilgilendirme</string>
+    <string name="country_change_warning_message">Kayıtlı olan kargolarınız var, eski ülkenize döndüğünüzde tekrar görünür olacaktır.</string>
+    <string name="ok">Tamam</string>
 </resources>

@@ -88,4 +88,7 @@
     <string name="empty_cargo_subtitle">No cargos in the list.</string>
     <string name="select">Select</string>
     <string name="done">Done</string>
+    <string name="info">Information</string>
+    <string name="country_change_warning_message">You have registered cargos, they will be visible again when you return to your previous country.</string>
+    <string name="ok">OK</string>
 </resources>
