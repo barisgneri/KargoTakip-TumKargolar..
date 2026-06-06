@@ -8,5 +8,10 @@
     "code": "us",
     "name": "United States",
     "flag_emoji": "🇺🇸"
+  },
+  {
+    "code": "de",
+    "name": "Almanya",
+    "flag_emoji": "🇩🇪"
   }
 ]
