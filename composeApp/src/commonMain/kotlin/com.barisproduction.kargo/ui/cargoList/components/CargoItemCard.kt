@@ -28,6 +28,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.barisproduction.kargo.ui.theme.spacing
+import kargotakiptumkargolar.composeapp.generated.resources.Res
+import kargotakiptumkargolar.composeapp.generated.resources.added_date
+import kargotakiptumkargolar.composeapp.generated.resources.cargo_logo
+import kargotakiptumkargolar.composeapp.generated.resources.details
+import kargotakiptumkargolar.composeapp.generated.resources.tracking_no_prefix
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun CargoItemCard(
@@ -69,7 +75,7 @@ fun CargoItemCard(
                 ) {
                     AsyncImage(
                         model = imageUrl,
-                        contentDescription = "Kargo Logo",
+                        contentDescription = stringResource(Res.string.cargo_logo),
                     )
                 }
 
@@ -87,7 +93,7 @@ fun CargoItemCard(
                     Spacer(modifier = Modifier.height(2.dp))
 
                     Text(
-                        text = "Takip No: $trackingNumber • $courierName",
+                        text = stringResource(Res.string.tracking_no_prefix, trackingNumber, courierName),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,
@@ -106,7 +112,7 @@ fun CargoItemCard(
 
                 Row {
                     Text(
-                        text = "Eklenme Tarihi: ",
+                        text = stringResource(Res.string.added_date),
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -119,13 +125,13 @@ fun CargoItemCard(
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        text = "Detaylar",
+                        text = stringResource(Res.string.details),
                         style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.primary
                     )
                     Icon(
                         imageVector = Icons.Default.ChevronRight,
-                        contentDescription = "Detaylar",
+                        contentDescription = stringResource(Res.string.details),
                         tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.size(16.dp)
                     )

@@ -10,16 +10,18 @@ import com.barisproduction.kargo.common.extensions.toUserMessage
 import com.barisproduction.kargo.data.util.ErrorParser
 import com.barisproduction.kargo.delegation.MVI
 import com.barisproduction.kargo.delegation.mvi
-import com.barisproduction.kargo.domain.model.CargoModel
-import com.barisproduction.kargo.domain.model.Parcels
 import com.barisproduction.kargo.domain.usecase.CheckCargoInDBUseCase
 import com.barisproduction.kargo.domain.usecase.FindCargoInfoUseCase
-import com.barisproduction.kargo.domain.usecase.InsertCargoUseCase
 import com.barisproduction.kargo.navigation.Screen
 import com.barisproduction.kargo.ui.tracking.TrackingScreenContract.UiEffect
 import com.barisproduction.kargo.ui.tracking.TrackingScreenContract.UiState
 import com.barisproduction.kargo.ui.tracking.TrackingScreenContract.UiAction
+import com.barisproduction.kargo.ui.tracking.util.TrackingScripts
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.delay
 
 class TrackingViewModel (
     savedStateHandle: SavedStateHandle,
@@ -31,10 +33,16 @@ class TrackingViewModel (
     private val argsParcelName = args.parcelName
 
     init {
+        updateUiState { copy(trackingNo = argsTrackingNumber) }
         findInfoInName()
+        observeDatabase()
+    }
+
+    private fun observeDatabase() {
         viewModelScope.launch {
-            val isVisible = !isHaveDB()
-            updateUiState { copy(saveButtonVisibility = isVisible) }
+            checkCargoInDBUseCase(argsTrackingNumber).collectLatest { isExist ->
+                updateUiState { copy(saveButtonVisibility = !isExist) }
+            }
         }
     }
 
@@ -58,13 +66,19 @@ class TrackingViewModel (
         viewModelScope.launch {
             when (uiAction) {
                 is UiAction.OnBackClick -> {
-                    if (!isHaveDB()) {
-                        updateUiState { copy(showSaveConfirmationDialog = true) }
-                    } else {
+                    if (uiState.value.showSaveConfirmationDialog) {
+                        updateUiState { copy(showSaveConfirmationDialog = false) }
+                        return@launch
+                    }
+                    val isExist = checkCargoInDBUseCase(argsTrackingNumber).first()
+                    if (isExist) {
                         emitUiEffect(UiEffect.NavigateBack)
+                    } else {
+                        updateUiState { copy(showSaveConfirmationDialog = true) }
                     }
                 }
-                is UiAction.OnSaveClick -> emitUiEffect(UiEffect.ShowSaveDialog(argsParcelName, argsTrackingNumber))
+                is UiAction.OnSaveClick -> {
+                    emitUiEffect(UiEffect.ShowSaveDialog(argsParcelName, argsTrackingNumber))}
                 is UiAction.OnLoadingStateChanged -> updateUiState { copy(isLoading = uiAction.isLoading) }
                 is UiAction.OnErrorReceived -> onWebViewError(errorCode = uiAction.errorCode)
                 is UiAction.OnRetryClick -> updateUiState { copy(errorMessage = null, isLoading = true) }
@@ -72,6 +86,13 @@ class TrackingViewModel (
                 is UiAction.OnExitWithoutSaving -> {
                     updateUiState { copy(showSaveConfirmationDialog = false) }
                     emitUiEffect(UiEffect.NavigateBack)
+                }
+                is UiAction.OnPasteClick -> {
+                    val script = TrackingScripts.getPasteTrackingNumberScript(argsTrackingNumber)
+                    updateUiState { copy(injectJs = script) }
+                }
+                is UiAction.OnJsInjected -> {
+                    updateUiState { copy(injectJs = null) }
                 }
             }
         }
@@ -86,7 +107,4 @@ class TrackingViewModel (
             )
         }
     }
-
-
-    private suspend fun isHaveDB() : Boolean = checkCargoInDBUseCase(argsTrackingNumber)
 }

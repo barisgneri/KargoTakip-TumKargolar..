@@ -5,19 +5,22 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Save
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import com.barisproduction.kargo.ui.components.CargoTopBarButton
 import kargotakiptumkargolar.composeapp.generated.resources.Res
 import kargotakiptumkargolar.composeapp.generated.resources.btn_save
 import kargotakiptumkargolar.composeapp.generated.resources.new_cargo_search
@@ -47,14 +50,10 @@ fun AddCargoTopBar(onBack: () -> Unit, onSave: () -> Unit) {
                 }
             },
             actions = {
-                TextButton(onClick = onSave) {
-                    Text(
-                        stringResource(Res.string.btn_save),
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.SemiBold,
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                }
+                CargoTopBarButton(
+                    text = stringResource(Res.string.btn_save),
+                    onClick = onSave
+                )
             },
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.background

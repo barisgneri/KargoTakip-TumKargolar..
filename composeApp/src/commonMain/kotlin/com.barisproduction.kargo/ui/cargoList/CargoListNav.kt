@@ -10,14 +10,16 @@ import org.koin.compose.viewmodel.koinViewModel
 class CargoListNavActions(
     val addNewCargoNavigation : () -> Unit,
     val navigateToTracking : (String,String) -> Unit,
-    val navigateToEdit : (String, String, String) -> Unit
+    val navigateToEdit : (String, String, String) -> Unit,
+    val navigateToSettings: () -> Unit
 ){
     companion object {
         val default: CargoListNavActions
             get() =CargoListNavActions(
                 addNewCargoNavigation = {},
                 navigateToTracking = { parcelName, trackingNo -> },
-                navigateToEdit = { parcelName, trackingNo, cargoName -> }
+                navigateToEdit = { parcelName, trackingNo, cargoName -> },
+                navigateToSettings = {}
             )
     }
 }

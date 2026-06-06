@@ -2,25 +2,33 @@ package com.barisproduction.kargo
 
 import android.content.Context
 import android.os.Build
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
+import java.util.Locale
 
 class AndroidPlatform(private val context: Context) : Platform {
     override val name: String = "Android ${Build.VERSION.SDK_INT}"
     override val versionCode: Int
-        get() {
-            return try {
-                val packageInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    context.packageManager.getPackageInfo(context.packageName, android.content.pm.PackageManager.PackageInfoFlags.of(0))
-                } else {
-                    context.packageManager.getPackageInfo(context.packageName, 0)
-                }
-
+        get() = try {
+            context.packageManager.getPackageInfo(context.packageName, 0).let {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    packageInfo.longVersionCode.toInt()
+                    it.longVersionCode.toInt()
                 } else {
-                    packageInfo.versionCode
+                    @Suppress("DEPRECATION")
+                    it.versionCode
                 }
-            } catch (e: Exception) {
-                0
             }
+        } catch (e: Exception) {
+            0
         }
+    override val systemLanguageCode: String
+        get() = Locale.getDefault().language
+
+    override val systemCountryCode: String
+        get() = Locale.getDefault().country.lowercase().ifBlank { "tr" }
+}
+
+actual fun changeLanguage(langCode: String) {
+    val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(langCode)
+    AppCompatDelegate.setApplicationLocales(appLocale)
 }

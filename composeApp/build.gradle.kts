@@ -38,6 +38,7 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.androidx.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.androidx.appcompat)
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.ktor.client.okhttp)
             implementation(project.dependencies.platform(libs.firebase.bom))
@@ -45,6 +46,7 @@ kotlin {
 
         }
         commonMain.dependencies {
+            implementation(libs.ui.backhandler)
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
@@ -60,6 +62,8 @@ kotlin {
             implementation(libs.coil)
             implementation(libs.coil.ktor)
             implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.json)
 
             // Room
             implementation(libs.androidx.room.runtime)
@@ -74,9 +78,15 @@ kotlin {
 
             implementation(libs.jetbrains.androidx.lifecycle)
 
+            implementation(libs.compottie.lite)
+
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
+        }
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+            implementation(libs.kotlinx.coroutines.test)
         }
     }
 }
@@ -101,8 +111,8 @@ android {
         applicationId = "com.barisproduction.kargo"
         minSdk = 24
         targetSdk = 36
-        versionCode = 12
-        versionName = "1.4.2"
+        versionCode = 13
+        versionName = "1.5.0"
     }
     packaging {
         resources {

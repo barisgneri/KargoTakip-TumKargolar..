@@ -1,6 +1,7 @@
 package com.barisproduction.kargo.ui.saveDialog
 
 import com.barisproduction.kargo.domain.model.Parcels
+import org.jetbrains.compose.resources.StringResource
 
 object CargoDialogContract {
 
@@ -12,7 +13,7 @@ object CargoDialogContract {
         val detectedCarrier: Parcels? = null,
         val isCarrierSelectionVisible: Boolean = false,
         val isError: Boolean = false,
-        val errorMessage: String? = null,
+        val errorMessage: StringResource? = null,
         val isTrackingNumberError: Boolean = false,
         val isParcelError: Boolean = false,
         val isCargoNameError: Boolean = false,

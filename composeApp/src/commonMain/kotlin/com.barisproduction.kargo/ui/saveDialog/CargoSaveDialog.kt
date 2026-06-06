@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Label
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Label
 import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,16 +35,7 @@ import com.barisproduction.kargo.ui.components.CargoButton
 import com.barisproduction.kargo.ui.components.CargoButtonStyle
 import com.barisproduction.kargo.ui.components.CargoTextField
 import com.barisproduction.kargo.ui.theme.spacing
-import kargotakiptumkargolar.composeapp.generated.resources.Res
-import kargotakiptumkargolar.composeapp.generated.resources.add_new_cargo
-import kargotakiptumkargolar.composeapp.generated.resources.btn_save
-import kargotakiptumkargolar.composeapp.generated.resources.cancel
-import kargotakiptumkargolar.composeapp.generated.resources.cargo_company
-import kargotakiptumkargolar.composeapp.generated.resources.cargo_name
-import kargotakiptumkargolar.composeapp.generated.resources.cargo_name_optional
-import kargotakiptumkargolar.composeapp.generated.resources.tracking_number
-import kargotakiptumkargolar.composeapp.generated.resources.update
-import kargotakiptumkargolar.composeapp.generated.resources.update_cargo
+import kargotakiptumkargolar.composeapp.generated.resources.*
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
@@ -127,7 +118,7 @@ private fun CargoDialogContent(
                     IconButton(onClick = onDismissRequest) {
                         Icon(
                             imageVector = Icons.Default.Close,
-                            contentDescription = "Kapat",
+                            contentDescription = stringResource(Res.string.close),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -151,7 +142,7 @@ private fun CargoDialogContent(
                         )
                     },
                     isError = uiState.isTrackingNumberError,
-                    placeholder = "Örn: TR123456789",
+                    placeholder = stringResource(Res.string.placeholder_tracking_number),
                     leadingIcon = Icons.Default.QrCodeScanner,
                     enabled = !uiState.isEditMode
                 )
@@ -182,10 +173,20 @@ private fun CargoDialogContent(
                 CargoTextField(
                     value = uiState.cargoName ?: "",
                     onValueChange = { onAction(CargoDialogContract.UiAction.OnCargoNameChange(it)) },
-                    placeholder = "Örn: Hediye",
+                    placeholder = stringResource(Res.string.placeholder_cargo_name),
                     isError = uiState.isCargoNameError,
-                    leadingIcon = Icons.Default.Label
+                    leadingIcon = Icons.AutoMirrored.Filled.Label
                 )
+
+                if (uiState.errorMessage != null) {
+                    Spacer(modifier = Modifier.height(spacing.small))
+                    Text(
+                        text = stringResource(uiState.errorMessage),
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(start = 4.dp)
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(spacing.extraLarge))
 

@@ -31,6 +31,8 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.barisproduction.kargo.domain.model.Parcels
 import com.barisproduction.kargo.ui.theme.spacing
+import kargotakiptumkargolar.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,7 +54,7 @@ fun CarrierSelectionSheet(
                 .padding(spacing.medium)
         ) {
             Text(
-                "Kargo Firması Seçin",
+                text = stringResource(Res.string.select_cargo_company),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface,

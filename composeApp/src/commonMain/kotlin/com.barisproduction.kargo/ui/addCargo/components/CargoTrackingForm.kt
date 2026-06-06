@@ -72,7 +72,7 @@ private fun CargoTrackingNumberEnter(
     CargoTextField(
         value = uiState.trackingNumber,
         onValueChange = { onAction(UiAction.OnTrackingNumberChange(it)) },
-        placeholder = "Örn: 1234567890",
+        placeholder = stringResource(Res.string.placeholder_tracking_number),
         isError = uiState.trackingNumberError,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         leadingIcon = Icons.Outlined.QrCodeScanner

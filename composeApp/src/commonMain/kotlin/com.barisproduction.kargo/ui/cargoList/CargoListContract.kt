@@ -14,6 +14,7 @@ object CargoListContract {
 
     sealed class UiAction{
         data object AddNewCargo : UiAction()
+        data object OnSettingsClick : UiAction()
         data class NavigateToTracking(val parcelName: String, val trackingNumber: String) : UiAction()
         data class RequestDelete(val trackNo: String) : UiAction()
         data object ConfirmDelete : UiAction()
@@ -26,6 +27,7 @@ object CargoListContract {
     sealed class UiEffect{
         data class ShowError(val message: String) : UiEffect()
         data object NavigateToAddNewCargo : UiEffect()
+        data object NavigateToSettings : UiEffect()
         data class NavigateToTracking(val parcelName: String, val trackingNumber: String) : UiEffect()
         data class NavigateToEdit(val parcelName: String, val trackingNumber: String, val cargoName: String) : UiEffect()
         data class OpenUrl(val url: String) : UiEffect()

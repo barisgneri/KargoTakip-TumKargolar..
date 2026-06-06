@@ -8,6 +8,8 @@ interface LocalRepository {
     suspend fun insertCargo(cargo: CargoModel)
     suspend fun updateCargo(cargo: CargoModel)
     fun getAllCargos(): Flow<List<CargoModel>>
+    fun getCargosByCountry(countryCode: String): Flow<List<CargoModel>>
     suspend fun deleteCargo(trackNo: String)
     suspend fun getCargoByTrackingNumber(trackingNumber: String): CargoEntity?
+    fun observeCargoByTrackingNumber(trackingNumber: String): Flow<CargoEntity?>
 }

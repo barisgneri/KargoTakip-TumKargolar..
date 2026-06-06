@@ -10,26 +10,42 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.barisproduction.kargo.common.extensions.collectWithLifecycle
+import com.barisproduction.kargo.common.extensions.toRelativeTime
 import com.barisproduction.kargo.ui.cargoList.CargoListContract.UiAction
 import com.barisproduction.kargo.ui.cargoList.CargoListContract.UiEffect
 import com.barisproduction.kargo.ui.cargoList.CargoListContract.UiState
 import com.barisproduction.kargo.ui.components.AnimAddCargoFAB
 import com.barisproduction.kargo.ui.components.LoadingBar
 import com.barisproduction.kargo.ui.theme.KargoTheme
+import com.barisproduction.kargo.ui.theme.spacing
+import kargotakiptumkargolar.composeapp.generated.resources.Res
+import kargotakiptumkargolar.composeapp.generated.resources.add_new_cargo
+import kargotakiptumkargolar.composeapp.generated.resources.empty_cargo_subtitle
+import kargotakiptumkargolar.composeapp.generated.resources.empty_cargo_title
+import kargotakiptumkargolar.composeapp.generated.resources.no_date_info
 import kotlinx.coroutines.flow.Flow
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.Inventory
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.barisproduction.kargo.domain.model.CargoModel
 import com.barisproduction.kargo.ui.cargoList.components.CargoItemCard
 import com.barisproduction.kargo.ui.cargoList.components.CargoListAppBar
@@ -55,6 +71,8 @@ fun CargoListScreen(
             is UiEffect.ShowError -> {}
 
             is UiEffect.NavigateToAddNewCargo -> navActions.addNewCargoNavigation()
+
+            is UiEffect.NavigateToSettings -> navActions.navigateToSettings()
 
             is UiEffect.NavigateToTracking -> navActions.navigateToTracking(
                 it.parcelName,
@@ -96,7 +114,7 @@ fun CargoListContent(
 ) {
     Scaffold(
         modifier = modifier.background(MaterialTheme.colorScheme.background),
-        topBar = { CargoListAppBar() },
+        topBar = { CargoListAppBar(onSettingsClick = { onAction(UiAction.OnSettingsClick) }) },
         floatingActionButton = {
             AnimAddCargoFAB(onClick = {
                 onAction(UiAction.AddNewCargo)
@@ -118,12 +136,12 @@ fun CargoList(
     onAction: (UiAction) -> Unit
 ) {
     if (cargoList.isEmpty()) {
-        EmptyCargoView(modifier = modifier)
+        EmptyCargoView(modifier = modifier, onAction = onAction)
     } else {
         LazyColumn(
             modifier = modifier.fillMaxSize(),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            contentPadding = PaddingValues(spacing.medium),
+            verticalArrangement = Arrangement.spacedBy(spacing.small)
         ) {
             items(cargoList, key = { it.trackNo }) { cargo ->
                 val dismissState = rememberSwipeToDismissBoxState(
@@ -147,7 +165,7 @@ fun CargoList(
                             trackingNumber = trackNo,
                             courierName = parcelName,
                             imageUrl = logo,
-                            dateAdded = addDate ?: "Tarih bilgisi yok.",
+                            dateAdded = createdAt?.toRelativeTime() ?: stringResource(Res.string.no_date_info),
                             onClick = { onAction(UiAction.NavigateToTracking(parcelName, trackNo)) }
                         )
                     }
@@ -159,22 +177,46 @@ fun CargoList(
 }
 
 @Composable
-fun EmptyCargoView(modifier: Modifier = Modifier) {
+fun EmptyCargoView(
+    modifier: Modifier = Modifier,
+    onAction: (UiAction) -> Unit
+) {
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
-                text = "Hemen kargonu sorgula!",
-                style = MaterialTheme.typography.headlineSmall
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(spacing.large)
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Inventory,
+                contentDescription = null,
+                modifier = Modifier.size(100.dp),
+                tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(spacing.medium))
             Text(
-                text = "Listede hiç kargo yok.",
+                text = stringResource(Res.string.empty_cargo_title),
+                style = MaterialTheme.typography.titleLarge,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(spacing.small))
+            Text(
+                text = stringResource(Res.string.empty_cargo_subtitle),
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center
             )
+            Spacer(modifier = Modifier.height(spacing.large))
+            Button(
+                onClick = { onAction(UiAction.AddNewCargo) },
+                shape = MaterialTheme.shapes.medium
+            ) {
+                Icon(Icons.Default.Add, contentDescription = null)
+                Spacer(Modifier.width(spacing.small))
+                Text(text = stringResource(Res.string.add_new_cargo))
+            }
         }
     }
 }

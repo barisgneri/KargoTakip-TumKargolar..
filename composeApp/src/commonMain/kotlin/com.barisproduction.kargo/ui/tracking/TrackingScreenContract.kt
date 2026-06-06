@@ -7,6 +7,8 @@ object TrackingScreenContract {
         val trackingUrl: String? = null,
         val logo: String? = null,
         val js: String = "",
+        val injectJs: String? = null,
+        val trackingNo: String = "",
         val saveButtonVisibility: Boolean = true,
         val showSaveConfirmationDialog: Boolean = false,
     )
@@ -24,5 +26,7 @@ object TrackingScreenContract {
         data object OnRetryClick : UiAction()
         data object OnDismissSaveDialog : UiAction()
         data object OnExitWithoutSaving : UiAction()
+        data object OnPasteClick : UiAction()
+        data object OnJsInjected : UiAction()
     }
 }

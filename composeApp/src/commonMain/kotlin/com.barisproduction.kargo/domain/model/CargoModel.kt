@@ -6,5 +6,6 @@ data class CargoModel(
     val cargoName: String?,
     val logo: String,
     val trackNo: String,
-    val addDate: String? = null
+    val createdAt: Long? = null,
+    val companyCountryCode: String? = null
 )

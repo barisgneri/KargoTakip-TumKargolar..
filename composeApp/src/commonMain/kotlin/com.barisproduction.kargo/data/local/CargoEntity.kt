@@ -12,4 +12,5 @@ data class CargoEntity (
     val trackingNumber: String,
     val logo: String,
     val createdAt: Long,
+    val companyCountryCode: String = "tr",
 )

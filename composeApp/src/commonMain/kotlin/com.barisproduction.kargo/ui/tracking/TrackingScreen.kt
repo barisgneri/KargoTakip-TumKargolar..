@@ -6,9 +6,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -26,8 +29,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.barisproduction.kargo.common.extensions.collectWithLifecycle
@@ -40,6 +46,7 @@ import com.barisproduction.kargo.ui.theme.spacing
 import com.barisproduction.kargo.ui.tracking.TrackingScreenContract.UiAction
 import com.barisproduction.kargo.ui.tracking.TrackingScreenContract.UiEffect
 import com.barisproduction.kargo.ui.tracking.TrackingScreenContract.UiState
+import com.barisproduction.kargo.ui.tracking.components.KeyboardToolbar
 import com.barisproduction.kargo.ui.tracking.components.TrackingScreenTopBar
 import kargotakiptumkargolar.composeapp.generated.resources.Res
 import kargotakiptumkargolar.composeapp.generated.resources.btn_save
@@ -53,6 +60,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun TrackingScreen(
     uiState: UiState,
@@ -62,6 +70,14 @@ fun TrackingScreen(
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+
+    BackHandler(enabled = true) {
+        if (uiState.showSaveConfirmationDialog) {
+            onAction(UiAction.OnDismissSaveDialog)
+        } else {
+            onAction(UiAction.OnBackClick)
+        }
+    }
 
     uiEffect.collectWithLifecycle { uiEffect ->
         when (uiEffect) {
@@ -103,12 +119,15 @@ fun TrackingScreen(
     )
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun TrackingScreenContent(
     uiState: UiState,
     onAction: (UiAction) -> Unit,
     snackbarHostState: SnackbarHostState
 ) {
+    val isKeyboardVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
+
     Scaffold(
         modifier = Modifier.background(MaterialTheme.colorScheme.background),
         topBar = {
@@ -119,60 +138,79 @@ fun TrackingScreenContent(
             )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
+        contentWindowInsets = WindowInsets(0, 0, 0, 0)
     ) { innerPadding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .padding(top = innerPadding.calculateTopPadding())
         ) {
-            if (uiState.errorMessage != null) {
-                ErrorView(
-                    message = uiState.errorMessage ?: "Bir hata oluştu",
-                    onRetry = { onAction(UiAction.OnRetryClick) }
-                )
-            } else {
-                uiState.trackingUrl?.let { url ->
-                    Column(
-                        modifier = Modifier.padding(spacing.medium)
-                            .clip(MaterialTheme.shapes.medium).border(
-                                1.dp,
-                                MaterialTheme.colorScheme.outline,
-                                MaterialTheme.shapes.medium
-                            ).background(MaterialTheme.colorScheme.surface)
-                    ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth().padding(spacing.small),
-                            verticalAlignment = Alignment.CenterVertically
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .navigationBarsPadding()
+            ) {
+                if (uiState.errorMessage != null) {
+                    ErrorView(
+                        message = uiState.errorMessage ?: "Bir hata oluştu",
+                        onRetry = { onAction(UiAction.OnRetryClick) }
+                    )
+                } else {
+                    uiState.trackingUrl?.let { url ->
+                        Column(
+                            modifier = Modifier.padding(spacing.medium)
+                                .clip(MaterialTheme.shapes.medium).border(
+                                    1.dp,
+                                    MaterialTheme.colorScheme.outline,
+                                    MaterialTheme.shapes.medium
+                                ).background(MaterialTheme.colorScheme.surface)
                         ) {
-                            Icon(
-                                Icons.Default.Lock,
-                                contentDescription = "Security",
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.size(18.dp)
-                            )
-                            Spacer(modifier = Modifier.width(spacing.small))
-                            Text(
-                                text = url,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
+                            Row(
+                                modifier = Modifier.fillMaxWidth().padding(spacing.small),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    Icons.Default.Lock,
+                                    contentDescription = "Security",
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                                Spacer(modifier = Modifier.width(spacing.small))
+                                Text(
+                                    text = url,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            }
+                            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                            KargoWebView(
+                                url = url,
+                                modifier = Modifier.fillMaxSize(),
+                                onLoadingStateChanged = { onAction(UiAction.OnLoadingStateChanged(it)) },
+                                onError = { onAction(UiAction.OnErrorReceived(it)) },
+                                js = uiState.js,
+                                injectJs = uiState.injectJs,
+                                onJsInjected = { onAction(UiAction.OnJsInjected) }
                             )
                         }
-                        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-                        KargoWebView(
-                            url = url,
-                            modifier = Modifier.fillMaxSize(),
-                            onLoadingStateChanged = { onAction(UiAction.OnLoadingStateChanged(it)) },
-                            onError = { onAction(UiAction.OnErrorReceived(it)) },
-                            js = uiState.js
-                        )
                     }
+                }
+
+                if (uiState.isLoading) {
+                    LoadingBar()
                 }
             }
 
-            if (uiState.isLoading) {
-                LoadingBar()
+            if (isKeyboardVisible) {
+                KeyboardToolbar(
+                    trackingNo = uiState.trackingNo,
+                    onPaste = { onAction(UiAction.OnPasteClick) },
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .imePadding()
+                )
             }
         }
     }
