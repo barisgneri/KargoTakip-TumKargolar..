@@ -5,18 +5,8 @@
     "flag_emoji": "🇹🇷"
   },
   {
-    "code": "az",
-    "name": "Azerbaycan",
-    "flag_emoji": "🇦🇿"
-  },
-  {
     "code": "us",
     "name": "United States",
     "flag_emoji": "🇺🇸"
-  },
-  {
-    "code": "de",
-    "name": "Germany",
-    "flag_emoji": "🇩🇪"
   }
 ]
