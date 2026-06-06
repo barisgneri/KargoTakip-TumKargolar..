@@ -3,7 +3,6 @@ name: Kargo Takip CI/CD
 on:
   push:
     branches: [ "main" ]
-
     paths-ignore:
       - 'README.md'
       - '.github/workflows/**'
@@ -19,6 +18,7 @@ on:
         options:
           - firebase
           - playstore
+          - github_release
 
 jobs:
   build-and-deploy:
@@ -48,14 +48,14 @@ jobs:
         GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
       run: echo "$GOOGLE_SERVICES_JSON" > composeApp/google-services.json
 
-    - name: Release AAB Oluştur
+    - name: Release AAB ve APK Oluştur
       env:
         KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
         KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       run: |
         chmod +x gradlew
-        ./gradlew :composeApp:bundleRelease -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/keystore.jks -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD -Pandroid.injected.signing.key.alias=$KEY_ALIAS -Pandroid.injected.signing.key.password=$KEY_PASSWORD
+        ./gradlew :composeApp:bundleRelease :composeApp:assembleRelease -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/keystore.jks -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD -Pandroid.injected.signing.key.alias=$KEY_ALIAS -Pandroid.injected.signing.key.password=$KEY_PASSWORD
 
     - name: Oluşan AAB'yi İndirilebilir Yap
       uses: actions/upload-artifact@v4
@@ -69,6 +69,23 @@ jobs:
         AAB_PATH=$(find composeApp/build/outputs/bundle/release -name "*.aab" | head -n 1)
         echo "aab_path=$AAB_PATH" >> $GITHUB_ENV
 
+    - name: APK Dosyasının Tam Yolunu Bul
+      id: find_apk
+      run: |
+        APK_PATH=$(find composeApp/build/outputs/apk/release -name "*.apk" | head -n 1)
+        echo "apk_path=$APK_PATH" >> $GITHUB_ENV
+
+    - name: Projeden Version Name Oku
+      id: get_version
+      run: |
+        VERSION_NAME=$(grep "versionName" composeApp/build.gradle.kts | head -n 1 | awk -F'"' '{print $2}')
+        # Eğer yukarıdaki satır çift tırnak yerine tek tırnak kullanıyorsa garantiye almak için alternatif ayıklama:
+        if [ -z "$VERSION_NAME" ]; then
+          VERSION_NAME=$(grep "versionName" composeApp/build.gradle.kts | head -n 1 | awk -F"'" '{print $2}')
+        fi
+        echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_ENV
+        echo "Bulunan Versiyon: $VERSION_NAME"
+
     - name: Firebase App Distribution'a Gönder
       if: github.event_name == 'push' || github.event.inputs.deploy_target == 'firebase'
       uses: wzieba/Firebase-Distribution-Github-Action@v1
@@ -79,7 +96,6 @@ jobs:
         file: ${{ env.aab_path }}
 
     - name: Google Play Store'a Yükle
-      # SADECE manuel çalıştırılıp playstore seçildiyse çalışır
       if: github.event.inputs.deploy_target == 'playstore'
       uses: r0adkll/upload-google-play@v1
       with:
@@ -88,3 +104,15 @@ jobs:
         releaseFiles: ${{ env.aab_path }}
         track: internal
         status: completed
+
+    - name: GitHub Release Oluştur ve APK Ekle
+      if: github.event.inputs.deploy_target == 'github_release'
+      uses: softprops/action-gh-release@v2
+      with:
+        files: ${{ env.apk_path }}
+        name: "Kargo Takip v${{ env.VERSION_NAME }}"
+        tag_name: "v${{ env.VERSION_NAME }}"
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
