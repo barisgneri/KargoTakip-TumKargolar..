@@ -8,9 +8,12 @@ import com.barisproduction.kargo.data.preferences.IosReviewPreferenceStore
 import com.barisproduction.kargo.data.preferences.ReviewPreferenceStore
 import com.barisproduction.kargo.data.preferences.AppPreferenceStore
 import com.barisproduction.kargo.data.preferences.IosAppPreferenceStore
+import com.barisproduction.kargo.common.service.BarcodeScannerService
+import com.barisproduction.kargo.common.service.IosBarcodeScannerService
 import org.koin.dsl.module
 
 val iosModule = module {
+    single<BarcodeScannerService> { IosBarcodeScannerService() }
     single { getRoomDatabase(getDatabaseBuilder()) }
     single<ReviewPreferenceStore> { IosReviewPreferenceStore() }
     single<AppPreferenceStore> { IosAppPreferenceStore() }

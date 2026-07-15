@@ -3,6 +3,8 @@ package com.barisproduction.kargo.di
 import com.barisproduction.kargo.AndroidPlatform
 import com.barisproduction.kargo.Platform
 import com.barisproduction.kargo.common.service.ClipboardService
+import com.barisproduction.kargo.common.service.BarcodeScannerService
+import com.barisproduction.kargo.common.service.AndroidBarcodeScannerService
 import com.barisproduction.kargo.data.preferences.AndroidReviewPreferenceStore
 import com.barisproduction.kargo.data.preferences.ReviewPreferenceStore
 import com.barisproduction.kargo.data.preferences.AppPreferenceStore
@@ -14,6 +16,7 @@ import com.barisproduction.kargo.data.local.getRoomDatabase
 
 val androidModule = module {
     single<ClipboardService> { AndroidClipboardService(context = get()) }
+    single<BarcodeScannerService> { AndroidBarcodeScannerService(context = get()) }
     single { getRoomDatabase(getDatabaseBuilder(get())) }
     single<ReviewPreferenceStore> { AndroidReviewPreferenceStore(get()) }
     single<AppPreferenceStore> { AndroidAppPreferenceStore(get()) }

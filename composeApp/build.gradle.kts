@@ -43,6 +43,7 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
             implementation(project.dependencies.platform(libs.firebase.bom))
             implementation(libs.firebase.crashlytics)
+            implementation(libs.play.services.code.scanner)
 
         }
         commonMain.dependencies {

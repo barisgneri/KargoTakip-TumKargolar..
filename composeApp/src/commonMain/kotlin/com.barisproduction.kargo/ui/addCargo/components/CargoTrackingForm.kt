@@ -87,7 +87,7 @@ private fun CargoTrackingNumberEnter(
         ActionOutlineButton(
             text = stringResource(Res.string.scan_barcode),
             icon = Icons.Outlined.QrCodeScanner,
-            isEnabled = false,
+            isEnabled = true,
             onClick = { onAction(UiAction.OnScanBarcode) },
             modifier = Modifier.weight(1f)
         )
