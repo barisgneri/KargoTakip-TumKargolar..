@@ -26,4 +26,6 @@ val useCaseModule = module {
     factoryOf(::SetThemeUseCase)
     factoryOf(::SetLanguageUseCase)
     factoryOf(::GetSystemCountryCodeUseCase)
+    factoryOf(::ScanBarcodeUseCase)
+    factoryOf(::GetClipboardTextUseCase)
 }
