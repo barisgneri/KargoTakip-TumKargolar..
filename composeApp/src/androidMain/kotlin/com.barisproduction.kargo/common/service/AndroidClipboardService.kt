@@ -15,7 +15,7 @@ class AndroidClipboardService(
         context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     }
 
-    override suspend fun getText(): String? = withContext(Dispatchers.IO) {
+    override suspend fun getText(): String? = withContext(Dispatchers.Main) {
         if (!clipboardManager.hasPrimaryClip()) return@withContext null
 
         val item = clipboardManager.primaryClip?.getItemAt(0)

@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.barisproduction.kargo.common.Resource
 import com.barisproduction.kargo.delegation.MVI
 import com.barisproduction.kargo.delegation.mvi
+import com.barisproduction.kargo.domain.model.AnalyticsEvent
+import com.barisproduction.kargo.domain.repository.AnalyticsTracker
 import com.barisproduction.kargo.domain.usecase.GetCargoParcelListUseCase
 import com.barisproduction.kargo.domain.usecase.GetClipboardTextUseCase
 import com.barisproduction.kargo.domain.usecase.ScanBarcodeUseCase
@@ -18,6 +20,7 @@ class AddCargoViewModel(
     private val getClipboardTextUseCase: GetClipboardTextUseCase,
     private val scanBarcodeUseCase: ScanBarcodeUseCase,
     private val getCargoParcelListUseCase: GetCargoParcelListUseCase,
+    private val analyticsTracker: AnalyticsTracker
 ) : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
 
     init {
@@ -56,6 +59,7 @@ class AddCargoViewModel(
     }
 
     private fun handleScanBarcode() {
+        analyticsTracker.trackEvent(AnalyticsEvent.BarcodeScanned)
         viewModelScope.launch {
             scanBarcodeUseCase()?.let { result ->
                 if (result.isNotBlank()) {
@@ -84,6 +88,7 @@ class AddCargoViewModel(
     }
 
     private fun handlePaste() {
+        analyticsTracker.trackEvent(AnalyticsEvent.PasteClicked)
         viewModelScope.launch {
             getClipboardTextUseCase()?.let { text ->
                 if (text.isNotBlank()) {

@@ -21,6 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.barisproduction.kargo.domain.model.AnalyticsEvent
 import com.barisproduction.kargo.ui.theme.spacing
 
 @Composable
