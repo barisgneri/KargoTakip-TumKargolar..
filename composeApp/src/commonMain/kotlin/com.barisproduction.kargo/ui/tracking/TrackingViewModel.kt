@@ -10,6 +10,8 @@ import com.barisproduction.kargo.common.extensions.toUserMessage
 import com.barisproduction.kargo.data.util.ErrorParser
 import com.barisproduction.kargo.delegation.MVI
 import com.barisproduction.kargo.delegation.mvi
+import com.barisproduction.kargo.domain.model.AnalyticsEvent
+import com.barisproduction.kargo.domain.repository.AnalyticsTracker
 import com.barisproduction.kargo.domain.usecase.CheckCargoInDBUseCase
 import com.barisproduction.kargo.domain.usecase.FindCargoInfoUseCase
 import com.barisproduction.kargo.navigation.Screen
@@ -27,6 +29,7 @@ class TrackingViewModel (
     savedStateHandle: SavedStateHandle,
     private val checkCargoInDBUseCase: CheckCargoInDBUseCase,
     private val findCargoInfoUseCase: FindCargoInfoUseCase,
+    private val analyticsTracker: AnalyticsTracker
     ) : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
     private val args = savedStateHandle.toRoute<Screen.Tracking>()
     private val argsTrackingNumber = args.trackingNo
@@ -88,6 +91,7 @@ class TrackingViewModel (
                     emitUiEffect(UiEffect.NavigateBack)
                 }
                 is UiAction.OnPasteClick -> {
+                    analyticsTracker.trackEvent(AnalyticsEvent.CopiedTrackNumberUse(parcelName = argsParcelName))
                     val script = TrackingScripts.getPasteTrackingNumberScript(argsTrackingNumber)
                     updateUiState { copy(injectJs = script) }
                 }
