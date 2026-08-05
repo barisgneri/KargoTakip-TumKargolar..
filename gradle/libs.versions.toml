@@ -24,6 +24,7 @@ firebase-crashlytics-plugin = "3.0.6"
 gitlive-firebase = "2.4.0"
 androidx-lifecycle = "2.9.4"
 compottie="2.2.1"
+turbine = "1.2.1"
 
 
 
@@ -59,6 +60,7 @@ ui-backhandler = { module = "org.jetbrains.compose.ui:ui-backhandler", version.r
 compottie-lite = { module = "io.github.alexzhirkevich:compottie-lite", version.ref = "compottie" }
 play-services-code-scanner = { group = "com.google.android.gms", name = "play-services-code-scanner", version.ref = "play-services-code-scanner" }
 kotlinx-coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "kotlinx-coroutines" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 
 [plugins]
