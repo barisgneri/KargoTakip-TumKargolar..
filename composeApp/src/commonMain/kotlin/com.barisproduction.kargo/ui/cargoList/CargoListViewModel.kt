@@ -10,6 +10,8 @@ import com.barisproduction.kargo.domain.usecase.GetReviewCompletedUseCase
 import com.barisproduction.kargo.domain.usecase.DeleteCargoUseCase
 import com.barisproduction.kargo.domain.usecase.GetCargosUseCase
 import com.barisproduction.kargo.domain.usecase.SetReviewCompletedUseCase
+import com.barisproduction.kargo.domain.repository.AnalyticsTracker
+import com.barisproduction.kargo.domain.model.AnalyticsEvent
 import com.barisproduction.kargo.ui.cargoList.CargoListContract.UiAction
 import com.barisproduction.kargo.ui.cargoList.CargoListContract.UiEffect
 import com.barisproduction.kargo.ui.cargoList.CargoListContract.UiState
@@ -21,7 +23,8 @@ class CargoListViewModel(
     private val getCargosUseCase: GetCargosUseCase,
     private val deleteCargoUseCase: DeleteCargoUseCase,
     private val getReviewCompletedUseCase: GetReviewCompletedUseCase,
-    private val setReviewCompletedUseCase: SetReviewCompletedUseCase
+    private val setReviewCompletedUseCase: SetReviewCompletedUseCase,
+    private val analyticsTracker: AnalyticsTracker
 ) : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
 
     private var previousCargoCount: Int? = null
@@ -32,7 +35,10 @@ class CargoListViewModel(
         viewModelScope.launch {
             when (uiAction) {
                 is UiAction.AddNewCargo -> emitUiEffect(UiEffect.NavigateToAddNewCargo)
-                is UiAction.OnSettingsClick -> emitUiEffect(UiEffect.NavigateToSettings)
+                is UiAction.OnSettingsClick -> {
+                    analyticsTracker.trackEvent(AnalyticsEvent.SettingsOpened)
+                    emitUiEffect(UiEffect.NavigateToSettings)
+                }
                 is UiAction.NavigateToTracking -> emitUiEffect(UiEffect.NavigateToTracking(uiAction.parcelName, uiAction.trackingNumber))
                 is UiAction.RequestDelete -> {
                     updateUiState {
@@ -45,6 +51,7 @@ class CargoListViewModel(
                 is UiAction.ConfirmDelete -> {
                     val trackNo = uiState.value.pendingDeleteTrackNo ?: return@launch
                     deleteCargoUseCase(trackNo)
+                    analyticsTracker.trackEvent(AnalyticsEvent.CargoDeleted(trackNo))
                     updateUiState {
                         copy(
                             showDeleteConfirmationDialog = false,
@@ -86,6 +93,7 @@ class CargoListViewModel(
     }
 
     init {
+        analyticsTracker.trackEvent(AnalyticsEvent.ScreenView("CargoList"))
         updateUiState { copy(isLoading = true) }
         viewModelScope.launch {
             // Dialog kararını kaçırmamak için önce review durumunu yükle.

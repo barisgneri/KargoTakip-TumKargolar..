@@ -14,7 +14,7 @@ class GetSelectedLanguageUseCase(private val repository: AppConfigRepository) {
             if (languages.isEmpty()) return@combine null
 
             val effectiveCode = selectedCode ?: repository.systemLanguageCode
-            languages.find { it.code == effectiveCode } ?: languages.firstOrNull()
+            languages.find { it.code == effectiveCode } ?: languages.find { it.code == "en" } ?: languages.firstOrNull()
         }
     }
 }

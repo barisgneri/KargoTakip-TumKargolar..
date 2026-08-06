@@ -3,10 +3,13 @@ package com.barisproduction.kargo.ui.addCargo
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.barisproduction.kargo.common.Resource
-import com.barisproduction.kargo.common.service.ClipboardService
 import com.barisproduction.kargo.delegation.MVI
 import com.barisproduction.kargo.delegation.mvi
+import com.barisproduction.kargo.domain.model.AnalyticsEvent
+import com.barisproduction.kargo.domain.repository.AnalyticsTracker
 import com.barisproduction.kargo.domain.usecase.GetCargoParcelListUseCase
+import com.barisproduction.kargo.domain.usecase.GetClipboardTextUseCase
+import com.barisproduction.kargo.domain.usecase.ScanBarcodeUseCase
 import com.barisproduction.kargo.ui.addCargo.AddCargoContract.UiAction
 import com.barisproduction.kargo.ui.addCargo.AddCargoContract.UiEffect
 import com.barisproduction.kargo.ui.addCargo.AddCargoContract.UiState
@@ -14,8 +17,10 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class AddCargoViewModel(
-    private val clipboardService: ClipboardService,
+    private val getClipboardTextUseCase: GetClipboardTextUseCase,
+    private val scanBarcodeUseCase: ScanBarcodeUseCase,
     private val getCargoParcelListUseCase: GetCargoParcelListUseCase,
+    private val analyticsTracker: AnalyticsTracker
 ) : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
 
     init {
@@ -48,7 +53,18 @@ class AddCargoViewModel(
                 is UiAction.OnCarrierSelectClick -> updateUiState { copy(isCarrierSelectionVisible = true) }
                 is UiAction.OnCarrierSelectDismiss -> updateUiState { copy(isCarrierSelectionVisible = false) }
                 is UiAction.OnCarrierSelected -> selectCarrier(uiAction)
-                UiAction.OnScanBarcode -> { /* TODO */ }
+                UiAction.OnScanBarcode -> handleScanBarcode()
+            }
+        }
+    }
+
+    private fun handleScanBarcode() {
+        analyticsTracker.trackEvent(AnalyticsEvent.BarcodeScanned)
+        viewModelScope.launch {
+            scanBarcodeUseCase()?.let { result ->
+                if (result.isNotBlank()) {
+                    updateUiState { copy(trackingNumber = result) }
+                }
             }
         }
     }
@@ -72,8 +88,9 @@ class AddCargoViewModel(
     }
 
     private fun handlePaste() {
+        analyticsTracker.trackEvent(AnalyticsEvent.PasteClicked)
         viewModelScope.launch {
-            clipboardService.getText()?.let { text ->
+            getClipboardTextUseCase()?.let { text ->
                 if (text.isNotBlank()) {
                     updateUiState { copy(trackingNumber = text) }
                 }

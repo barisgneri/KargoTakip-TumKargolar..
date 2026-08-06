@@ -17,6 +17,8 @@ import com.barisproduction.kargo.domain.usecase.FindCargoInfoUseCase
 import com.barisproduction.kargo.domain.usecase.GetCargoParcelListUseCase
 import com.barisproduction.kargo.domain.usecase.InsertCargoUseCase
 import com.barisproduction.kargo.domain.usecase.UpdateCargoUseCase
+import com.barisproduction.kargo.domain.repository.AnalyticsTracker
+import com.barisproduction.kargo.domain.model.AnalyticsEvent
 import com.barisproduction.kargo.navigation.Screen
 import kotlinx.coroutines.launch
 
@@ -30,12 +32,14 @@ class CargoDialogViewModel(
     private val getCargoParcelListUseCase: GetCargoParcelListUseCase,
     private val insertCargoUseCase: InsertCargoUseCase,
     private val checkCargoInDBUseCase: CheckCargoInDBUseCase,
-    private val updateCargoUseCase: UpdateCargoUseCase
+    private val updateCargoUseCase: UpdateCargoUseCase,
+    private val analyticsTracker: AnalyticsTracker
 ) : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
 
     init {
         val args = savedStateHandle.toRoute<Screen.CargoSaveDialog>()
 
+        analyticsTracker.trackEvent(AnalyticsEvent.ScreenView("CargoSaveDialog"))
         getParcelList()
         updateUiState {
             copy(
@@ -144,6 +148,7 @@ class CargoDialogViewModel(
                 updateCargoUseCase(entity)
             } else {
                 insertCargoUseCase(entity)
+                analyticsTracker.trackEvent(AnalyticsEvent.CargoAdded(entity.parcelName))
             }
 
             emitUiEffect(UiEffect.Dismiss)

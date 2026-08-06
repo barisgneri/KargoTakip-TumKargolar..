@@ -1,5 +1,6 @@
 package domain
 
+import app.cash.turbine.test
 import com.barisproduction.kargo.common.Resource
 import com.barisproduction.kargo.data.remote.model.AppUpdateConfigDto
 import com.barisproduction.kargo.data.remote.model.CargoDto
@@ -43,24 +44,41 @@ class CargoRepositoryImplTest {
                 )
             )
 
-            repository.getCargoParcelList()
+            repository.getCargoParcelListState().test {
+                // 1. Initial State (Loading)
+                assertTrue(awaitItem() is Resource.Loading)
 
-            val currentState = repository.getCargoParcelListState().value
+                repository.getCargoParcelList()
 
-            assertTrue(currentState is Resource.Success)
+                // 2. getCargoParcelList basinda tekrar Loading emit ediliyor
+                assertTrue(awaitItem() is Resource.Loading)
 
-            val data = (currentState as Resource.Success).data
-            assertEquals(2, data?.size)
-            assertEquals("Aç kapıyı aras kargo", data?.get(0)?.parcelName)
+                // 3. Success State
+                val successState = awaitItem()
+                assertTrue(successState is Resource.Success)
+
+                val data = (successState as Resource.Success).data
+                assertEquals(2, data?.size)
+                assertEquals("Aç kapıyı aras kargo", data?.get(0)?.parcelName)
+            }
         }
 
     @Test
     fun `getCargoParcelList API hata verirse StateFlow icinde Error donmeli`() = runTest {
         fakeRemoteDataSource.shouldThrowError = true
-        repository.getCargoParcelList()
 
-        val currentState = repository.getCargoParcelListState().value
-        assertTrue(currentState is Resource.Error)
+        repository.getCargoParcelListState().test {
+            // 1. Initial State (Loading)
+            assertTrue(awaitItem() is Resource.Loading)
+
+            repository.getCargoParcelList()
+
+            // 2. getCargoParcelList basinda tekrar Loading emit ediliyor
+            assertTrue(awaitItem() is Resource.Loading)
+
+            // 3. Error State
+            assertTrue(awaitItem() is Resource.Error)
+        }
     }
 
     @Test
@@ -75,36 +93,37 @@ class CargoRepositoryImplTest {
                 )
             )
 
-            // Act - İlk çağrı (Başarılı olacak ve StateFlow Success olacak)
-            repository.getCargoParcelList()
+            repository.getCargoParcelListState().test {
+                // Initial State
+                assertTrue(awaitItem() is Resource.Loading)
 
-            // Şimdi veriyi değiştirip tekrar çağıracağız. Eğer kodundaki 'if' bloğu çalışıyorsa,
-            // yeni veriyi ALMAMASI lazım.
-            fakeRemoteDataSource.dummyDtoList = listOf(
-                CargoDto(
-                    name = "aras kargo",
-                    url = "https://google.com",
-                    logo = "logo1",
-                    js = "javasriptkodu"
-                ),
-                CargoDto(
-                    name = "sürat kargo",
-                    url = "https://facebook.com",
-                    logo = "logo2",
-                    js = "javasriptkodu2"
+                // Act - İlk çağrı
+                repository.getCargoParcelList()
+                // Loading ve sonra Success bekliyoruz
+                assertTrue(awaitItem() is Resource.Loading)
+                val firstSuccess = awaitItem()
+                assertTrue(firstSuccess is Resource.Success)
+
+                // Şimdi veriyi değiştirip tekrar çağıracağız.
+                fakeRemoteDataSource.dummyDtoList = listOf(
+                    CargoDto(
+                        name = "aras kargo",
+                        url = "https://google.com",
+                        logo = "logo1",
+                        js = "javasriptkodu"
+                    )
                 )
-            )
 
-            // Act - İkinci çağrı
-            repository.getCargoParcelList()
+                // Act - İkinci çağrı
+                repository.getCargoParcelList()
 
-            // Assert
-            val currentState = repository.getCargoParcelListState().value
-            val data = (currentState as Resource.Success).data
+                // Assert - Yeni bir event gelmemeli (çünkü cache'den dönüyor ve StateFlow aynı değeri emit etmez)
+                expectNoEvents()
 
-            // Sadece ilk çağrıdaki verinin kalmış olması, cache mantığının çalıştığını kanıtlar
-            assertEquals(1, data?.size)
-            assertEquals(1, fakeRemoteDataSource.callCount)
+                val data = (firstSuccess as Resource.Success).data
+                assertEquals(1, data?.size)
+                assertEquals(1, fakeRemoteDataSource.callCount)
+            }
         }
 
     @Test

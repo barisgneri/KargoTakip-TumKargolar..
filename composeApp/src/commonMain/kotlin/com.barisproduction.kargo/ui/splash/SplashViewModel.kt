@@ -14,6 +14,8 @@ import com.barisproduction.kargo.ui.splash.SplashContract.UiState
 import com.barisproduction.kargo.domain.usecase.CheckForceUpdateUseCase
 import com.barisproduction.kargo.domain.usecase.FetchCargoParcelListUseCase
 import com.barisproduction.kargo.domain.usecase.GetCargoParcelListUseCase
+import com.barisproduction.kargo.domain.repository.AnalyticsTracker
+import com.barisproduction.kargo.domain.model.AnalyticsEvent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -24,10 +26,12 @@ class SplashViewModel(
     private val fetchCargoParcelListUseCase: FetchCargoParcelListUseCase,
     private val getCargoParcelListUseCase: GetCargoParcelListUseCase,
     private val checkForceUpdateUseCase: CheckForceUpdateUseCase,
-    private val platform: Platform
+    private val platform: Platform,
+    private val analyticsTracker: AnalyticsTracker
 ) : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
 
     init {
+        analyticsTracker.trackEvent(AnalyticsEvent.AppOpened)
         viewModelScope.launch {
             runSplashFlow()
         }

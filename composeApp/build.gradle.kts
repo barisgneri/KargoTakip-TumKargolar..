@@ -43,6 +43,8 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
             implementation(project.dependencies.platform(libs.firebase.bom))
             implementation(libs.firebase.crashlytics)
+            implementation(libs.play.services.code.scanner)
+            implementation(libs.kotlinx.coroutines.play.services)
 
         }
         commonMain.dependencies {
@@ -87,6 +89,7 @@ kotlin {
         commonTest.dependencies {
             implementation(kotlin("test"))
             implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.turbine)
         }
     }
 }
@@ -111,8 +114,8 @@ android {
         applicationId = "com.barisproduction.kargo"
         minSdk = 24
         targetSdk = 36
-        versionCode = 13
-        versionName = "1.5.0"
+        versionCode = 14
+        versionName = "1.5.1"
     }
     packaging {
         resources {
