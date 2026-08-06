@@ -35,7 +35,8 @@ class AppConfigRepositoryImpl(
     override fun getLanguages(): List<LanguageModel> {
         return listOf(
             LanguageModel("Türkçe", "tr"),
-            LanguageModel("English", "en")
+            LanguageModel("English", "en"),
+            LanguageModel("Deutsch", "de")
         )
     }
 

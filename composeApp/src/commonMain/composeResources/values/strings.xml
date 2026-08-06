@@ -1,47 +1,47 @@
 <resources>
-    <string name="app_name">Cargo Track</string>
+    <string name="app_name">Package Tracker</string>
     <string name="btn_save">Save</string>
     <string name="error_network">No internet connection</string>
-    <string name="add_new_cargo">Add New Cargo</string>
+    <string name="add_new_cargo">Add New Package</string>
     <string name="check_connection_and_try_again">Please check your internet connection and try again.</string>
     <string name="connection_error">Connection Error</string>
-    <string name="new_cargo_search">Track New Cargo</string>
-    <string name="start_with_enter_tracking_number">Start by entering tracking number</string>
+    <string name="new_cargo_search">Track New Shipment</string>
+    <string name="start_with_enter_tracking_number">Enter a tracking number to start</string>
     <string name="tracking_number">Tracking Number</string>
     <string name="scan_barcode">Scan Barcode</string>
     <string name="paste_clipboard">Paste from Clipboard</string>
-    <string name="search_cargo">Track Cargo</string>
-    <string name="cargo_name_optional">Cargo Name (Optional)</string>
+    <string name="search_cargo">Track Package</string>
+    <string name="cargo_name_optional">Package Name (Optional)</string>
     <string name="placeholder_cargo_name_optional">Ex: Order: Shoes</string>
     <string name="placeholder_tracking_number">Ex: TR123456789</string>
     <string name="placeholder_cargo_name">Ex: Gift</string>
-    <string name="cargo_company">Cargo Company</string>
-    <string name="select_cargo_company">Select Company</string>
-    <string name="cargo_tracking_detail">Tracking Details</string>
-    <string name="enter_cargo_number_or_scan_barcode_info_text">You can scan the barcode on your cargo or enter the number manually.</string>
-    <string name="my_cargos">My Cargos</string>
-    <string name="cargo_name">Cargo Name</string>
+    <string name="cargo_company">Carrier</string>
+    <string name="select_cargo_company">Select Carrier</string>
+    <string name="cargo_tracking_detail">Shipment Details</string>
+    <string name="enter_cargo_number_or_scan_barcode_info_text">Scan the barcode on your package or enter the number manually.</string>
+    <string name="my_cargos">My Packages</string>
+    <string name="cargo_name">Package Name</string>
     <string name="cancel">Cancel</string>
-    <string name="update_cargo">Update Cargo</string>
+    <string name="update_cargo">Update Package</string>
     <string name="update">Update</string>
-    <string name="did_not_save_cargo">You Didn't Save Cargo</string>
-    <string name="dont_save_cargo_info">Don't bother re-entering info, would you like to save your cargo?</string>
+    <string name="did_not_save_cargo">Package Not Saved</string>
+    <string name="dont_save_cargo_info">Save this package so you don't have to enter the info again?</string>
     <string name="exit">Exit</string>
     <string name="review_app_title">Would you rate the app?</string>
     <string name="review_app_description">Your feedback is very valuable to us.</string>
     <string name="review_app_confirm">Rate</string>
     <string name="review_app_later">Later</string>
     <string name="delete">Delete</string>
-    <string name="delete_cargo_title">Delete Cargo</string>
-    <string name="delete_cargo_description">Are you sure you want to delete this cargo?</string>
+    <string name="delete_cargo_title">Delete Package</string>
+    <string name="delete_cargo_description">Are you sure you want to delete this package?</string>
     <string name="edit">Edit</string>
 
     <!-- Splash & Update Strings -->
     <string name="update_available">Update Available</string>
     <string name="update_description_required">A new update is required to continue using the app.</string>
     <string name="btn_update">Update</string>
-    <string name="fast_and_ads_free">FAST AND ADS FREE</string>
-    <string name="app_preparing">App Preparing...</string>
+    <string name="fast_and_ads_free">FAST AND AD-FREE</string>
+    <string name="app_preparing">Preparing App...</string>
 
     <!-- Settings -->
     <string name="settings">Settings</string>
@@ -50,7 +50,7 @@
     <string name="theme_setting">Theme Settings</string>
     <string name="dark_mode">Dark Mode</string>
     <string name="change_country">Change Country</string>
-    <string name="change_country_info">Select your country to optimize cargo tracking services.</string>
+    <string name="change_country_info">Select your country to optimize tracking services.</string>
     <string name="select_country">Select Country</string>
     <string name="change_language">Change Language</string>
     <string name="change_language_info">You can update the app language according to your preference.</string>
@@ -65,7 +65,7 @@
     <string name="tracking_no_prefix">Tracking No: %1$s • %2$s</string>
     <string name="added_date">Added Date: </string>
     <string name="details">Details</string>
-    <string name="cargo_logo">Cargo Logo</string>
+    <string name="cargo_logo">Carrier Logo</string>
     <string name="just_now">Just now</string>
     <string name="minutes_ago">%1$d min ago</string>
     <string name="hours_ago">%1$d hours ago</string>
@@ -84,11 +84,11 @@
     <string name="month_nov">November</string>
     <string name="month_dec">December</string>
     <string name="cargo_company_selected">%1$s Selected</string>
-    <string name="empty_cargo_title">Track your cargo now!</string>
-    <string name="empty_cargo_subtitle">No cargos in the list.</string>
+    <string name="empty_cargo_title">Track your package now!</string>
+    <string name="empty_cargo_subtitle">Your package list is empty.</string>
     <string name="select">Select</string>
     <string name="done">Done</string>
     <string name="info">Information</string>
-    <string name="country_change_warning_message">You have registered cargos, they will be visible again when you return to your previous country.</string>
+    <string name="country_change_warning_message">You have saved packages; they will be visible again when you return to your previous country.</string>
     <string name="ok">OK</string>
 </resources>
