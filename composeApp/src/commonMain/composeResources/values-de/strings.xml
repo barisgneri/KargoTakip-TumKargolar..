@@ -2,7 +2,7 @@
     <string name="app_name">Paketverfolgung</string>
     <string name="btn_save">Speichern</string>
     <string name="error_network">Keine Internetverbindung</string>
-    <string name="add_new_cargo">Neue Sendung hinzufügen</string>
+    <string name="add_new_cargo">Neues Paket hinzufügen</string>
     <string name="check_connection_and_try_again">Bitte überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.</string>
     <string name="connection_error">Verbindungsfehler</string>
     <string name="new_cargo_search">Neue Sendung verfolgen</string>
